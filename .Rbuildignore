@@ -1,0 +1,5 @@
+^jmastats\.Rproj$
+^\.Rproj\.user$
+^Dockerfile$
+^docker-compose\.yml$
+^data-raw$

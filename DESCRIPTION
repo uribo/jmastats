@@ -1,0 +1,16 @@
+Package: jmastats
+Version: 0.0.0.9000
+Title: Access to Japan Meteorological Agency Data
+Description: What the package does (one paragraph).
+Authors@R: c(person(given = "Shinya",
+                                     family = "Uryu",
+                                     email = "suika1127@gmail.com",
+                                     role  = c("aut", "cre"),
+                                     comment = c(ORCID = "0000-0002-0493-6186")))
+Depends: 
+    R (>= 2.10)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+RoxygenNote: 6.0.1
