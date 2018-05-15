@@ -1,4 +1,5 @@
 .Rproj.user
 .Rhistory
 .RData
+inst/doc
 data-raw/ame_master.csv
