@@ -145,9 +145,21 @@ jma_collect <- function(item = NULL,
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) #%>%
       #readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+  } else if (item == "hourly_s1") {
+    df <-
+      df_raw[[5]][-c(1), ]
+
+    names(df) <-
+      name_sets(rlang::eval_tidy(item))
+
+    df <-
+      convert_error(df) %>%
+      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+      readr::type_convert()
+
   } else if (item == "monthly_a1") {
     df <-
-      x[[6]][-c(1:2), ]
+      df_raw[[6]][-c(1:2), ]
 
     names(df) <-
       name_sets(rlang::eval_tidy(item))
@@ -205,19 +217,37 @@ convert_variable_unit <- function(.data) {
 convert_error <- function(.data) {
   dplyr::mutate_all(.data,
                     .funs = dplyr::funs(
-                      dplyr::if_else(. %in% c("///", "×", "", "#"), NA_character_, .)))
+                      dplyr::if_else(. %in% c("///", "×", "", "#"), NA_character_, .))) %>%
+    dplyr::mutate_all(.funs = dplyr::funs(
+                        dplyr::if_else(. %in% c("--"), "0.0", .)))
 
 }
 
 name_sets <- function(item) {
 
     switch (item,
-      "hourly_a1" = c("時",
-                      paste0("降水量_", "(mm)"),
-                      paste0("気温_", "(\u2103)"),
-                      paste0(c("風速_", "風向_"), "(m/s)"),
-                      paste0("日照時間_", "(h)"),
-                      paste0("雪_", c("降雪", "積雪"), "(寒候年.cm)")),
+      "hourly_a1" = c("time",
+                      paste0("precipitation_", "(mm)"),
+                      paste0("temperature_", "(\u2103)"),
+                      paste0("wind_", c("speed", "direction"), "(m/s)"),
+                      paste0("dailight_", "(h)"),
+                      paste0("snow_", c("fall_moment", "fall_period"), "(cm)")),
+      "hourly_s1" = c("time",
+                      paste0("atmosphere_",
+                      c("land", "surface"), "(hPa)"),
+                      paste0("precipitation_", "(mm)"),
+                      paste0("temperature_", "(\u2103)"),
+                      paste0("露点温度", "(\u2103)"),
+                      paste0("蒸気圧", "(hPa)"),
+                      paste0("humidity", "(%)"),
+                      paste0("wind_", c("speed", "direction"), "(m/s)"),
+                      paste0("dailight_", "(h)"),
+                      paste0("全天日射量", "(MJ/m^2)"),
+                      paste0("snow_", c("fall_moment", "fall_period"), "(cm)"),
+                      paste0("weather"),
+                      paste0("雲量"),
+                      paste0("視程", "(km)")
+                      ),
       "monthly_a1" = c("月",
                        paste0("降水量_", c("合計", "日最大", "最大1時間", "最大10分間"), "(mm)"),
                        paste0("気温_",
