@@ -3,6 +3,9 @@
 #####################################
 library(dplyr)
 # # 1. zip archives ---------------------------------------------------------
+# Ref) http://www.data.jma.go.jp/developer/index.html
+# http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
+# https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
 if (file.exists(here::here("data-raw", "ame_master.csv")) == FALSE) {
   zip_file <- "http://www.jma.go.jp/jma/kishou/know/amedas/ame_master.zip"
   download.file(
@@ -89,8 +92,7 @@ df_stations <-
 df_stations <-
   df_stations %>%
   left_join(df_prec_no, by = "prec_no") %>%
-  mutate(area = stringr::str_remove(area, "地方")) %>%
-  tibble::as_tibble()
+  mutate(area = stringr::str_remove(area, "地方"))
 
 stations <-
   d %>%
@@ -99,6 +101,7 @@ stations <-
                      area = dplyr::if_else(station == "竜王山", "徳島", area),
                      station = stringr::str_remove(station, "（.+）")),
             by = c("station_name" = "station", "area")) %>%
-  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+  tibble::new_tibble(subclass = "sf")
 
 usethis::use_data(stations, overwrite = TRUE)
