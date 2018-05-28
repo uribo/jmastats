@@ -223,10 +223,15 @@ jma_url <- function(item = NULL,
                    station_type,
                    paste0(station_type, "1"))
 
+  day <- if (rlang::is_true(is.null(day))) {
+    ""
+  } else {
+    day
+  }
+
   list(
     url = glue::glue(
       "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={pref}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
-      day = dplyr::if_else(is.null(day) == TRUE, "", day),
       blockid = rlang::eval_tidy(.blockid)
     ),
     station_type = station_type
