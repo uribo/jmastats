@@ -25,20 +25,9 @@ jma_collect <- function(item = NULL,
     xml2::read_html(target$url) %>%
     rvest::html_table(fill = TRUE)
 
+  selected_item <- paste0(item, "_", target$station_type)
+
   if (item == "annually" & target$station_type == "a") {
-    fix_names <-
-      c("年",
-        paste0("降水量_",
-               c("合計", "最大日", "最大1時間", "最大10分間"), "(mm)"),
-        paste0("気温_",
-               c("平均日平均", "平均日最高", "平均日最低", "最高", "最低"), "(\u2103)"),
-        paste0("風向・風速_",
-               c("平均風速", "最大風速風速", "最大風速風向",
-                 "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
-        paste0("日照時間_", "(h)"),
-        paste0("雪_",
-               c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
-        )
       # c("年",
       #   paste0("気圧_", c("現地平均", "海面平均"), "(hPa)"),
       #   paste0("降水量_", c("合計", "最大日", "最大1時間", "最大10分間"), "(mm)"),
@@ -54,7 +43,8 @@ jma_collect <- function(item = NULL,
     df <-
       df_raw[[4]][-c(1:2), ]
 
-    names(df) <- fix_names
+    names(df) <-
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -64,19 +54,8 @@ jma_collect <- function(item = NULL,
     df <-
       df_raw[[6]][-c(1:2), ]
 
-    fix_names <- c(
-      "月",
-      paste0("降水量_", c("合計", "日最大", "最大1時間", "最大10分間"), "(mm)"),
-      paste0("気温_", c("平均日平均", "平均日最高", "平均日最低",
-                      "最高", "最低"), "(\u2103)"),
-      paste0("風向・風速_",
-             c("平均風速", "最大風速風速", "最大風速風向",
-               "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
-      paste0("日照時間_", "(h)"),
-      paste0("雪_", c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
-    )
-
-    names(df) <- fix_names
+    names(df) <-
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -88,20 +67,8 @@ jma_collect <- function(item = NULL,
     df <-
       df_raw[[6]][-c(1:2), ]
 
-    fix_names <- c(
-      "月",
-      "旬",
-      paste0("降水量_", c("合計", "日最大", "最大1時間", "最大10分間"), "(mm)"),
-      paste0("気温_", c("平均日平均", "平均日最高", "平均日最低",
-                      "最高", "最低"), "(\u2103)"),
-      paste0("風向・風速_",
-             c("平均風速", "最大風速風速", "最大風速風向",
-               "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
-      paste0("日照時間_", "(h)"),
-      paste0("雪_", c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
-    )
-
-    names(df) <- fix_names
+    names(df) <-
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -112,18 +79,8 @@ jma_collect <- function(item = NULL,
     df <-
       df_raw[[6]][-c(1:2), ]
 
-    fix_names <- c(
-      "日",
-      paste0("降水量_", c("合計", "最大1時間", "最大10分間"), "(mm)"),
-      paste0("気温_", c("平均", "最高", "最低"), "(\u2103)"),
-      paste0("風向・風速_",
-             c("平均風速", "最大風速風速", "最大風速風向",
-               "最大瞬間風速風速", "最大瞬間風速風向", "最多風速"), "(m/s)"),
-      paste0("日照時間_", "(h)"),
-      paste0("雪_", c("降雪合計", "最深積雪"), "(寒候年.cm)")
-    )
-
-    names(df) <- fix_names
+    names(df) <-
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -136,21 +93,8 @@ jma_collect <- function(item = NULL,
     df <-
       df_raw[[6]][-c(1:2), ]
 
-    fix_names <- c(
-      "日",
-      paste0("気圧_", c("現地平均", "海面平均"), "(hPa)"),
-      paste0("降水量_", c("合計", "最大1時間", "最大10分間"), "(mm)"),
-      paste0("気温_", c("平均", "最高", "最低"), "(\u2103)"),
-      paste0("湿度_", c("平均", "最小"), "(%)"),
-      paste0("風向・風速_",
-             c("平均風速", "最大風速風速", "最大風速風向",
-               "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
-      paste0("日照時間_", "(h)"),
-      paste0("雪_", c("降雪合計", "最深積雪"), "(寒候年.cm)"),
-      paste0("天気概況", c("昼 (06:00-18:00)", "夜 (18:00-翌日06:00)"))
-    )
-
-    names(df) <- fix_names
+    names(df) <-
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -163,7 +107,7 @@ jma_collect <- function(item = NULL,
       df_raw[[5]][-c(1:2), ]
 
     names(df) <-
-      name_sets(rlang::eval_tidy(item))
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -174,7 +118,7 @@ jma_collect <- function(item = NULL,
       df_raw[[5]][-c(1), ]
 
     names(df) <-
-      name_sets(rlang::eval_tidy(item))
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -186,7 +130,7 @@ jma_collect <- function(item = NULL,
       df_raw[[6]][-c(1:2), ]
 
     names(df) <-
-      name_sets(rlang::eval_tidy(item))
+      name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
@@ -268,7 +212,30 @@ convert_error <- function(.data) {
 
 name_sets <- function(item) {
 
-    switch (item,
+    switch(item,
+      "daily_a1" = c(
+        "日",
+        paste0("降水量_", c("合計", "最大1時間", "最大10分間"), "(mm)"),
+        paste0("気温_", c("平均", "最高", "最低"), "(\u2103)"),
+        paste0("風向・風速_",
+               c("平均風速", "最大風速風速", "最大風速風向",
+                 "最大瞬間風速風速", "最大瞬間風速風向", "最多風速"), "(m/s)"),
+        paste0("日照時間_", "(h)"),
+        paste0("雪_", c("降雪合計", "最深積雪"), "(寒候年.cm)")
+      ),
+      "daily_s1" = c(
+        "time",
+        paste0("気圧_", c("現地平均", "海面平均"), "(hPa)"),
+        paste0("降水量_", c("合計", "最大1時間", "最大10分間"), "(mm)"),
+        paste0("気温_", c("平均", "最高", "最低"), "(\u2103)"),
+        paste0("湿度_", c("平均", "最小"), "(%)"),
+        paste0("風向・風速_",
+               c("平均風速", "最大風速風速", "最大風速風向",
+                 "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
+        paste0("日照時間_", "(h)"),
+        paste0("雪_", c("降雪合計", "最深積雪"), "(寒候年.cm)"),
+        paste0("天気概況", c("昼 (06:00-18:00)", "夜 (18:00-翌日06:00)"))
+      ),
       "hourly_a1" = c("time",
                       paste0("precipitation_", "(mm)"),
                       paste0("temperature_", "(\u2103)"),
@@ -291,6 +258,18 @@ name_sets <- function(item) {
                       paste0("雲量"),
                       paste0("視程", "(km)")
                       ),
+      "10daily_a1" = c(
+        "月",
+        "旬",
+        paste0("降水量_", c("合計", "日最大", "最大1時間", "最大10分間"), "(mm)"),
+        paste0("気温_", c("平均日平均", "平均日最高", "平均日最低",
+                        "最高", "最低"), "(\u2103)"),
+        paste0("風向・風速_",
+               c("平均風速", "最大風速風速", "最大風速風向",
+                 "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
+        paste0("日照時間_", "(h)"),
+        paste0("雪_", c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
+      ),
       "monthly_a1" = c("月",
                        paste0("降水量_", c("合計", "日最大", "最大1時間", "最大10分間"), "(mm)"),
                        paste0("気温_",
@@ -301,6 +280,18 @@ name_sets <- function(item) {
                                 "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
                        paste0("日照時間_", "(h)"),
                        paste0("雪_", c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
+      ),
+      "annually_a" = c("年",
+                      paste0("降水量_",
+                             c("合計", "最大日", "最大1時間", "最大10分間"), "(mm)"),
+                      paste0("気温_",
+                             c("平均日平均", "平均日最高", "平均日最低", "最高", "最低"), "(\u2103)"),
+                      paste0("風向・風速_",
+                             c("平均風速", "最大風速風速", "最大風速風向",
+                               "最大瞬間風速風速", "最大瞬間風速風向"), "(m/s)"),
+                      paste0("日照時間_", "(h)"),
+                      paste0("雪_",
+                             c("降雪の合計", "日降雪の最大", "最深積雪"), "(寒候年.cm)")
       )
     )
 }
