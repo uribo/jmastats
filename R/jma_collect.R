@@ -163,6 +163,15 @@ jma_url <- function(item = NULL,
     dplyr::if_else(df_target_station$station_type == "官", "s", "a")
 
   station_type <-
+    dplyr::if_else(df_target_station$station_name %in% c("天城", "与論島",
+                                                         "安次嶺", "川平",
+                                                         "慶良間", "盛山",
+                                                         "鏡原", "東"),
+                   # 官なのにaのやつ
+                   "a",
+                   station_type)
+
+  station_type <-
     dplyr::if_else(selected_item == "annually",
                    station_type,
                    paste0(station_type, "1"))
