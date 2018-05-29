@@ -91,7 +91,7 @@ jma_collect <- function(item = NULL,
       readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
   } else if (item == "daily" & target$station_type == "s1") {
     df <-
-      df_raw[[6]][-c(1:2), ]
+      df_raw[[6]][-c(1:3), ]
 
     names(df) <-
       name_sets(selected_item)
