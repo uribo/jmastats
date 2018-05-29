@@ -85,9 +85,9 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate(`日` = as.Date(paste(year,
+      dplyr::mutate(date = as.Date(paste(year,
                                   stringr::str_pad(month, width = 2, pad = "0"),
-                                  stringr::str_pad(`日`, width = 2, pad = "0"), sep = "-"))) %>%
+                                  stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
       readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
   } else if (item == "daily" & target$station_type == "s1") {
     df <-
@@ -99,6 +99,9 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+      dplyr::mutate(date = as.Date(paste(year,
+                                         stringr::str_pad(month, width = 2, pad = "0"),
+                                         stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
       readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
 
   } else if (item == "hourly" & target$station_type == "a1") {
