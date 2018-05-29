@@ -2,10 +2,10 @@
 % Please edit documentation in R/jma_collect.R
 \name{jma_url}
 \alias{jma_url}
-\title{jma_url(item = "annually_a", "0010", year = 2017, month = 11, day = NULL)}
+\title{jma_url(item = "annually", "0010", year = 2017, month = 11, day = NULL)}
 \usage{
-jma_url(item = NULL, block_no, year, month, day = NULL)
+jma_url(item = NULL, block_no, year, month, day)
 }
 \description{
-jma_url(item = "annually_a", "0010", year = 2017, month = 11, day = NULL)
+jma_url(item = "annually", "0010", year = 2017, month = 11, day = NULL)
 }

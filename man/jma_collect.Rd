@@ -4,7 +4,7 @@
 \alias{jma_collect}
 \title{Collect JMA Stats Data}
 \usage{
-jma_collect(item = NULL, block_no, year, month, day = NULL)
+jma_collect(item = NULL, block_no, year, month, day)
 }
 \arguments{
 \item{item}{url}
@@ -22,9 +22,9 @@ Collect JMA Stats Data
 }
 \examples{
 \dontrun{
-jma_collect(item = "annually_a", "1284", year = 2017, month = 11, day = NULL)
+jma_collect(item = "annually", "1284", year = 2017, month = 11, day = NULL)
 # daily
-jma_collect(item = "daily_a1", block_no = "0010", year = 2017, month = 11, day = NULL)
-jma_collect(item = "daily_a1", "0422", year = 2017, month = 11, day = NULL)
+jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11, day = NULL)
+jma_collect(item = "daily", "0422", year = 2017, month = 11, day = NULL)
 }
 }

@@ -14,7 +14,7 @@
 #' }
 #' @export
 jma_collect <- function(item = NULL,
-                        block_no, year, month, day = NULL) {
+                        block_no, year, month, day) {
 
   .blockid <- rlang::enquo(block_no)
 
@@ -146,7 +146,7 @@ jma_collect <- function(item = NULL,
 
 #' jma_url(item = "annually", "0010", year = 2017, month = 11, day = NULL)
 jma_url <- function(item = NULL,
-                    block_no, year, month, day = NULL) {
+                    block_no, year, month, day) {
   .blockid <- rlang::enquo(block_no)
 
   selected_item <- item
@@ -156,7 +156,8 @@ jma_url <- function(item = NULL,
   }
 
   df_target_station <-
-    dplyr::filter(stations, block_no == !! rlang::eval_tidy(.blockid))
+    dplyr::filter(stations, block_no == !! rlang::eval_tidy(.blockid)) %>%
+    dplyr::distinct(block_no, .keep_all = TRUE)
 
   pref <- df_target_station$prec_no
   station_type <-
@@ -171,15 +172,12 @@ jma_url <- function(item = NULL,
                    "a",
                    station_type)
 
-  station_type <-
-    dplyr::if_else(selected_item == "annually",
-                   station_type,
-                   paste0(station_type, "1"))
+  if (selected_item != "annually") {
+    station_type <- paste0(station_type, "1")
+  }
 
-  day <- if (rlang::is_true(is.null(day))) {
-    ""
-  } else {
-    day
+  if (rlang::is_true(rlang::is_missing(day))) {
+    day <- ""
   }
 
   list(
@@ -189,7 +187,6 @@ jma_url <- function(item = NULL,
     ),
     station_type = station_type
   )
-
 
 }
 
