@@ -132,7 +132,7 @@ jma_collect <- function(item = NULL,
   }
   # convert_variable_unit(df) %>%
   #   tibble::as_tibble()
-  df
+  tibble::as_tibble(df)
 }
 
 #' jma_url(item = "annually", "0010", year = 2017, month = 11, day = NULL)

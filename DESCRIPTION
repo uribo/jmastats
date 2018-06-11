@@ -24,6 +24,7 @@ Imports:
     rvest,
     sf,
     stringr,
+    tibble,
     units,
     xml2
 Suggests: 
