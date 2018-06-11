@@ -15,8 +15,20 @@ LazyData: true
 ByteCompile: true
 RoxygenNote: 6.0.1
 Imports: 
-    magrittr
+    dplyr,
+    glue,
+    magrittr,
+    purrr,
+    readr,
+    rlang,
+    rvest,
+    sf,
+    stringr,
+    units,
+    xml2
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    sealr,
+    testthat
 VignetteBuilder: knitr
