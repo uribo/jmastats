@@ -16,38 +16,42 @@ if (file.exists(here::here("data-raw", "ame_master.csv")) == FALSE) {
     here::here("data-raw", basename(zip_file)),
     exdir = here::here("data-raw")
   )
+}
 
-  d <-
-    read.csv(here::here("data-raw", "ame_master.csv"),
-             fileEncoding = "cp932",
-             stringsAsFactors = FALSE) %>%
-    tibble::as_tibble() %>%
-    mutate(`都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
-           `カタカナ名` = stringi::stri_trans_general(`ｶﾀｶﾅ名`, id = "nfkc"),
-           longitude = as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 1, 3)) +
-             as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 4, 6)) / 60,
-           latitude = as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 1, 2)) +
-             as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 3, 5)) / 60) %>%
-    dplyr::select(1:4, 6, 11, 14:19)
+d <-
+  read.csv(
+    here::here("data-raw", "ame_master.csv"),
+    fileEncoding = "cp932",
+    stringsAsFactors = FALSE) %>%
+  tibble::as_tibble() %>%
+  mutate(
+    `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
+    `カタカナ名` = stringi::stri_trans_general(`ｶﾀｶﾅ名`, id = "nfkc"),
+    longitude = as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 1, 3)) +
+      as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 4, 6)) / 60,
+    latitude = as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 1, 2)) +
+      as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 3, 5)) / 60
+  ) %>%
+  dplyr::select(1:4, 6, 11, 14:19)
 
-  names(d) <-
-    c("area", "station_no", "station_type", "station_name", "address",
-      "elevation", "observation_begin", "note1", "note2", "katakana",
-      "longitude", "latitude")
+names(d) <- c("area", "station_no", "station_type",
+              "station_name", "address", "elevation",
+              "observation_begin", "note1", "note2",
+              "katakana", "longitude", "latitude")
 
-  d <-
-    d %>%
-    dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
-                     dplyr::funs(dplyr::if_else(. == "−", NA_character_, .)))
+d <-
+  d %>%
+  dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
+                   dplyr::funs(dplyr::if_else(. == "−", NA_character_, .)))
 
-  d <- d %>%
-    dplyr::mutate(area = dplyr::recode(area,
-                                       `オホーツク` = "網走・北見・紋別"))
+d <-
+  d %>%
+  dplyr::mutate(area = dplyr::recode(area,
+                                     `オホーツク` = "網走・北見・紋別"))
 
   # mismatch
   # d %>%
   #   filter(block_no == 47646) # 茨城県　つくば（館野）
-}
 
 # 2. scraping  ---------------------------------------------------------------
 library(rvest)
