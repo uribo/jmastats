@@ -17,6 +17,7 @@ RoxygenNote: 6.0.1
 Imports: 
     dplyr,
     glue,
+    janitor,
     magrittr,
     purrr,
     readr,

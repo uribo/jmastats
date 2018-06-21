@@ -1,3 +1,8 @@
+guess_unit <- function(x) {
+  stringr::str_extract(x, "\\(.+?\\)") %>%
+    stringr::str_remove_all("\\(|\\)")
+}
+
 # 数値が高くなるほど危険度が増す情報の配色
 jma_pal <-
   rev(purrr::pmap_chr(
