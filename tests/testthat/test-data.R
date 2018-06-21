@@ -5,7 +5,7 @@ test_that("check stations statement", {
   expect_is(stations,
             c("sf", "tbl_df", "tbl", "data.frame"))
   expect_equal(dim(stations),
-               c(1334L, 13L))
+               c(1334L, 14L))
   expect_named(
     stations,
     c(
@@ -21,6 +21,7 @@ test_that("check stations statement", {
       "katakana",
       "prec_no",
       "block_no",
+      "pref_code",
       "geometry"
     )
   )
@@ -33,6 +34,7 @@ test_that("check stations statement", {
       "character",
       "character",
       "integer",
+      "character",
       "character",
       "character",
       "character",
