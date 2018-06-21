@@ -28,8 +28,11 @@ Imports:
     units,
     xml2
 Suggests: 
+    jpndistrict,
     knitr,
     rmarkdown,
     sealr,
     testthat
+Remotes:
+    uribo/jpndistrict
 VignetteBuilder: knitr

@@ -2,6 +2,7 @@
 # Stations list
 #####################################
 library(dplyr)
+library(jpndistrict)
 # # 1. zip archives ---------------------------------------------------------
 # Ref) http://www.data.jma.go.jp/developer/index.html
 # http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
@@ -32,15 +33,13 @@ d <-
     latitude = as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 1, 2)) +
       as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 3, 5)) / 60
   ) %>%
-  dplyr::select(1:4, 6, 11, 14:19)
-
-names(d) <- c("area", "station_no", "station_type",
-              "station_name", "address", "elevation",
-              "observation_begin", "note1", "note2",
-              "katakana", "longitude", "latitude")
-
-d <-
-  d %>%
+  dplyr::select(1:4, 6, 11, 14:19) %>%
+  purrr::set_names(
+    c("area", "station_no", "station_type",
+      "station_name", "address", "elevation",
+      "observation_begin", "note1", "note2",
+      "katakana", "longitude", "latitude")
+  ) %>%
   dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
                    dplyr::funs(dplyr::if_else(. == "−", NA_character_, .)))
 
@@ -74,7 +73,6 @@ read_block_no <- function(prec_no) {
     distinct()
 }
 
-
 df_prec_no <-
   read_html("http://www.data.jma.go.jp/obd/stats/etrn/select/prefecture00.php?prec_no=&block_no=&year=&month=&day=&view=") %>%
   html_nodes(css = "#main > map > area") %>%
@@ -106,6 +104,22 @@ stations <-
                      station = stringr::str_remove(station, "（.+）")),
             by = c("station_name" = "station", "area")) %>%
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-  tibble::new_tibble(subclass = "sf")
+  tibble::new_tibble(subclass = "sf") %>%
+  mutate(pref = purrr::pmap(., ~ find_pref(geometry = ..13))) %>%
+  mutate(pref_null = purrr::pmap_lgl(., ~ is.null(..13)))
+
+stations <-
+  rbind(
+    stations %>%
+    filter(pref_null == TRUE) %>%
+    mutate(pref = NA_character_) %>%
+    rename(pref_code = pref),
+  stations %>%
+    filter(pref_null == FALSE) %>%
+    tidyr::unnest() %>%
+    select(-prefecture, -geometry1)
+) %>%
+  select(-pref_null) %>%
+  arrange(station_no)
 
 usethis::use_data(stations, overwrite = TRUE)

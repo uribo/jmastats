@@ -15,7 +15,10 @@ RUN set -x && \
 RUN set -x && \
   install2.r --error \
     here \
+    lwgeom \
     sealr \
     sf \
     usethis \
-    units
+    units && \
+  installGithub.r \
+    "uribo/jpndistrict"
