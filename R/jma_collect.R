@@ -135,7 +135,6 @@ jma_collect <- function(item = NULL,
   tibble::as_tibble(df)
 }
 
-#' jma_url(item = "annually", "0010", year = 2017, month = 11, day = NULL)
 jma_url <- function(item = NULL,
                     block_no, year, month, day) {
   .blockid <- rlang::enquo(block_no)
@@ -146,38 +145,43 @@ jma_url <- function(item = NULL,
     rlang::abort("この中から選択")
   }
 
-  df_target_station <-
-    dplyr::filter(stations, block_no == !! rlang::eval_tidy(.blockid)) %>%
-    dplyr::distinct(block_no, .keep_all = TRUE)
-
-  pref <- df_target_station$prec_no
-  station_type <-
-    dplyr::if_else(df_target_station$station_type == "官", "s", "a")
-
-  station_type <-
-    dplyr::if_else(df_target_station$station_name %in% c("天城", "与論島",
-                                                         "安次嶺", "川平",
-                                                         "慶良間", "盛山",
-                                                         "鏡原", "東"),
-                   # 官なのにaのやつ
-                   "a",
-                   station_type)
-
-  if (selected_item != "annually") {
-    station_type <- paste0(station_type, "1")
-  }
-
-  if (rlang::is_true(rlang::is_missing(day))) {
+  if (rlang::is_missing(day)) {
     day <- ""
+    dummy_day <- 1
+  } else {
+    dummy_day <- day
   }
 
-  list(
-    url = glue::glue(
-      "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={pref}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
-      blockid = rlang::eval_tidy(.blockid)
-    ),
-    station_type = station_type
-  )
+  if (validate_date(year, month, dummy_day)) {
+    df_target_station <-
+      subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
+      dplyr::distinct(block_no, .keep_all = TRUE)
+
+    pref <- df_target_station$prec_no
+    station_type <-
+      ifelse(df_target_station$station_type == "官", "s", "a")
+
+    station_type <-
+      ifelse(df_target_station$station_name %in% c("天城", "与論島",
+                                                   "安次嶺", "川平",
+                                                   "慶良間", "盛山",
+                                                   "鏡原", "東"),
+             # Special pattern
+             "a",
+             station_type)
+
+    if (selected_item != "annually") {
+      station_type <- paste0(station_type, "1")
+    }
+
+    list(
+      url = as.character(glue::glue(
+        "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={pref}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+        blockid = rlang::eval_tidy(.blockid)
+      )),
+      station_type = station_type
+    )
+  }
 
 }
 
