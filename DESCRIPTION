@@ -28,6 +28,7 @@ Imports:
     tibble,
     units,
     xml2
+    lubridate (>= 1.7.4),
 Suggests: 
     jpndistrict,
     knitr,

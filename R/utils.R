@@ -3,6 +3,38 @@ guess_unit <- function(x) {
     stringr::str_remove_all("\\(|\\)")
 }
 
+validate_date <- function(year, month, day) {
+
+  check_positive <-
+    sapply(list(year = year, month = month, day = day), function(x) { x > 0})
+
+  if (sum(check_positive) != 3L) {
+    rlang::inform(paste0(
+      "Input arguments should be positive\n",
+      "Check: ",
+      paste(names(which(check_positive == FALSE)), collapse = ", ")))
+    return(FALSE)
+  }
+
+  x <-
+    lubridate::make_date(year, month, day)
+
+  if (is.na(x)) {
+    rlang::inform(paste0(
+      "Input arguments should be calender format\n",
+      "Check: ",
+      paste(names(which(c(
+        "month" =
+          ifelse(is.na(match(13, 1:12)), FALSE, TRUE),
+        "day" =
+          ifelse(is.na(match(1, 1:31)), FALSE, TRUE)
+      ) == FALSE)), collapse = ", ")))
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
+}
+
 # 数値が高くなるほど危険度が増す情報の配色
 jma_pal <-
   rev(purrr::pmap_chr(
