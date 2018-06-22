@@ -15,6 +15,7 @@ RUN set -x && \
 RUN set -x && \
   install2.r --error \
     here \
+    janitor \
     lwgeom \
     sealr \
     sf \

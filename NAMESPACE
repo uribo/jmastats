@@ -3,4 +3,5 @@
 export("%>%")
 export(jma_collect)
 export(nearest_station)
+export(parse_unit)
 importFrom(magrittr,"%>%")
