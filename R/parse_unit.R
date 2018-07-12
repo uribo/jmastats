@@ -5,28 +5,36 @@
 #' @export
 parse_unit <- function(data, rename = TRUE) {
 
+  . <- NULL
+
+  data <-
+    readr::type_convert(data)
+
   original_vars <-
     names(data)
 
-  var_units <-
-    names(data) %>%
-    purrr::map_chr(guess_unit)
+  data_candidate <-
+    data %>%
+    readr::type_convert() %>%
+    dplyr::select_if(~ !is.character(.)) %>%
+    dplyr::select_if(~ sum(is.na(.)) != nrow(data))
 
-  target_vars <-
-    names(data)[-which(is.na(var_units))]
+  var_units <-
+    names(data_candidate) %>%
+    purrr::map(guess_unit) %>%
+    purrr::reduce(c)
 
   df_drop <-
-    data[, which(is.na(var_units))]
+    data[, c(which(is.na(var_units)),
+             which(!names(data) %in% names(data_candidate)))]
 
   df_units <-
     purrr::map2_dfc(
-      var_units[!is.na(var_units)],
-      1:length(var_units[!is.na(var_units)]),
-      ~ data %>%
-        dplyr::select(!! rlang::sym(target_vars[.y])) %>%
-        dplyr::mutate_at(vars(!! rlang::sym(target_vars[.y])),
-                         .funs = units::set_units, value = .x)
-    )
+      which(!names(data_candidate) %in% names(df_drop)),
+      var_units[which(!names(data_candidate) %in% names(df_drop))],
+      ~ units::as_units(data_candidate[[.x]], value = .y)
+    ) %>%
+    purrr::set_names(names(data_candidate)[!names(data_candidate) %in% names(df_drop)])
 
   df_res <-
     dplyr::bind_cols(df_drop, df_units) %>%
