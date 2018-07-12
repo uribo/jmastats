@@ -95,15 +95,15 @@ jma_collect <- function(item = NULL,
   } else if (item == "hourly" & target$station_type == "a1") {
 
     df <-
-      df_raw[[5]][-c(1:2), ]
+      df_raw[[5]][-c(1), ]
 
     names(df) <-
       name_sets(selected_item)
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) #%>%
-      #readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]")))
+
   } else if (item == "hourly" & target$station_type == "s1") {
     df <-
       df_raw[[5]][-c(1), ]
