@@ -35,16 +35,10 @@ validate_date <- function(year, month, day) {
   }
 }
 
+
+
 # 数値が高くなるほど危険度が増す情報の配色
 # 降水量、風速、積雪
-jma_pal <-
-  rev(purrr::pmap_chr(
-    list(r = c(180, 255, 255, 250,   0, 33,  160, 242),
-         g = c(0,    40, 153, 245,  65, 140, 210, 242),
-         b = c(104,   0,   0,   0, 255, 240, 255, 255)),
-    ~ rgb(..1, ..2, ..3, max = 255)
-  ))
-
 # jma_pal <-
 #   rev(purrr::pmap_chr(
 #     list(r = c(180, 255, 255, 250, 255, 255, 185,   0,  0,    0),
@@ -56,6 +50,62 @@ jma_pal <-
 # x <- seq(0, 1, length = 600)
 # scales::show_col(scales::seq_gradient_pal(c(jma_pal))(x),
 #                  labels = FALSE, borders = "#a87963")
+
+jma_pal <- function(pallet = c("absolute", "relative"), .attribute = FALSE) {
+
+  res <-
+    list(
+      absolute = list(
+        colors = purrr::pmap_chr(
+          list(r = c(180, 255, 255, 250,   0, 33,  160, 242),
+               g = c(0,    40, 153, 245,  65, 140, 210, 242),
+               b = c(104,   0,   0,   0, 255, 240, 255, 255)),
+          ~ rgb(..1, ..2, ..3, max = 255)
+        ),
+        precipitation = list(
+          labels = c("Over 80", "50~80", "30~50", "20~30", "10~20", "5~10", "1~5", "0~1"),
+          breaks = c(80, 50, 30, 20, 10, 5, 1, 0)
+        ),
+        snow = list(
+          labels = c("Over 200", "150~200", "100~150", "50~100",
+                     "20~50", "5~20", "Under 5"),
+          breaks = c(200, 150, 100, 50, 20, 5, 4)
+        ),
+        wind = list(
+          labels = c("Over 25", "20~25", "15~20", "10~15", "5~10", "0~5"),
+          breaks = c(25, 20, 15, 10, 5, 0)
+        )
+      ),
+      relative = list(
+        colors = purrr::pmap_chr(
+          list(
+            r = c(180, 255, 255, 250, 255, 255, 185,   0,   0,   0),
+            g = c(  0,  40, 153, 245, 255, 255, 235, 150,  65,  32),
+            b = c(104,   0,   0,   0, 150, 240, 255, 255, 255, 128)
+          ),
+          ~ rgb(..1, ..2, ..3, max = 255)
+        ),
+        amedas = list(
+          labels =     c("35~", "30~35", "25~30", "20~25",
+                         "15~20", "10~15", "5~10", "0~5",
+                         "-5~0", "~-5"),
+          breaks = c(35, 30, 25, 20, 15, 10, 5, 0, -5, -6)
+        ),
+        forecast = list(
+          labels =     c("35~", "30~35", "25~30", "20~24",
+                         "15~19", "10~14", "5~9", "0~4",
+                         "-5~-1", "~-5"),
+          breaks = c(35, 30, 25, 20, 15, 10, 5, 0, -5, -6)
+        )
+      )
+    )
+
+  if (.attribute == FALSE) {
+    res[[rlang::quo_name(pallet)]][[1]]
+  } else {
+    res
+  }
+}
 
 # 警報・注意報に及びこれに類する情報の配色
 pal1 <-
