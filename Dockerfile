@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:3.5.0
+FROM rocker/tidyverse:3.5.1
 
 RUN set -x && \
   apt-get update && \
@@ -15,8 +15,10 @@ RUN set -x && \
 RUN set -x && \
   install2.r --error \
     here \
+    ggforce \
     janitor \
     lwgeom \
+    mapview \
     sealr \
     sf \
     usethis \

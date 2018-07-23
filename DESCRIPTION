@@ -16,6 +16,8 @@ ByteCompile: true
 RoxygenNote: 6.0.1
 Imports: 
     dplyr (>= 0.7.5),
+    ggforce (>= 0.1.2),
+    ggplot2 (>= 2.2.1),
     glue (>= 1.2.0),
     janitor (>= 1.0.0),
     lubridate (>= 1.7.4),
