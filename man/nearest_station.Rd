@@ -12,5 +12,9 @@ nearest_station(longitude, latitude)
 \item{latitude}{latitude}
 }
 \description{
-Find out neighborhood station
+Return the nearest \link{stations} information
+to the given coordinates.
+}
+\examples{
+nearest_station(142.9313, 43.70417)
 }

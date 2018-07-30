@@ -16,11 +16,11 @@ scale_fill_jma_relative(type = "amedas", ...)
 \arguments{
 \item{type}{Display item}
 
-\item{...}{Arguments to pass on to [`ggplot2::scale_colour_gradientn()`]() or
-`ggplot2::scale_fill_gradientn()`}
+\item{...}{Arguments to pass on to \link[ggplot2:scale_color_gradientn]{ggplot2::scale_color_gradientn} or
+\link[ggplot2:scale_fill_gradientn]{ggplot2::scale_fill_gradientn}}
 }
 \value{
-A `ScaleContinuous` object that can be added to a `ggplot` object
+A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
 }
 \description{
 Scales to use for ggplot2

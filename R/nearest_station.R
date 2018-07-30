@@ -1,12 +1,20 @@
 #' Find out neighborhood station
 #'
+#' @description Return the nearest [stations] information
+#' to the given coordinates.
 #' @param longitude longitude
 #' @param latitude latitude
-#' @example
+#' @importFrom dplyr select mutate
+#' @importFrom purrr map_dbl
+#' @importFrom sf st_distance st_point st_set_geometry st_sfc
+#' @importFrom units set_units
+#' @examples
 #' nearest_station(142.9313, 43.70417)
 #' @name nearest_station
 #' @export
 nearest_station <- function(longitude, latitude) {
+
+  m <- NULL
 
   distances <-
     1:nrow(stations) %>%
@@ -20,6 +28,5 @@ nearest_station <- function(longitude, latitude) {
   dplyr::select(stations[min_row, ], c(1, 2, 4)) %>%
     dplyr::mutate(distance = distances[min_row] %>%
                     units::set_units(m)) %>%
-    sf::st_set_geometry(NULL)
-
+    sf::st_set_geometry(value = NULL)
 }

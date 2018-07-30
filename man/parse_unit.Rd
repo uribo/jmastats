@@ -9,7 +9,7 @@ parse_unit(data, rename = TRUE)
 \arguments{
 \item{data}{data}
 
-\item{rename}{*logical*}
+\item{rename}{\emph{logical}}
 }
 \description{
 Parse data variable units

@@ -15,7 +15,7 @@ jma_collect(item = NULL, block_no, year, month, day)
 
 \item{month}{select month}
 
-\item{day}{select date (default `NULL`)}
+\item{day}{select date (default \code{NULL})}
 }
 \description{
 Collect JMA Stats Data

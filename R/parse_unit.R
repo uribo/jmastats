@@ -2,6 +2,11 @@
 #'
 #' @param data data
 #' @param rename *logical*
+#' @importFrom dplyr bind_cols select select_if
+#' @importFrom janitor clean_names
+#' @importFrom purrr map map2_dfc reduce set_names
+#' @importFrom readr type_convert
+#' @importFrom units as_units
 #' @export
 parse_unit <- function(data, rename = TRUE) {
 

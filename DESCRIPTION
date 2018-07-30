@@ -10,10 +10,6 @@ Authors@R: c(person(given = "Shinya",
 Depends: 
     R (>= 2.10)
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-ByteCompile: true
-RoxygenNote: 6.0.1
 Imports: 
     dplyr (>= 0.7.5),
     ggforce (>= 0.1.2),
@@ -39,4 +35,9 @@ Suggests:
     testthat (>= 2.0.0)
 Remotes:
     uribo/jpndistrict
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
 VignetteBuilder: knitr
+RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)

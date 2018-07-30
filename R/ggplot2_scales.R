@@ -1,8 +1,8 @@
 #' Scales to use for ggplot2
 #'
 #' @param type Display item
-#' @param ... Arguments to pass on to [`ggplot2::scale_colour_gradientn()`]() or
-#' `ggplot2::scale_fill_gradientn()`
+#' @param ... Arguments to pass on to [ggplot2::scale_color_gradientn] or
+#' [ggplot2::scale_fill_gradientn]
 #'
 #' @importFrom ggplot2 scale_color_gradientn scale_fill_gradientn
 #' @importFrom purrr flatten
