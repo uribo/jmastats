@@ -7,10 +7,12 @@
 #' @param day select date (default `NULL`)
 #' @examples
 #' \dontrun{
-#' jma_collect(item = "annually", "1284", year = 2017, month = 11, day = NULL)
+#' jma_collect(item = "annually", "1284", year = 2017, month = 11)
 #' # daily
-#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11, day = NULL)
-#' jma_collect(item = "daily", "0422", year = 2017, month = 11, day = NULL)
+#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11)
+#' jma_collect(item = "daily", "0422", year = 2017, month = 11)
+#' # hourly
+#' jma_collect("hourly", "0010", 2018, 7, 30)
 #' }
 #' @export
 jma_collect <- function(item = NULL,
