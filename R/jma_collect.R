@@ -92,30 +92,34 @@ jma_collect <- function(item = NULL,
                                          stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
       readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
 
-  } else if (item == "hourly" & target$station_type == "a1") {
+  } else if (item == "hourly") {
+    if (target$station_type == "a1") {
+      df <-
+        df_raw[[5]][-c(1), ]
+
+      names(df) <-
+        name_sets(selected_item)
+
+      df <-
+        convert_error(df) %>%
+        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]")))
+    } else if (target$station_type == "s1") {
+      df <-
+        df_raw[[5]][-c(1), ]
+
+      names(df) <-
+        name_sets(selected_item)
+
+      df <-
+        convert_error(df) %>%
+        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+        readr::type_convert()
+    }
 
     df <-
-      df_raw[[5]][-c(1), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]")))
-
-  } else if (item == "hourly" & target$station_type == "s1") {
-    df <-
-      df_raw[[5]][-c(1), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      readr::type_convert()
-
+      df %>%
+      dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
+      dplyr::select(date, dplyr::everything())
   } else if (item == "monthly" & target$station_type == "a1") {
     df <-
       df_raw[[6]][-c(1:2), ]
