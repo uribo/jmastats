@@ -243,4 +243,8 @@ stations <-
                             .default = pref_code
                             ))
 
+stations <-
+  stations %>%
+  dplyr::mutate_if(is.character, .funs = dplyr::funs(stringi::stri_conv(str = ., to = "UTF8")))
+
 usethis::use_data(stations, overwrite = TRUE)
