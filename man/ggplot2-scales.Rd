@@ -3,11 +3,14 @@
 \name{ggplot2-scales}
 \alias{ggplot2-scales}
 \alias{scale_color_jma_absolute}
+\alias{scale_color_jma_relative}
 \alias{scale_fill_jma_absolute}
 \alias{scale_fill_jma_relative}
 \title{Scales to use for ggplot2}
 \usage{
 scale_color_jma_absolute(type = "precipitation", ...)
+
+scale_color_jma_relative(type = "amedas", ...)
 
 scale_fill_jma_absolute(type = "precipitation", ...)
 

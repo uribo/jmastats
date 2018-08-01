@@ -28,11 +28,11 @@
 #'   scale_color_jma_absolute(type = "precipitation") +
 #'   scale_fill_jma_absolute(type = "precipitation")
 #' }
+#' @export
 scale_color_jma_absolute <- function(type = "precipitation", ...) {
 
   pal <-
-    jma_pal(pallet = "absolute", .attribute = TRUE) %>%
-    purrr::flatten()
+    jma_pal(palette = "absolute", .attribute = TRUE)
 
   ggplot2::scale_color_gradientn(colors = rev(pal$colors),
                         labels = rev(switch(type,
@@ -50,11 +50,30 @@ scale_color_jma_absolute <- function(type = "precipitation", ...) {
 
 #' @rdname ggplot2-scales
 #' @export
+scale_color_jma_relative <- function(type = "amedas", ...) {
+
+  pal <-
+    jma_pal(palette = "relative", .attribute = TRUE)
+
+  ggplot2::scale_color_gradientn(colors = rev(pal$colors),
+                                 labels = switch(type,
+                                                 amedas = pal$amedas$labels),
+                                 limits = switch(type,
+                                                 amedas = pal$amedas$limits
+                                 ),
+                                 breaks = switch(type,
+                                                 amedas = pal$amedas$breaks),
+                                 ...
+  )
+
+}
+
+#' @rdname ggplot2-scales
+#' @export
 scale_fill_jma_absolute <- function(type = "precipitation", ...) {
 
   pal <-
-    jma_pal(pallet = "absolute", .attribute = TRUE) %>%
-    purrr::flatten()
+    jma_pal(palette = "absolute", .attribute = TRUE)
 
   ggplot2::scale_fill_gradientn(colors = rev(pal$colors),
                         labels = rev(switch(type,
@@ -75,15 +94,14 @@ scale_fill_jma_absolute <- function(type = "precipitation", ...) {
 scale_fill_jma_relative <- function(type = "amedas", ...) {
 
   pal_relative <-
-    jma_pal(pallet = "relative", .attribute = TRUE) %>%
-    purrr::flatten()
+    jma_pal(palette = "relative", .attribute = TRUE)
 
   ggplot2::scale_fill_gradientn(colors = rev(pal_relative$colors),
-                       labels = rev(switch (type,
+                       labels = rev(switch(type,
                                             amedas = pal_relative$amedas$labels,
                                             forecast = pal_relative$forecast$labels
                        )),
-                       breaks  = rev(switch (type,
+                       breaks  = rev(switch(type,
                                              amedas = pal_relative$amedas$breaks,
                                              forecast = pal_relative$forecast$breaks
                        )),
