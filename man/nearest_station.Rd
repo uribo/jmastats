@@ -2,19 +2,49 @@
 % Please edit documentation in R/nearest_station.R
 \name{nearest_station}
 \alias{nearest_station}
-\title{Find out neighborhood station}
+\alias{pick_neighbor_stations}
+\title{Find out neighborhood stations}
 \usage{
-nearest_station(longitude, latitude)
+nearest_station(longitude, latitude, geometry = NULL)
+
+pick_neighbor_stations(longitude, latitude, distance = 1, .unit = "m",
+  geometry = NULL)
 }
 \arguments{
-\item{longitude}{longitude}
+\item{longitude}{Longitude.}
 
-\item{latitude}{latitude}
+\item{latitude}{Latitude.}
+
+\item{geometry}{XY \link[sf:sf]{sf::sf} object.}
+
+\item{distance}{Distance from station to station to adjustment.}
+
+\item{.unit}{Unit used for extraction from the point of interest. Default \emph{m} (meters).
+This value is passed to \link[units:as_units]{units::as_units}.}
+}
+\value{
+sf
 }
 \description{
 Return the nearest \link{stations} information
 to the given coordinates.
 }
+\details{
+\itemize{
+\item \code{nearest_station()}: Return single station data.
+\item \code{pick_neighbor_stations()}: Pick-up neighbourhood stations.
+Filter by distance from target point.
+}
+}
 \examples{
+\dontrun{
 nearest_station(142.9313, 43.70417)
+
+pick_neighbor_stations(140.10, 36.08, 300000)
+
+d <-
+  pick_neighbor_stations(140.10, 36.08, 30, "km")
+pick_neighbor_stations(geometry = sf::st_point(c(140.1833, 36.23333)),
+                       distance = 100)
+}
 }
