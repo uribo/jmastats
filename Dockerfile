@@ -24,5 +24,7 @@ RUN set -x && \
     usethis \
     units && \
   installGithub.r \
-    "/r-lib/roxygen2md" \
+    "r-lib/pkgload" \
+    "klutometis/roxygen" \
+    "r-lib/roxygen2md" \
     "uribo/jpndistrict"

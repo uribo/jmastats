@@ -30,8 +30,10 @@ Imports:
 Suggests: 
     jpndistrict (>= 0.3.2.9000),
     knitr (>= 1.20),
+    lwgeom (>= 0.1-4),
     rmarkdown (>= 1.9),
     sealr (>= 0.1.0),
+    stringi (>= 1.2.4),
     testthat (>= 2.0.0)
 Remotes:
     uribo/jpndistrict
@@ -39,5 +41,5 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
