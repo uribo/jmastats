@@ -148,7 +148,7 @@ jma_url <- function(item = NULL,
   selected_item <- item
 
   if (identical(selected_item, character(0))) {
-    rlang::abort("この中から選択")
+    rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
 
   if (rlang::is_missing(day)) {
@@ -165,13 +165,18 @@ jma_url <- function(item = NULL,
 
     pref <- df_target_station$prec_no
     station_type <-
-      ifelse(df_target_station$station_type == "官", "s", "a")
+      ifelse(df_target_station$station_type == intToUtf8(23448), "s", "a")
 
     station_type <-
-      ifelse(df_target_station$station_name %in% c("天城", "与論島",
-                                                   "安次嶺", "川平",
-                                                   "慶良間", "盛山",
-                                                   "鏡原", "東"),
+      ifelse(df_target_station$station_name %in% c(intToUtf8(c(22825, 22478)),
+                                                   intToUtf8(c(19982, 35542, 23798)),
+                                                   intToUtf8(c(23433, 27425, 23994)),
+                                                   intToUtf8(c(24029, 24179)),
+                                                   intToUtf8(c(24950, 33391, 38291)),
+                                                   intToUtf8(c(30427, 23665)),
+                                                   intToUtf8(c(37857, 21407)),
+                                                   intToUtf8(c(26481))
+                                                   ),
              # Special pattern
              "a",
              station_type)
@@ -211,9 +216,10 @@ convert_variable_unit <- function(.data) {
 convert_error <- function(.data) {
   dplyr::mutate_all(.data,
                     .funs = dplyr::funs(
-                      dplyr::if_else(. %in% c("///", "×", "", "#"), NA_character_, .))) %>%
+                      dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)), intToUtf8(c(215)), "", intToUtf8(c(35))),
+                                     NA_character_, .))) %>%
     dplyr::mutate_all(.funs = dplyr::funs(
-                        dplyr::if_else(. %in% c("--"), "0.0", .)))
+                        dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
 
 }
 
