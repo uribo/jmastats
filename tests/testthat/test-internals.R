@@ -46,3 +46,20 @@ test_that("multiplication works", {
       station_type = "a")
   )
 })
+
+test_that("Set coords", {
+
+  res <-
+    check_input_coords(longitude = 140.10, latitude = 36.08, geometry = NULL)
+  expect_is(res, "list")
+  expect_named(res, c("longitude", "latitude"))
+
+  expect_equivalent(
+    check_input_coords(geometry = st_point(c(140.10, 36.08))),
+    check_input_coords(longitude = 140.10, latitude = 36.08, geometry = NULL))
+
+  expect_message(
+    check_input_coords(longitude = 123.00, latitude = 32.0, geometry = st_point(c(140.10, 36.08)))
+  )
+
+})

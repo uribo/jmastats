@@ -35,6 +35,26 @@ validate_date <- function(year, month, day) {
   }
 }
 
+check_input_coords <- function(longitude = NULL, latitude = NULL, geometry = NULL) {
+  if (!is.null(geometry)) {
+    if (sf::st_is(geometry, "POINT")) {
+
+      coords <-
+        if (sf::st_is(geometry, "POINT")) {
+          list(longitude = sf::st_coordinates(geometry)[1],
+               latitude =  sf::st_coordinates(geometry)[2])
+        }
+
+      if (!rlang::is_missing(longitude) | !rlang::is_missing(latitude))
+        rlang::inform("the condition assigned coord and geometry, only the geometry will be used") # nolint
+    }
+  } else {
+    coords <-
+      list(longitude = rlang::quo_expr(longitude),
+           latitude  = rlang::quo_expr(latitude))
+  }
+  coords
+}
 
 
 # 数値が高くなるほど危険度が増す情報の配色
