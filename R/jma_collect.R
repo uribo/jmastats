@@ -142,7 +142,7 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%  %>%
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
       readr::type_convert()
 
   } else {
