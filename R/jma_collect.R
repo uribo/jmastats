@@ -29,17 +29,21 @@ jma_collect <- function(item = NULL,
 
   selected_item <- paste0(item, "_", target$station_type)
 
-  if (item == "annually" & target$station_type == "a") {
-    df <-
-      df_raw[[4]][-c(1:2), ]
+  if (item == "annually") {
+    if (target$station_type == "a") {
+      df <-
+        df_raw[[4]][-c(1:2), ]
 
-    names(df) <-
-      name_sets(selected_item)
+      names(df) <-
+        name_sets(selected_item)
 
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      df <-
+        convert_error(df) %>%
+        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+        readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+    } else if (target$station_type == "s") {
+
+    }
   } else if (item == "monthly" & target$station_type == "a1") {
     df <-
       df_raw[[6]][-c(1:2), ]
@@ -151,6 +155,12 @@ jma_url <- function(item = NULL,
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
 
+  if (selected_item == "annually" & rlang::is_missing(year)) {
+    year <- ""
+    dummy_year <- 1
+  } else {
+    dummy_year <- year
+  }
   if (rlang::is_missing(day)) {
     day <- ""
     dummy_day <- 1
@@ -158,7 +168,7 @@ jma_url <- function(item = NULL,
     dummy_day <- day
   }
 
-  if (validate_date(year, month, dummy_day)) {
+  if (validate_date(dummy_year, month, dummy_day)) {
     df_target_station <-
       subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
       dplyr::distinct(block_no, .keep_all = TRUE)
@@ -489,6 +499,42 @@ name_sets <- function(item) {
                                "max_fall_day",
                                "depth"),
                              "(cm)")
-      )
-    )
+      ),
+      "annually_s" = c("year",
+                       paste0("atmosphere_",
+                              c("land", "surface"), "(hPa)"),
+                       paste0("precipitation_",
+                              c("sum",
+                                "max_per_day",
+                                "max_1hour",
+                                "max_10minutes"), "(mm)"),
+                       paste0("temperature_",
+                              c("average",
+                                "average_max",
+                                "average_min",
+                                "max",
+                                "min"), "(\u2103)"),
+                       paste0("humidity_",
+                              c("average",
+                                "min"), "(%)"),
+                       paste0("wind_",
+                              c("average_speed",
+                                "max_speed",
+                                "max_speed_direction",
+                                "max_instantaneous_speed",
+                                "max_instantaneous_direction"),
+                              "(m/s)"),
+                       paste0("daylight_", "(h)"),
+                       paste0("solar_irradiance_", "(MJ/m^2)"),
+                       paste0("snow_",
+                              c("fall",
+                                "max_fall_day",
+                                "depth"),
+                              "(cm)"),
+                       paste0("cloud_covering_", c("mean")),
+                       paste0("condition",
+                              c("snow_days",
+                                "fog_days",
+                                "thunder_days"))
+    ))
 }
