@@ -30,7 +30,6 @@ jma_collect <- function(item = NULL,
   selected_item <- paste0(item, "_", target$station_type)
 
   if (item == "annually") {
-    if (target$station_type == "a") {
       df <-
         df_raw[[4]][-c(1:2), ]
 
@@ -40,10 +39,9 @@ jma_collect <- function(item = NULL,
       df <-
         convert_error(df) %>%
         dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-        readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
-    } else if (target$station_type == "s") {
+        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+        readr::type_convert()
 
-    }
   } else if (item == "monthly" & target$station_type == "a1") {
     df <-
       df_raw[[6]][-c(1:2), ]
@@ -54,9 +52,10 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      readr::type_convert()
 
-  } else if(item == "10daily" & target$station_type == "a1") {
+  } else if (item == "10daily" & target$station_type == "a1") {
 
     df <-
       df_raw[[6]][-c(1:2), ]
@@ -67,7 +66,8 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      readr::type_convert()
 
   } else if (item == "daily" & target$station_type == "a1") {
     df <-
@@ -79,10 +79,11 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
       dplyr::mutate(date = as.Date(paste(year,
                                   stringr::str_pad(month, width = 2, pad = "0"),
                                   stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
-      readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      readr::type_convert()
   } else if (item == "daily" & target$station_type == "s1") {
     df <-
       df_raw[[6]][-c(1:3), ]
@@ -93,10 +94,11 @@ jma_collect <- function(item = NULL,
     df <-
       convert_error(df) %>%
       dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
       dplyr::mutate(date = as.Date(paste(year,
                                          stringr::str_pad(month, width = 2, pad = "0"),
                                          stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
-      readr::type_convert(col_types = readr::cols(.default = readr::col_number()))
+      readr::type_convert()
 
   } else if (item == "hourly") {
     if (target$station_type == "a1") {
@@ -108,7 +110,9 @@ jma_collect <- function(item = NULL,
 
       df <-
         convert_error(df) %>%
-        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]")))
+        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+        readr::type_convert()
     } else if (target$station_type == "s1") {
       df <-
         df_raw[[5]][-c(1), ]
@@ -119,13 +123,15 @@ jma_collect <- function(item = NULL,
       df <-
         convert_error(df) %>%
         dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
         readr::type_convert()
     }
 
     df <-
       df %>%
       dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
-      dplyr::select(date, dplyr::everything())
+      dplyr::select(date, dplyr::everything()) %>%
+      readr::type_convert()
   } else if (item == "monthly" & target$station_type == "a1") {
     df <-
       df_raw[[6]][-c(1:2), ]
@@ -135,7 +141,9 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]")))
+      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%  %>%
+      readr::type_convert()
 
   } else {
     df <- df_raw
