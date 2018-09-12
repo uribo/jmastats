@@ -1,3 +1,4 @@
+^\.env$
 ^jmastats\.Rproj$
 ^\.Rproj\.user$
 ^Dockerfile$
