@@ -8,7 +8,8 @@ RUN set -x && \
     libgeos-dev \
     libproj-dev \
     libudunits2-dev \
-    liblwgeom-dev && \
+    liblwgeom-dev \
+    qpdf && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 
@@ -27,4 +28,5 @@ RUN set -x && \
     "r-lib/pkgload" \
     "klutometis/roxygen" \
     "r-lib/roxygen2md" \
-    "uribo/jpndistrict"
+    "uribo/jpndistrict" && \
+  rm -rf /tmp/downloaded_packages/ /tmp/*.rds
