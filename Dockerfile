@@ -1,14 +1,13 @@
-FROM rocker/tidyverse:3.5.1
+FROM rocker/geospatial:3.5.2
+
+ARG GITHUB_PAT
+
+RUN set -x && \
+  echo "GITHUB_PAT=$GITHUB_PAT" >> /usr/local/lib/R/etc/Renviron
 
 RUN set -x && \
   apt-get update && \
   apt-get install -y --no-install-recommends \
-    libudunits2-dev \
-    libgdal-dev \
-    libgeos-dev \
-    libproj-dev \
-    libudunits2-dev \
-    liblwgeom-dev \
     qpdf && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
@@ -18,12 +17,7 @@ RUN set -x && \
     here \
     ggforce \
     janitor \
-    lwgeom \
-    mapview \
-    sealr \
-    sf \
-    usethis \
-    units && \
+    usethis && \
   installGithub.r \
     "r-lib/pkgload" \
     "klutometis/roxygen" \
