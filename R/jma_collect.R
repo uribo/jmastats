@@ -12,6 +12,15 @@
 #' @importFrom rvest html_table
 #' @importFrom stringr str_pad str_remove str_trim
 #' @importFrom xml2 read_html
+#' @note
+#' The parameter `item` chooses one from these:
+#' - annually:
+#' - monthly:
+#' - 3monthly:
+#' - 10daily:
+#' - mb5daily:
+#' - daily:
+#' - hourly:
 #' @examples
 #' \dontrun{
 #' jma_collect(item = "annually", "1284", year = 2017, month = 11)

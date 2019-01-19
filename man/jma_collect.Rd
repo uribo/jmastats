@@ -20,6 +20,18 @@ jma_collect(item = NULL, block_no, year, month, day)
 \description{
 Collect JMA Stats Data
 }
+\note{
+The parameter \code{item} chooses one from these:
+\itemize{
+\item annually:
+\item monthly:
+\item 3monthly:
+\item 10daily:
+\item mb5daily:
+\item daily:
+\item hourly:
+}
+}
 \examples{
 \dontrun{
 jma_collect(item = "annually", "1284", year = 2017, month = 11)
