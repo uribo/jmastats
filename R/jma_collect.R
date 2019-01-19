@@ -5,6 +5,13 @@
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
+#' @import rlang
+#' @importFrom dplyr funs mutate mutate_all mutate_if select
+#' @importFrom glue glue
+#' @importFrom readr type_convert
+#' @importFrom rvest html_table
+#' @importFrom stringr str_pad str_remove str_trim
+#' @importFrom xml2 read_html
 #' @examples
 #' \dontrun{
 #' jma_collect(item = "annually", "1284", year = 2017, month = 11)

@@ -5,7 +5,6 @@
 #' [ggplot2::scale_fill_gradientn]
 #'
 #' @importFrom ggplot2 scale_color_gradientn scale_fill_gradientn
-#' @importFrom purrr flatten
 #'
 #' @return A `ScaleContinuous` object that can be added to a `ggplot` object
 #'
