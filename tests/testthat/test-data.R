@@ -1,6 +1,5 @@
 context("test-data.R")
 
-# sealr::transcribe(stations, detail = FALSE, load_testthat = FALSE, ts = FALSE, mask_seal = TRUE)
 test_that("check stations statement", {
   expect_is(stations,
             c("sf", "tbl_df", "tbl", "data.frame"))

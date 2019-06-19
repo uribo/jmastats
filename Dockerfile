@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.5.2
+FROM rocker/geospatial:3.6.0
 
 ARG GITHUB_PAT
 
@@ -17,6 +17,7 @@ RUN set -x && \
     here \
     ggforce \
     janitor \
+    lwgeom \
     usethis && \
   installGithub.r \
     "r-lib/pkgload" \

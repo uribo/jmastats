@@ -6,3 +6,4 @@
 ^data-raw$
 ^LICENSE\.md$
 ^\.DS_Store$
+^\*\.xlsx$
