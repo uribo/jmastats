@@ -209,7 +209,12 @@ jma_url <- function(item = NULL,
                                                    intToUtf8(c(24950, 33391, 38291)),
                                                    intToUtf8(c(30427, 23665)),
                                                    intToUtf8(c(37857, 21407)),
-                                                   intToUtf8(c(26481))
+                                                   intToUtf8(c(26481)),
+                                                   intToUtf8(c(30707, 30000)),
+                                                   intToUtf8(c(19978, 22823, 27941)),
+                                                   intToUtf8(c(32654, 27941, 23798)),
+                                                   intToUtf8(c(38957, 12534, 23798)),
+                                                   intToUtf8(c(23567, 20516, 36032))
                                                    ),
              # Special pattern
              "a",
