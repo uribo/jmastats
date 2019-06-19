@@ -54,8 +54,8 @@ jma_collect <- function(item = NULL,
 
       df <-
         convert_error(df) %>%
-        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
         readr::type_convert()
 
   } else if (item == "monthly" & target$station_type == "a1") {
@@ -67,8 +67,8 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       readr::type_convert()
 
   } else if (item == "10daily" & target$station_type == "a1") {
@@ -81,8 +81,8 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       readr::type_convert()
 
   } else if (item == "daily" & target$station_type == "a1") {
@@ -94,8 +94,8 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       dplyr::mutate(date = as.Date(paste(year,
                                   stringr::str_pad(month, width = 2, pad = "0"),
                                   stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
@@ -109,8 +109,8 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       dplyr::mutate(date = as.Date(paste(year,
                                          stringr::str_pad(month, width = 2, pad = "0"),
                                          stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
@@ -126,8 +126,8 @@ jma_collect <- function(item = NULL,
 
       df <-
         convert_error(df) %>%
-        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
         readr::type_convert()
     } else if (target$station_type == "s1") {
       df <-
@@ -138,8 +138,8 @@ jma_collect <- function(item = NULL,
 
       df <-
         convert_error(df) %>%
-        dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
         readr::type_convert()
     }
 
@@ -157,8 +157,8 @@ jma_collect <- function(item = NULL,
 
     df <-
       convert_error(df) %>%
-      dplyr::mutate_all(.funs = dplyr::funs(stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = dplyr::funs(stringr::str_trim(., side = "both"))) %>%
+      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
+      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       readr::type_convert()
 
   } else {
@@ -233,13 +233,20 @@ jma_url <- function(item = NULL,
 convert_variable_unit <- function(.data) {
   df <-
     dplyr::mutate_at(.data,
-                   dplyr::vars(dplyr::contains("\u2103")), dplyr::funs(units::set_units(., value = "\u2103"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("hPa")), dplyr::funs(units::set_units(., value = "hPa"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("mm")), dplyr::funs(units::set_units(., value = "mm"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("cm")), dplyr::funs(units::set_units(., value = "cm"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("hour")), dplyr::funs(units::set_units(., value = "hour"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("m/s")), dplyr::funs(units::set_units(., value = "m/s"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("%")), dplyr::funs(units::set_units(., value = "%")))
+                   dplyr::vars(dplyr::contains("(\u2103)")),
+                   list(~ units::set_units(., value = "\u2103"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(hPa)")),
+                     list(~ units::set_units(., value = "hPa"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(mm)")),
+                     list(~ units::set_units(., value = "mm"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(cm)")),
+                     list(~ units::set_units(., value = "cm"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(hour)")),
+                     list(~ units::set_units(., value = "h"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(m/s)")),
+                     list(~ units::set_units(., value = "m/s"))) %>%
+    dplyr::mutate_at(dplyr::vars(dplyr::contains("(%)")),
+                     list(~ units::set_units(., value = "%")))
 
   names(df) <-
     stringr::str_remove_all(names(df), "\\(.+\\)")
@@ -249,10 +256,10 @@ convert_variable_unit <- function(.data) {
 
 convert_error <- function(.data) {
   dplyr::mutate_all(.data,
-                    .funs = dplyr::funs(
+                    .funs = list(~
                       dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)), intToUtf8(c(215)), "", intToUtf8(c(35))),
                                      NA_character_, .))) %>%
-    dplyr::mutate_all(.funs = dplyr::funs(
+    dplyr::mutate_all(.funs = list(~
                         dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
 
 }

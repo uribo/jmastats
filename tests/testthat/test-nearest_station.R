@@ -34,7 +34,8 @@ test_that("multiplication works", {
   res <-
     pick_neighbor_stations(longitude = 140.10,
                            latitude = 36.08,
-                           distance = 300000)
+                           distance = 3500)
+  expect_equal(dim(res), c(1, 4))
   expect_s3_class(
     res,
     "sf"
@@ -43,7 +44,12 @@ test_that("multiplication works", {
     res,
     "tbl_df"
   )
-
+  expect_identical(
+    res,
+    pick_neighbor_stations(longitude = 140.10,
+                           latitude = 36.08,
+                           distance = 3.5, .unit = "km")
+  )
   expect_equal(
     nrow(pick_neighbor_stations(longitude = 140.10,
                            latitude = 36.08,

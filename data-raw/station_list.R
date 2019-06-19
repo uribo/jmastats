@@ -2,12 +2,13 @@
 # Stations list
 #####################################
 library(dplyr)
+library(sf)
 library(jpndistrict)
 # # 1. zip archives ---------------------------------------------------------
 # Ref) http://www.data.jma.go.jp/developer/index.html
 # http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
 # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
-if (file.exists(here::here("data-raw", "ame_master.csv")) == FALSE) {
+if (file.exists(here::here("data-raw/ame_master.csv")) == FALSE) {
   zip_file <- "http://www.jma.go.jp/jma/kishou/know/amedas/ame_master.zip"
   download.file(
     zip_file,
@@ -21,7 +22,7 @@ if (file.exists(here::here("data-raw", "ame_master.csv")) == FALSE) {
 
 d <-
   read.csv(
-    here::here("data-raw", "ame_master.csv"),
+    here::here("data-raw/ame_master.csv"),
     fileEncoding = "cp932",
     stringsAsFactors = FALSE) %>%
   tibble::as_tibble() %>%
@@ -41,16 +42,16 @@ d <-
       "katakana", "longitude", "latitude")
   ) %>%
   dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
-                   dplyr::funs(dplyr::if_else(. == "−", NA_character_, .)))
+                   list(~ dplyr::if_else(. == "−", NA_character_, .)))
 
 d <-
   d %>%
   dplyr::mutate(area = dplyr::recode(area,
                                      `オホーツク` = "網走・北見・紋別"))
 
-  # mismatch
-  # d %>%
-  #   filter(block_no == 47646) # 茨城県　つくば（館野）
+# # mismatch
+# d %>%
+#   filter(block_no == 47646) # 茨城県　つくば（館野）
 
 # 2. scraping  ---------------------------------------------------------------
 library(rvest)
@@ -89,8 +90,7 @@ df_stations <-
   df_prec_no$prec_no %>%
   unique() %>%
   purrr::map_df(
-    read_block_no
-  )
+    read_block_no)
 
 df_stations <-
   df_stations %>%
@@ -105,7 +105,7 @@ d <-
                      station = stringr::str_remove(station, "（.+）")),
             by = c("station_name" = "station", "area")) %>%
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-  tibble::new_tibble(subclass = "sf")
+  tibble::new_tibble(nrow = nrow(.), subclass = "sf")
 
 # 30 mins.
 stations <-
@@ -113,17 +113,31 @@ stations <-
   mutate(pref = purrr::pmap(., ~ find_pref(geometry = ..13))) %>%
   mutate(pref_null = purrr::pmap_lgl(., ~ is.null(..13)))
 
+stations<-
+  stations %>%
+  mutate(pref_null = purrr::pmap_lgl(., ~ is.null(..14)))
+
+stations_pref_na <-
+  stations %>%
+  filter(pref_null == TRUE) %>%
+  mutate(pref = NA_character_) %>%
+  rename(pref_code = pref)
+
+stations_pref_comp <-
+  stations %>%
+  filter(pref_null == FALSE)
+
 stations <-
   rbind(
-    stations %>%
-    filter(pref_null == TRUE) %>%
-    mutate(pref = NA_character_) %>%
-    rename(pref_code = pref),
-  stations %>%
-    filter(pref_null == FALSE) %>%
-    tidyr::unnest() %>%
-    select(-prefecture, -geometry1)
-) %>%
+    stations_pref_comp %>%
+      select(-pref) %>%
+      bind_cols(stations_pref_comp %>%
+                  pull(pref) %>%
+                  purrr::map(st_drop_geometry) %>%
+                  purrr::reduce(rbind)) %>%
+      select(names(stations_pref_na)),
+    stations_pref_na
+  ) %>%
   select(-pref_null) %>%
   arrange(station_no)
 
@@ -245,6 +259,6 @@ stations <-
 
 stations <-
   stations %>%
-  dplyr::mutate_if(is.character, .funs = dplyr::funs(stringi::stri_conv(str = ., to = "UTF8")))
+  dplyr::mutate_if(is.character, .funs = list(~ stringi::stri_conv(str = ., to = "UTF8")))
 
 usethis::use_data(stations, overwrite = TRUE)

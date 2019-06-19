@@ -43,7 +43,7 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
     check_input_coords(longitude, latitude, geometry)
 
   distances <-
-    1:nrow(stations) %>%
+    seq.int(nrow(stations)) %>%
     purrr::map_dbl(
       ~ sf::st_distance(sf::st_point(c(coords$longitude,
                                        coords$latitude)) %>%
@@ -54,7 +54,8 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
 
   dplyr::select(stations[min_row, ], c(1, 2, 4)) %>%
     dplyr::mutate(distance = distances[min_row] %>%
-                    units::set_units(m))
+                    units::set_units(m)) %>%
+    dplyr::select(dplyr::everything(), geometry)
 }
 
 #' @rdname nearest_station
@@ -62,6 +63,7 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
 pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m", geometry = NULL) {
 
   distance <- rlang::enquo(distance)
+  unit = rlang::quo_name(.unit)
 
   coords <-
     check_input_coords(longitude, latitude, geometry)
@@ -70,10 +72,10 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
     dplyr::transmute(station_name,
                      block_no,
                      distance = sf::st_distance(
+                       geometry,
                        sf::st_sfc(sf::st_point(c(coords$longitude,
                                                  coords$latitude)),
-                                  crs = 4326),
-                       sf::st_sfc(geometry))) %>%
-    dplyr::filter(distance <= units::as_units(!! distance, rlang::quo_name(.unit)))
+                                  crs = 4326))[, 1]) %>%
+  dplyr::filter(distance <= units::as_units(!! distance, value = !! unit))
 
 }
