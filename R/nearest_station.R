@@ -77,7 +77,8 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
     res <- pick_neighbor_stations(coords$longitude,
                                   coords$latitude,
                                   distance = 3200,
-                                  .unit = "km")
+                                  .unit = "km") %>%
+    dplyr::top_n(1, dplyr::desc(distance))
   if (nrow(res) == 0)
     rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
   else
