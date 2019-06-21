@@ -33,49 +33,83 @@
 #' @name nearest_station
 NULL
 
-. <- m <- block_no <- geometry <- station_name <- NULL
+. <- m <- station_no <-
+  block_no <- geometry <- station_name <-
+  area <- distance <- NULL
 
 #' @rdname nearest_station
 #' @export
 nearest_station <- function(longitude, latitude, geometry = NULL) {
-
   coords <-
     check_input_coords(longitude, latitude, geometry)
-
-  distances <-
-    seq.int(nrow(stations)) %>%
-    purrr::map_dbl(
-      ~ sf::st_distance(sf::st_point(c(coords$longitude,
-                                       coords$latitude)) %>%
-                          sf::st_sfc(crs = 4326),
-                        stations[.x, ]))
-
-  min_row <- which.min(distances)
-
-  dplyr::select(stations[min_row, ], c(1, 2, 4)) %>%
-    dplyr::mutate(distance = distances[min_row] %>%
-                    units::set_units(m)) %>%
-    dplyr::select(dplyr::everything(), geometry)
+  res <- pick_neighbor_stations(coords$longitude,
+                                coords$latitude,
+                                distance = 10,
+                                .unit = "km")
+  if (nrow(res) > 1)
+    res <- res %>%
+    dplyr::top_n(1, dplyr::desc(distance))
+  else
+    res <- pick_neighbor_stations(coords$longitude,
+                                  coords$latitude,
+                                  distance = 100,
+                                  .unit = "km")
+  if (nrow(res) > 1)
+    res <- res %>%
+    dplyr::top_n(1, dplyr::desc(distance))
+  else
+    res <- pick_neighbor_stations(coords$longitude,
+                                  coords$latitude,
+                                  distance = 500,
+                                  .unit = "km")
+  if (nrow(res) > 1)
+    res <- res %>%
+    dplyr::top_n(1, dplyr::desc(distance))
+  else
+    res <- pick_neighbor_stations(coords$longitude,
+                                  coords$latitude,
+                                  distance = 1000,
+                                  .unit = "km")
+  if (nrow(res) > 1)
+    res <- res %>%
+    dplyr::top_n(1, dplyr::desc(distance))
+  else
+    res <- pick_neighbor_stations(coords$longitude,
+                                  coords$latitude,
+                                  distance = 3200,
+                                  .unit = "km")
+  if (nrow(res) == 0)
+    rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
+  else
+  res %>%
+    dplyr::select(area,
+                  station_no,
+                  station_name,
+                  block_no,
+                  distance,
+                  geometry)
 }
 
 #' @rdname nearest_station
 #' @export
 pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m", geometry = NULL) {
-
-  distance <- rlang::enquo(distance)
-  unit = rlang::quo_name(.unit)
-
+  unit <- rlang::quo_name(.unit)
   coords <-
     check_input_coords(longitude, latitude, geometry)
-
-  stations %>%
-    dplyr::transmute(station_name,
-                     block_no,
-                     distance = sf::st_distance(
-                       geometry,
-                       sf::st_sfc(sf::st_point(c(coords$longitude,
-                                                 coords$latitude)),
-                                  crs = 4326))[, 1]) %>%
-  dplyr::filter(distance <= units::as_units(!! distance, value = !! unit))
-
+  stations[which(sf::st_is_within_distance(st_sfc(st_point(c(coords$longitude,
+                                                             coords$latitude)),
+                                                  crs = 4326),
+                                           stations,
+                                           dist = units::as_units(distance, value = unit),
+                                           sparse = FALSE)[1, ]), ] %>%
+    dplyr::transmute(
+      area,
+      station_no,
+      station_name,
+      block_no,
+      distance = sf::st_distance(
+        geometry,
+        sf::st_sfc(sf::st_point(c(coords$longitude, coords$latitude)),
+                   crs = 4326))[, 1]) %>%
+    dplyr::arrange(distance)
 }
