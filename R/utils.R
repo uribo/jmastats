@@ -50,8 +50,8 @@ check_input_coords <- function(longitude = NULL, latitude = NULL, geometry = NUL
     }
   } else {
     coords <-
-      list(longitude = rlang::quo_expr(longitude),
-           latitude  = rlang::quo_expr(latitude))
+      list(longitude = rlang::quo_squash(longitude),
+           latitude  = rlang::quo_squash(latitude))
   }
   coords
 }
