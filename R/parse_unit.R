@@ -4,7 +4,7 @@
 #' @param rename *logical*
 #' @importFrom dplyr bind_cols select select_if
 #' @importFrom janitor clean_names
-#' @importFrom purrr map map2_dfc reduce set_names
+#' @importFrom purrr keep map map2_dfc reduce set_names
 #' @importFrom readr type_convert
 #' @importFrom units as_units
 #' @export
@@ -20,14 +20,15 @@ parse_unit <- function(data, rename = TRUE) {
 
   data_candidate <-
     data %>%
-    readr::type_convert() %>%
+    dplyr::select(grep(pattern = "\\(.+\\)$", original_vars)) %>%
     dplyr::select_if(~ !is.character(.)) %>%
     dplyr::select_if(~ sum(is.na(.)) != nrow(data))
 
   var_units <-
     names(data_candidate) %>%
     purrr::map(guess_unit) %>%
-    purrr::reduce(c)
+    purrr::reduce(c) %>%
+    purrr::keep(~ !is.na(.x))
 
   df_drop <-
     data[, c(which(is.na(var_units)),
