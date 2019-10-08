@@ -28,19 +28,55 @@ read_rsmc_besttrack <- function(path) {
   v8 <- v10 <- NULL
 
   lines <- readr::read_lines(path)
-
+  xx <-
+    lines[stringr::str_detect(lines, "^66666")]
   df_header <-
-    utils::read.table(textConnection(lines[stringr::str_detect(lines, "^66666")]),
-                      col.names = c("indicator_66666",
-                                    "international_number", "nrow",
-                                    "tropical_cyclone_number",
-                                    "international_number_copy",
-                                    "flag_last_data_line",
-                                    "DTM", "storm_name", "last_update"),
-               stringsAsFactors = FALSE) %>%
-    dplyr::arrange(international_number) %>%
-    dplyr::mutate(storm_name = forcats::fct_inorder(storm_name)) %>%
-    tibble::as_tibble()
+    seq.int(length(xx)) %>%
+    purrr::map(
+      function(x) {
+        parse_x <- xx[x] %>%
+          stringr::str_split("[[:space:]]", simplify = TRUE) %>%
+          stringr::str_subset(".+")
+        if (length(parse_x) == 7L) {
+          parse_x <-
+            c(parse_x[1:4],
+              NA_character_,
+              parse_x[5:6],
+              NA_character_,
+              parse_x[7])
+        } else if (length(parse_x) == 8L) {
+          parse_x <-
+            c(parse_x[1:4],
+              NA_character_,
+              parse_x[5:8])
+        }
+        parse_x %>%
+          set_names(c("indicator_66666",
+                      "international_number", "nrow",
+                      "tropical_cyclone_number",
+                      "international_number_copy",
+                      "flag_last_data_line",
+                      "DTM", "storm_name", "last_update"))
+      }
+    ) %>%
+    purrr::reduce(dplyr::bind_rows) %>%
+    tibble::as_tibble() %>%
+    readr::type_convert(col_types = "dcdcccdcc") %>%
+    dplyr::mutate(last_update = lubridate::ymd(last_update))
+
+  if (df_header %>%
+      dplyr::pull(international_number) %>%
+      stringr::str_sub(1, 2) %>%
+      dplyr::n_distinct() == 1) {
+    df_header <-
+      df_header %>%
+      dplyr::arrange(international_number) %>%
+      dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
+  } else {
+    df_header <-
+      df_header %>%
+      dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
+  }
 
   data_common_vars <-
     c("datetime", "indicator_002", "grade",
@@ -55,7 +91,6 @@ read_rsmc_besttrack <- function(path) {
            c("", "(nm)", "(nm)"))
   xx <-
     lines[stringr::str_detect(lines, "^66666", negate = TRUE)]
-
   df_record <-
     seq.int(1, length(xx)) %>%
     purrr::map(
@@ -63,11 +98,19 @@ read_rsmc_besttrack <- function(path) {
         parse_x <- xx[x] %>%
           stringr::str_split("[[:space:]]", simplify = TRUE) %>%
           stringr::str_subset(".+")
-        if (length(parse_x) == 7L) {
-          as.data.frame(parse_x) %>%
+        if (length(parse_x) <= 7L) {
+          tmp_d <-
+            as.data.frame(parse_x) %>%
             t() %>%
-            tibble::as_tibble(.name_repair = "minimal") %>%
-            purrr::set_names(data_common_vars)
+            tibble::as_tibble(.name_repair = "minimal")
+
+          if (length(parse_x) == 6L) {
+            tmp_d %>%
+              purrr::set_names(data_common_vars[-length(data_common_vars)])
+          } else if (length(parse_x) == 7L) {
+            tmp_d %>%
+              purrr::set_names(data_common_vars)
+          }
         } else {
           tmp_d <-
             parse_x %>%
@@ -91,15 +134,22 @@ read_rsmc_besttrack <- function(path) {
       }
     ) %>%
     purrr::reduce(dplyr::bind_rows) %>%
-    dplyr::mutate(international_number = rep(df_header$international_number,
-                                             df_header$nrow),
-           datetime = lubridate::ymd_h(datetime, tz = "UTC"),
-           latitude = as.numeric(latitude) / 10,
-           longitude = as.numeric(longitude) / 10) %>%
+    dplyr::mutate(
+      datetime = lubridate::ymd_h(
+        paste0(
+          dplyr::if_else(as.numeric(stringr::str_sub(datetime, 1, 2)) <= 19,
+                         "20",
+                         "19"),
+          datetime), tz = "UTC"),
+      latitude = as.numeric(latitude) / 10,
+      longitude = as.numeric(longitude) / 10,
+      international_number = rep(df_header$international_number,
+                                 df_header$nrow)) %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
     dplyr::left_join(df_header, by = "international_number") %>%
     dplyr::arrange(datetime) %>%
     dplyr::select(names(.)[!names(.) %in% attr(., "sf_column")])
+  df_record
 }
 
 
