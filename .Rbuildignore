@@ -7,3 +7,4 @@
 ^LICENSE\.md$
 ^\.DS_Store$
 ^\*\.xlsx$
+^inst/besttrack$

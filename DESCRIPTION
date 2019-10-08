@@ -8,10 +8,11 @@ Authors@R: c(person(given = "Shinya",
                                      role  = c("aut", "cre"),
                                      comment = c(ORCID = "0000-0002-0493-6186")))
 Depends: 
-    R (>= 2.10)
+    R (>= 3.1)
 License: MIT + file LICENSE
 Imports: 
     dplyr (>= 0.7.5),
+    forcats (>= 0.4.0),
     ggforce (>= 0.1.2),
     ggplot2 (>= 2.2.1),
     glue (>= 1.2.0),
@@ -25,6 +26,7 @@ Imports:
     sf (>= 0.6.3),
     stringr (>= 1.3.1),
     tibble (>= 1.4.2),
+    tidyr (>= 1.0.0),
     units (>= 0.5.1),
     xml2 (>= 1.2.0)
 Suggests: 
@@ -40,5 +42,5 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1.9000
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)

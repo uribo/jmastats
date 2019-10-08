@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.6.0
+FROM rocker/geospatial:3.6.1
 
 ARG GITHUB_PAT
 
@@ -18,10 +18,10 @@ RUN set -x && \
     ggforce \
     janitor \
     lwgeom \
+    roxygen2 \
     usethis && \
   installGithub.r \
     "r-lib/pkgload" \
-    "klutometis/roxygen" \
     "r-lib/roxygen2md" \
     "uribo/jpndistrict" && \
   rm -rf /tmp/downloaded_packages/ /tmp/*.rds
