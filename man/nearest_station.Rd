@@ -7,8 +7,13 @@
 \usage{
 nearest_station(longitude, latitude, geometry = NULL)
 
-pick_neighbor_stations(longitude, latitude, distance = 1, .unit = "m",
-  geometry = NULL)
+pick_neighbor_stations(
+  longitude,
+  latitude,
+  distance = 1,
+  .unit = "m",
+  geometry = NULL
+)
 }
 \arguments{
 \item{longitude}{Longitude.}

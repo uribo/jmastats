@@ -17,11 +17,12 @@ RUN set -x && \
     here \
     ggforce \
     janitor \
+    jpndistrict \
     lwgeom \
+    pkgload \
     roxygen2 \
+    roxygen2md \
     usethis && \
   installGithub.r \
-    "r-lib/pkgload" \
-    "r-lib/roxygen2md" \
-    "uribo/jpndistrict" && \
+    "r-lib/roxygen2" && \
   rm -rf /tmp/downloaded_packages/ /tmp/*.rds

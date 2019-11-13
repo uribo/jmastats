@@ -1,7 +1,10 @@
 Package: jmastats
 Version: 0.0.0.9000
-Title: Access to Japan Meteorological Agency Data
-Description: What the package does (one paragraph).
+Title: Download Weather Data from Japan Meteorological Agency Website
+Description: Provides the features to download weather data published 
+    by the Japan Meteorological Agency website (<http://www.data.jma.go.jp/obd/stats/etrn/index.php>).
+    Data can refer to published data from 1976, and items correspond to those of the website. In addition to this, 
+    it is possible to process the best track data of typhoons and to check nearby observation stations.
 Authors@R: c(person(given = "Shinya",
                                      family = "Uryu",
                                      email = "suika1127@gmail.com",
@@ -10,6 +13,8 @@ Authors@R: c(person(given = "Shinya",
 Depends: 
     R (>= 3.1)
 License: MIT + file LICENSE
+BugReports: https://gitlab.com/uribo/jmastats/issues
+URL: https://gitlab.com/uribo/jmastats
 Imports: 
     dplyr (>= 0.7.5),
     forcats (>= 0.4.0),
@@ -30,17 +35,15 @@ Imports:
     units (>= 0.5.1),
     xml2 (>= 1.2.0)
 Suggests: 
-    jpndistrict (>= 0.3.2.9000),
+    jpndistrict (>= 0.3.3),
     knitr (>= 1.20),
     lwgeom (>= 0.1-4),
     rmarkdown (>= 1.9),
     stringi (>= 1.2.4),
     testthat (>= 2.0.0)
-Remotes:
-    uribo/jpndistrict
 Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Roxygen: list(markdown = TRUE)

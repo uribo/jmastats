@@ -3,7 +3,6 @@
 \docType{package}
 \name{jmastats}
 \alias{jmastats}
-\alias{jmastats-package}
 \title{Access to Japan Meteorological Agency Data}
 \description{
 Access to Japan Meteorological Agency Data
