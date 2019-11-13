@@ -7,8 +7,12 @@
 \usage{
 read_rsmc_besttrack(path)
 
-track_combine(data, group_vars = c("international_number", "storm_name"),
-  keep_vars = NULL, geometry = geometry)
+track_combine(
+  data,
+  group_vars = c("international_number", "storm_name"),
+  keep_vars = NULL,
+  geometry = geometry
+)
 }
 \arguments{
 \item{path}{path to best track data (.txt)}
@@ -32,5 +36,5 @@ contains observation record as point.
 }
 }
 \details{
-See \url{http://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details. # nolint
+See \url{http://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details.
 }

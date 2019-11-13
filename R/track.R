@@ -24,7 +24,8 @@
 #' @export
 read_rsmc_besttrack <- function(path) {
 
-  . <- international_number <- storm_name <- datetime <- latitude <- longitude <- NULL
+  . <- last_update <- international_number <- storm_name <-
+  `central_pressure(hPa)` <- `maximum_sustained_wind_speed(knot)` <- datetime <- latitude <- longitude <- NULL
   v8 <- v10 <- NULL
 
   lines <- readr::read_lines(path)
@@ -82,12 +83,13 @@ read_rsmc_besttrack <- function(path) {
     c("datetime", "indicator_002", "grade",
       "latitude", "longitude",
       "central_pressure(hPa)",
-      "maximum sustained_wind_speed(knot)")
+      "maximum_sustained_wind_speed(knot)")
   data_typhoon_vars <-
     paste0(c("_direction_of_the_longest_radius_of_",
              "_the_longest_radius_of_",
              "_the_shortest_radius_of_"),
-           rep(c("50kt_winds_or_greater", "30kt_winds_or_greater"), each = 3),
+           rep(c("50kt_winds_or_greater",
+                 "30kt_winds_or_greater"), each = 3),
            c("", "(nm)", "(nm)"))
   xx <-
     lines[stringr::str_detect(lines, "^66666", negate = TRUE)]
@@ -145,6 +147,7 @@ read_rsmc_besttrack <- function(path) {
       longitude = as.numeric(longitude) / 10,
       international_number = rep(df_header$international_number,
                                  df_header$nrow)) %>%
+    dplyr::mutate_at(dplyr::vars(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`), as.numeric) %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
     dplyr::left_join(df_header, by = "international_number") %>%
     dplyr::arrange(datetime) %>%
