@@ -1,24 +1,18 @@
 #' Scales to use for ggplot2
-#'
 #' @param type Display item
 #' @param ... Arguments to pass on to [ggplot2::scale_color_gradientn] or
 #' [ggplot2::scale_fill_gradientn]
-#'
 #' @importFrom ggplot2 scale_color_gradientn scale_fill_gradientn
-#'
 #' @return A `ScaleContinuous` object that can be added to a `ggplot` object
-#'
 #' @name ggplot2-scales
 #' @rdname ggplot2-scales
 #' @examples
 #' \dontrun{
 #' library(dplyr)
-#'
 #' d <-
 #' jma_collect("daily", block_no = "47646", year = 2017, month = 9) %>%
 #' select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) %>%
 #' parse_unit()
-#'
 #' library(ggforce)
 #' ggplot(d, aes(date, precipitation_sum_mm,
 #'           color = units::drop_units(precipitation_sum_mm),

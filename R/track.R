@@ -9,7 +9,7 @@
 #' @param path path to best track data (.txt)
 #' @import rlang
 #' @importFrom dplyr arrange bind_rows group_by lead select
-#' left_join mutate ungroup rowwise
+#' left_join if_else mutate mutate_at ungroup rowwise vars
 #' @importFrom forcats fct_inorder
 #' @importFrom lubridate ymd_h
 #' @importFrom purrr set_names reduce
@@ -78,7 +78,6 @@ read_rsmc_besttrack <- function(path) {
       df_header %>%
       dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
   }
-
   data_common_vars <-
     c("datetime", "indicator_002", "grade",
       "latitude", "longitude",
@@ -105,7 +104,6 @@ read_rsmc_besttrack <- function(path) {
             as.data.frame(parse_x) %>%
             t() %>%
             tibble::as_tibble(.name_repair = "minimal")
-
           if (length(parse_x) == 6L) {
             tmp_d %>%
               purrr::set_names(data_common_vars[-length(data_common_vars)])
@@ -154,7 +152,6 @@ read_rsmc_besttrack <- function(path) {
     dplyr::select(names(.)[!names(.) %in% attr(., "sf_column")])
   df_record
 }
-
 
 #' @rdname track
 #' @param data Import data using [read_rsmc_besttrack]
