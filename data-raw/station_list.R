@@ -1,6 +1,7 @@
 #####################################
 # Stations list
 # 1. 地上気象観測地点,地域気象観測所
+# 2. 潮位観測地点
 #####################################
 library(dplyr)
 library(sf)
@@ -269,3 +270,25 @@ stations <-
   verify(dim(.) == c(1334, 14))
 
 usethis::use_data(stations, overwrite = TRUE)
+
+# 2. 潮位観測 ---------------------------------------------------------------------
+# ref) https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php
+# https://www.jma.go.jp/jp/choi/list1.html
+library(parzer)
+
+d <-
+  read_html("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php") %>%
+  html_table(fill = TRUE) %>%
+  purrr::pluck(1) %>%
+  tibble::repair_names() %>%
+  tibble::as_tibble() %>%
+  slice(-seq.int(2)) %>%
+  slice(-nrow(.)) %>%
+  mutate_all(dplyr::na_if, y = "-") %>%
+  rename(longitude = `経度（東経）`,
+         latitude = `緯度（北緯）`) %>%
+  mutate_at(vars(longitude, latitude),
+            list(~ stringr::str_replace_all(., c("\u309c" = "\u00b0")))) %>%
+  mutate(longitude = parzer::parse_lon(longitude),
+         latitude = parzer::parse_lat(latitude)) %>%
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
