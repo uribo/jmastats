@@ -1,10 +1,15 @@
 #####################################
 # Stations list
+# 1. 地上気象観測地点,地域気象観測所
 #####################################
 library(dplyr)
 library(sf)
-library(jpndistrict)
-# # 1. zip archives ---------------------------------------------------------
+library(jpndistrict) # for reverse geocoding
+library(assertr)
+library(rvest)
+
+# 1. 地上気象観測地点 -------------------------------------------------------------
+# # 1.1. zip archives ---------------------------------------------------------
 # Ref) http://www.data.jma.go.jp/developer/index.html
 # http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
 # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
@@ -20,11 +25,12 @@ if (file.exists(here::here("data-raw/ame_master.csv")) == FALSE) {
   )
 }
 
-d <-
+df_amedas_master <-
   read.csv(
     here::here("data-raw/ame_master.csv"),
     fileEncoding = "cp932",
     stringsAsFactors = FALSE) %>%
+  verify(dim(.) == c(1327, 16)) %>%
   tibble::as_tibble() %>%
   mutate(
     `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
@@ -42,26 +48,23 @@ d <-
       "katakana", "longitude", "latitude")
   ) %>%
   dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
-                   list(~ dplyr::if_else(. == "−", NA_character_, .)))
-
-d <-
-  d %>%
+                   list(~ dplyr::if_else(. == "−", NA_character_, .))) %>%
   dplyr::mutate(area = dplyr::recode(area,
-                                     `オホーツク` = "網走・北見・紋別"))
+                                     `オホーツク` = "網走・北見・紋別")) %>%
+  verify(ncol(.) == 12L)
 
 # # mismatch
 # d %>%
 #   filter(block_no == 47646) # 茨城県　つくば（館野）
 
-# 2. scraping  ---------------------------------------------------------------
-library(rvest)
+# 1.2. scraping  ---------------------------------------------------------------
 read_block_no <- function(prec_no) {
   Sys.sleep(2)
-  read_html(glue::glue(
+  xml2::read_html(glue::glue(
     "http://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no={prec_no}&block_no=&year=&month=&day=&view=")) %>%
-    html_nodes(css = "#ncontents2 > map > area") %>%
-    html_attrs() %>%
-    tibble(
+    rvest::html_nodes(css = "#ncontents2 > map > area") %>%
+    rvest::html_attrs() %>%
+    tibble::tibble(
       station = purrr::map_chr(., "alt"),
       prec_no = purrr::map_chr(., "href") %>%
         stringr::str_extract("prec_no=[0-9]{2}") %>%
@@ -75,45 +78,46 @@ read_block_no <- function(prec_no) {
 }
 
 df_prec_no <-
-  read_html("http://www.data.jma.go.jp/obd/stats/etrn/select/prefecture00.php?prec_no=&block_no=&year=&month=&day=&view=") %>%
-  html_nodes(css = "#main > map > area") %>%
-  html_attrs() %>%
+  xml2::read_html("http://www.data.jma.go.jp/obd/stats/etrn/select/prefecture00.php?prec_no=&block_no=&year=&month=&day=&view=") %>%
+  rvest::html_nodes(css = "#main > map > area") %>%
+  rvest::html_attrs() %>%
   tibble::tibble(
     area = purrr::map_chr(., "alt"),
     prec_no = purrr::map_chr(., "href") %>%
       stringr::str_extract("prec_no=[0-9]{2}") %>%
       stringr::str_remove("prec_no=")) %>%
-  dplyr::select(-1)
+  dplyr::select(-1) %>%
+  verify(dim(.) == c(61, 2))
 
+# 1.3 Merge ---------------------------------------------------------------
 # ~ 2 mins.
 df_stations <-
   df_prec_no$prec_no %>%
   unique() %>%
   purrr::map_df(
-    read_block_no)
-
-df_stations <-
-  df_stations %>%
+    read_block_no) %>%
+  verify(dim(.) == c(1669, 3)) %>%
   left_join(df_prec_no, by = "prec_no") %>%
-  mutate(area = stringr::str_remove(area, "地方"))
+  mutate(area = stringr::str_remove(area, "地方")) %>%
+  verify(dim(.) == c(1669, 4)) %>%
+  mutate(area = stringr::str_remove(area, "(都|府|県)$"),
+         area = dplyr::if_else(station == "竜王山", "徳島", area),
+         station = stringr::str_remove(station, "（.+）"))
 
-d <-
-  d %>%
-  left_join(df_stations %>%
-              mutate(area = stringr::str_remove(area, "(都|府|県)$"),
-                     area = dplyr::if_else(station == "竜王山", "徳島", area),
-                     station = stringr::str_remove(station, "（.+）")),
+stations <-
+  df_amedas_master %>%
+  left_join(df_stations,
             by = c("station_name" = "station", "area")) %>%
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-  tibble::new_tibble(nrow = nrow(.), subclass = "sf")
+  tibble::new_tibble(nrow = nrow(.), class = "sf")
 
-# 30 mins.
+# 30 mins (dockerだともっとかかる)
 stations <-
-  d %>%
+  stations %>%
   mutate(pref = purrr::pmap(., ~ find_pref(geometry = ..13))) %>%
   mutate(pref_null = purrr::pmap_lgl(., ~ is.null(..13)))
 
-stations<-
+stations <-
   stations %>%
   mutate(pref_null = purrr::pmap_lgl(., ~ is.null(..14)))
 
@@ -121,7 +125,8 @@ stations_pref_na <-
   stations %>%
   filter(pref_null == TRUE) %>%
   mutate(pref = NA_character_) %>%
-  rename(pref_code = pref)
+  rename(pref_code = pref) %>%
+  verify(nrow(.) == 111L)
 
 stations_pref_comp <-
   stations %>%
@@ -141,7 +146,7 @@ stations <-
   select(-pref_null) %>%
   arrange(station_no)
 
-# Manual fix ------------------------------------------------------------
+# 1.4 Manual fix ------------------------------------------------------------
 stations <-
   stations %>%
   mutate(pref_code = recode(station_no,
@@ -259,6 +264,8 @@ stations <-
 
 stations <-
   stations %>%
-  dplyr::mutate_if(is.character, .funs = list(~ stringi::stri_conv(str = ., to = "UTF8")))
+  dplyr::mutate_if(is.character,
+                   .funs = list(~ stringi::stri_conv(str = ., to = "UTF8"))) %>%
+  verify(dim(.) == c(1334, 14))
 
 usethis::use_data(stations, overwrite = TRUE)
