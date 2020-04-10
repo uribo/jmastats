@@ -4,6 +4,3 @@
 \name{jmastats}
 \alias{jmastats}
 \title{Access to Japan Meteorological Agency Data}
-\description{
-Access to Japan Meteorological Agency Data
-}

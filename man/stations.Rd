@@ -4,7 +4,8 @@
 \name{stations}
 \alias{stations}
 \title{Japan Meteorological Agency's Stations list}
-\format{A data frame with 1334 rows 14 variables:
+\format{
+A data frame with 1334 rows 14 variables:
 \itemize{
 \item{area}
 \item{station_no}
@@ -21,7 +22,8 @@
 \item{block_no}
 \item{pref_code}
 \item{geometry}
-}}
+}
+}
 \usage{
 stations
 }

@@ -31,12 +31,10 @@ Scales to use for ggplot2
 \examples{
 \dontrun{
 library(dplyr)
-
 d <-
-jma_collect("daily", block_no = "47646", year = 2017, month = 9) %>%
-select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) %>%
+jma_collect("daily", block_no = "47646", year = 2017, month = 9) \%>\%
+select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) \%>\%
 parse_unit()
-
 library(ggforce)
 ggplot(d, aes(date, precipitation_sum_mm,
           color = units::drop_units(precipitation_sum_mm),

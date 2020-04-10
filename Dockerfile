@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.6.1
+FROM rocker/geospatial:3.6.2
 
 ARG GITHUB_PAT
 
@@ -23,6 +23,4 @@ RUN set -x && \
     roxygen2 \
     roxygen2md \
     usethis && \
-  installGithub.r \
-    "r-lib/roxygen2" && \
   rm -rf /tmp/downloaded_packages/ /tmp/*.rds
