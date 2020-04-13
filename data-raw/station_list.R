@@ -297,7 +297,7 @@ usethis::use_data(stations, overwrite = TRUE)
 # https://www.jma.go.jp/jp/choi/list1.html
 library(parzer)
 
-d <-
+tide_station <-
   read_html("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php") %>%
   html_table(fill = TRUE) %>%
   purrr::pluck(1) %>%
@@ -312,4 +312,7 @@ d <-
             list(~ stringr::str_replace_all(., c("\u309c" = "\u00b0")))) %>%
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) %>%
-  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+  assertr::verify(dim(.) == c(239, 17))
+
+usethis::use_data(tide_station, overwrite = TRUE)

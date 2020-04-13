@@ -25,3 +25,11 @@ globalVariables("stations")
 #' head(stations)
 #' dim(stations)
 "stations"
+
+#' Tidal observation stations of Japan Meteorological Agency
+#'
+#' @description XXX
+#' @format A data frame with 239 rows 17 variables
+#' @examples
+#' head(tide_station)
+"tide_station"
