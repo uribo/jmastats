@@ -3,6 +3,7 @@
 .Rhistory
 .RData
 inst/doc
+data-raw/amedas_raw.rds
 data-raw/ame_master.csv
 .DS_Store
 *.xlsx
