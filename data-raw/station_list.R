@@ -269,7 +269,6 @@ stations <-
                             .default = pref_code
                             ))
 
-
 stations <-
   stations %>%
   dplyr::mutate_if(is.character,
@@ -296,23 +295,36 @@ usethis::use_data(stations, overwrite = TRUE)
 # ref) https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php
 # https://www.jma.go.jp/jp/choi/list1.html
 library(parzer)
+library(httr)
+
+years <-
+  seq.int(1997, lubridate::year(lubridate::now()))
 
 tide_station <-
-  read_html("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php") %>%
-  html_table(fill = TRUE) %>%
-  purrr::pluck(1) %>%
-  tibble::repair_names() %>%
-  tibble::as_tibble() %>%
-  slice(-seq.int(2)) %>%
-  slice(-nrow(.)) %>%
-  mutate_all(dplyr::na_if, y = "-") %>%
-  rename(longitude = `経度（東経）`,
-         latitude = `緯度（北緯）`) %>%
+  years %>%
+  purrr::set_names(as.character(years)) %>%
+  purrr::map_df(
+    ~
+      POST(glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/genbo/station.php?year={.x}")) %>%
+      content() %>%
+      html_table(fill = TRUE) %>%
+      purrr::pluck(1) %>%
+      tibble::repair_names() %>%
+      tibble::as_tibble(),
+    .id = "year")
+
+tide_station <-
+  tide_station %>%
+  filter(stringr::str_detect(`地点番号`, "\uff0a", negate = TRUE),
+         `地点番号` != "地点番号") %>%
+  select(seq.int(8)) %>%
+  purrr::set_names(c("year", "id", "stn", "station_name", "address",
+                     "latitude", "longitude", "type")) %>%
   mutate_at(vars(longitude, latitude),
             list(~ stringr::str_replace_all(., c("\u309c" = "\u00b0")))) %>%
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) %>%
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-  assertr::verify(dim(.) == c(239, 17))
+  verify(dim(.) == c(1670, 7))
 
 usethis::use_data(tide_station, overwrite = TRUE)
