@@ -4,10 +4,16 @@
 \alias{read_tide_level}
 \title{Read and parse tide level text data}
 \usage{
-read_tide_level(path, raw = FALSE)
+read_tide_level(path = NULL, .year, .month, .stn, raw = FALSE)
 }
 \arguments{
 \item{path}{URL or local file path to sea tide level file}
+
+\item{.year}{year}
+
+\item{.month}{month}
+
+\item{.stn}{Two uppercase letters of the alphabet to identify the observation point.}
 
 \item{raw}{If \emph{TRUE}, return raw format data}
 }

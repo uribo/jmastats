@@ -1,6 +1,9 @@
 #' Read and parse tide level text data
 #'
 #' @param path URL or local file path to sea tide level file
+#' @param .year year
+#' @param .month month
+#' @param .stn Two uppercase letters of the alphabet to identify the observation point.
 #' @param raw If *TRUE*, return raw format data
 #' @seealso [https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html](https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html)
 #' @examples
@@ -8,7 +11,34 @@
 #' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
 #' }
 #' @export
-read_tide_level <- function(path, raw = FALSE) {
+read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
+  if (is.null(path)) {
+    year <-
+      as.character(.year)
+    month <-
+      sprintf("%02d", .month)
+    year <-
+      rlang::arg_match(year,
+                       as.character(seq.int(1997, lubridate::year(lubridate::now()))))
+    month <-
+      rlang::arg_match(month,
+                       sprintf("%02d", seq.int(12)))
+    if (year == 1997 && month %in% c("01", "02", "03")) {
+      rlang::abort("Old format")
+    }
+
+    stn_candidate <-
+      tide_station %>%
+      dplyr::filter(year == !!rlang::enquo(year)) %>%
+      dplyr::pull(stn)
+    stn <-
+      stn_candidate[stn_candidate %in% .stn]
+    if (length(stn) == 0) {
+      rlang::abort("In that year, there was no data from the target observatory.")
+    }
+    path <-
+      glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/genbo/{year}/{year}{month}/hry{year}{month}{stn}.txt") # nolint
+  }
   d <-
     readr::read_lines(path)
   if (raw == FALSE) {
