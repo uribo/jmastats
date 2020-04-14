@@ -1,4 +1,4 @@
-globalVariables("stations")
+globalVariables(c("stations", "tide_station"))
 
 #' Japan Meteorological Agency's Stations list
 #'
@@ -25,3 +25,11 @@ globalVariables("stations")
 #' head(stations)
 #' dim(stations)
 "stations"
+
+#' Tidal observation stations of Japan Meteorological Agency
+#'
+#' @description XXX
+#' @format A data frame with 1670 rows 7 variables
+#' @examples
+#' head(tide_station)
+"tide_station"

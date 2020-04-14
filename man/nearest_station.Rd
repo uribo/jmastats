@@ -3,6 +3,7 @@
 \name{nearest_station}
 \alias{nearest_station}
 \alias{pick_neighbor_stations}
+\alias{pick_neighbor_tide_stations}
 \title{Find out neighborhood stations}
 \usage{
 nearest_station(longitude, latitude, geometry = NULL)
@@ -12,6 +13,15 @@ pick_neighbor_stations(
   latitude,
   distance = 1,
   .unit = "m",
+  geometry = NULL
+)
+
+pick_neighbor_tide_stations(
+  year,
+  longitude,
+  latitude,
+  distance = 100,
+  .unit = "km",
   geometry = NULL
 )
 }
@@ -26,6 +36,8 @@ pick_neighbor_stations(
 
 \item{.unit}{Unit used for extraction from the point of interest. Default \emph{m} (meters).
 This value is passed to \link[units:as_units]{units::as_units}.}
+
+\item{year}{For tide level data. Restricted to the observation points in the target year.}
 }
 \value{
 sf
@@ -38,6 +50,7 @@ to the given coordinates.
 \itemize{
 \item \code{nearest_station()}: Return single station data.
 \item \code{pick_neighbor_stations()}: Pick-up neighbourhood stations.
+\item \code{pick_neighbor_tide_stations()}: Pick-up neighbourhood tidal observation stations.
 Filter by distance from target point.
 }
 }
@@ -51,5 +64,9 @@ d <-
   pick_neighbor_stations(140.10, 36.08, 30, "km")
 pick_neighbor_stations(geometry = sf::st_point(c(140.1833, 36.23333)),
                        distance = 100)
+
+pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
+                            year = 2020,
+                            distance = 100, .unit = "km")
 }
 }

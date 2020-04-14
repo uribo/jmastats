@@ -44,3 +44,10 @@ test_that("check stations statement", {
     )
   )
 })
+
+test_that("tidal station", {
+  expect_equal(
+    dim(tide_station),
+    c(1670, 7)
+  )
+})
