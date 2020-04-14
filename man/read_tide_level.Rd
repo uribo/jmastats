@@ -23,6 +23,8 @@ Read and parse tide level text data
 \examples{
 \dontrun{
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
+
+read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 }
 }
 \seealso{

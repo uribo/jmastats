@@ -9,6 +9,8 @@
 #' @examples
 #' \dontrun{
 #' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
+#'
+#' read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 #' }
 #' @export
 read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
@@ -84,9 +86,31 @@ parse_tide_file <- function(data) {
       tidyselect::ends_with("obs1"),
       tidyselect::ends_with("obs2"),
       tidyselect::ends_with("obs3"),
-      tidyselect::ends_with("obs4"))
+      tidyselect::ends_with("obs4")) %>%
+    dplyr::mutate_at(dplyr::vars(tidyselect::contains("tide_hm_obs")),
+              list(~ dplyr::na_if(., "99:99"))) %>%
+    dplyr::mutate_at(dplyr::vars(tidyselect::contains("tide_tidal_level_cm_obs")),
+              list(~ dplyr::na_if(., "999"))) %>%
+    readr::type_convert(col_types = readr::cols(
+      stn = readr::col_character(),
+      low_tide_hm_obs1 = readr::col_time(format = ""),
+      low_tide_tidal_level_cm_obs1 = readr::col_double(),
+      high_tide_hm_obs1 = readr::col_time(format = ""),
+      high_tide_tidal_level_cm_obs1 = readr::col_double(),
+      low_tide_hm_obs2 = readr::col_time(format = ""),
+      low_tide_tidal_level_cm_obs2 = readr::col_double(),
+      high_tide_hm_obs2 = readr::col_time(format = ""),
+      high_tide_tidal_level_cm_obs2 = readr::col_double(),
+      low_tide_hm_obs3 = readr::col_time(format = ""),
+      low_tide_tidal_level_cm_obs3 = readr::col_double(),
+      high_tide_hm_obs3 = readr::col_time(format = ""),
+      high_tide_tidal_level_cm_obs3 = readr::col_double(),
+      low_tide_hm_obs4 = readr::col_time(format = ""),
+      low_tide_tidal_level_cm_obs4 = readr::col_double(),
+      high_tide_hm_obs4 = readr::col_time(format = ""),
+      high_tide_tidal_level_cm_obs4 = readr::col_double()
+    ))
 }
-
 
 parse_hry <- function(d) {
   purrr::map2_chr(
