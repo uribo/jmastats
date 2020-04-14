@@ -6,6 +6,7 @@
 #' @details
 #' * `nearest_station()`: Return single station data.
 #' * `pick_neighbor_stations()`: Pick-up neighbourhood stations.
+#' * `pick_neighbor_tide_stations()`: Pick-up neighbourhood tidal observation stations.
 #' Filter by distance from target point.
 #' @return sf
 #' @param longitude Longitude.
@@ -14,6 +15,7 @@
 #' @param distance Distance from station to station to adjustment.
 #' @param .unit Unit used for extraction from the point of interest. Default *m* (meters).
 #' This value is passed to [units::as_units].
+#' @param year For tide level data. Restricted to the observation points in the target year.
 #' @importFrom dplyr filter select mutate transmute
 #' @importFrom purrr map_dbl
 #' @importFrom rlang enquo quo_name
@@ -29,11 +31,16 @@
 #'   pick_neighbor_stations(140.10, 36.08, 30, "km")
 #' pick_neighbor_stations(geometry = sf::st_point(c(140.1833, 36.23333)),
 #'                        distance = 100)
+#'
+#' pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
+#'                             year = 2020,
+#'                             distance = 100, .unit = "km")
 #' }
 #' @name nearest_station
 NULL
 
 . <- m <- station_no <-
+  address <- id <- stn <- type <-
   block_no <- geometry <- station_name <-
   area <- distance <- NULL
 
@@ -112,5 +119,38 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
         geometry,
         sf::st_sfc(sf::st_point(c(coords$longitude, coords$latitude)),
                    crs = 4326))[, 1]) %>%
+    dplyr::arrange(distance)
+}
+
+#' @rdname nearest_station
+#' @export
+pick_neighbor_tide_stations <- function(year, longitude, latitude,
+                                        distance = 100, .unit = "km", geometry = NULL) {
+  unit <- rlang::quo_name(.unit)
+  yr <-
+    rlang::enquo(year)
+  stations <-
+    tide_station %>% filter(year == !!yr)
+  coords <-
+    check_input_coords(longitude, latitude, geometry)
+  stations[which(sf::st_is_within_distance(st_sfc(st_point(c(coords$longitude,
+                                                             coords$latitude)),
+                                                  crs = 4326),
+                                           stations,
+                                           dist = units::as_units(distance, value = unit),
+                                           sparse = FALSE)[1, ]), ] %>%
+    dplyr::transmute(
+      year,
+      id,
+      stn,
+      station_name,
+      address,
+      type,
+      distance = sf::st_distance(
+        geometry,
+        sf::st_sfc(sf::st_point(c(coords$longitude, coords$latitude)),
+                   crs = 4326))[, 1],
+      geometry
+    ) %>%
     dplyr::arrange(distance)
 }
