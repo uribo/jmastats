@@ -22,5 +22,5 @@ read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2
 }
 }
 \seealso{
-\link{read_tide_level}
+\code{\link[=read_tide_level]{read_tide_level()}}
 }

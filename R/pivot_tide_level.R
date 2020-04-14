@@ -6,7 +6,7 @@
 #' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt") %>%
 #'   pivot_tide_level()
 #' }
-#' @seealso [read_tide_level]
+#' @seealso [read_tide_level()]
 #' @return List to store two datasets. hourly observation data and tide.
 #' @export
 pivot_tide_level <- function(data) {
