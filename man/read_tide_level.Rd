@@ -9,11 +9,11 @@ read_tide_level(path = NULL, .year, .month, .stn, raw = FALSE)
 \arguments{
 \item{path}{URL or local file path to sea tide level file}
 
-\item{.year}{year}
+\item{.year}{A.D. 1997 to present year.}
 
-\item{.month}{month}
+\item{.month}{Month number. 1997 only, valid after March.}
 
-\item{.stn}{Two uppercase letters of the alphabet to identify the observation point.}
+\item{.stn}{Station identification name in uppercase two-digit letters.}
 
 \item{raw}{If \emph{TRUE}, return raw format data}
 }

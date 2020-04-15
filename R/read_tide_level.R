@@ -1,9 +1,9 @@
 #' Read and parse tide level text data
 #'
 #' @param path URL or local file path to sea tide level file
-#' @param .year year
-#' @param .month month
-#' @param .stn Two uppercase letters of the alphabet to identify the observation point.
+#' @param .year A.D. 1997 to present year.
+#' @param .month Month number. 1997 only, valid after March.
+#' @param .stn Station identification name in uppercase two-digit letters.
 #' @param raw If *TRUE*, return raw format data
 #' @seealso [https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html](https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html)
 #' @examples
@@ -15,27 +15,8 @@
 #' @export
 read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
   if (is.null(path)) {
-    year <-
-      check_input_tidal_year(.year)
-    month <-
-      sprintf("%02d", .month)
-    month <-
-      rlang::arg_match(month,
-                       sprintf("%02d", seq.int(12)))
-    if (year == 1997 && month %in% c("01", "02", "03")) {
-      rlang::abort("Old format")
-    }
-    stn_candidate <-
-      tide_station %>%
-      dplyr::filter(year == !!rlang::enquo(year)) %>%
-      dplyr::pull(stn)
-    stn <-
-      stn_candidate[stn_candidate %in% .stn]
-    if (length(stn) == 0) {
-      rlang::abort("In that year, there was no data from the target observatory.")
-    }
     path <-
-      glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/genbo/{year}/{year}{month}/hry{year}{month}{stn}.txt") # nolint
+      request_tide_level_url(.year, .month, .stn)
   }
   d <-
     readr::read_lines(path)
@@ -52,9 +33,36 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
       parse_tide_file()
   }
   d %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::num_range("hry_", range = seq.int(0, 23), width = 2),
+    dplyr::mutate_at(dplyr::vars(tidyselect::num_range("hry_",
+                                                       range = seq.int(0, 23),
+                                                       width = 2),
                                  tidyselect::contains("tide_level")),
                      list(~ units::set_units(., "cm")))
+}
+
+request_tide_level_url <- function(.year, .month, .stn) {
+  jma_site <-
+    "https://www.data.jma.go.jp"
+  year <-
+    check_input_tidal_year(.year)
+  month <-
+    sprintf("%02d", .month)
+  month <-
+    rlang::arg_match(month,
+                     sprintf("%02d", seq.int(12)))
+  if (year == 1997 && month %in% c("01", "02", "03")) {
+    rlang::abort("Old format")
+  }
+  stn_candidate <-
+    tide_station %>%
+    dplyr::filter(year == !!rlang::enquo(year)) %>%
+    dplyr::pull(stn)
+  stn <-
+    stn_candidate[stn_candidate %in% .stn]
+  if (length(stn) == 0) {
+    rlang::abort("In that year, there was no data from the target observatory.")
+  }
+  glue::glue("{jma_site}/gmd/kaiyou/data/db/tide/genbo/{year}/{year}{month}/hry{year}{month}{stn}.txt") # nolint
 }
 
 parse_tide_file <- function(data) {
