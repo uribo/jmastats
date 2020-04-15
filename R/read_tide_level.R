@@ -25,7 +25,6 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
     if (year == 1997 && month %in% c("01", "02", "03")) {
       rlang::abort("Old format")
     }
-
     stn_candidate <-
       tide_station %>%
       dplyr::filter(year == !!rlang::enquo(year)) %>%
@@ -52,7 +51,10 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
       tibble::as_tibble() %>%
       parse_tide_file()
   }
-  d
+  d %>%
+    dplyr::mutate_at(dplyr::vars(tidyselect::num_range("hry_", range = seq.int(0, 23), width = 2),
+                                 tidyselect::contains("tide_level")),
+                     list(~ units::set_units(., "cm")))
 }
 
 parse_tide_file <- function(data) {
@@ -91,21 +93,21 @@ parse_tide_file <- function(data) {
     readr::type_convert(col_types = readr::cols(
       stn = readr::col_character(),
       low_tide_hm_obs1 = readr::col_time(format = ""),
-      low_tide_tidal_level_cm_obs1 = readr::col_double(),
+      low_tide_level_obs1 = readr::col_double(),
       high_tide_hm_obs1 = readr::col_time(format = ""),
-      high_tide_tidal_level_cm_obs1 = readr::col_double(),
+      high_tide_level_obs1 = readr::col_double(),
       low_tide_hm_obs2 = readr::col_time(format = ""),
-      low_tide_tidal_level_cm_obs2 = readr::col_double(),
+      low_tide_level_obs2 = readr::col_double(),
       high_tide_hm_obs2 = readr::col_time(format = ""),
-      high_tide_tidal_level_cm_obs2 = readr::col_double(),
+      high_tide_level_obs2 = readr::col_double(),
       low_tide_hm_obs3 = readr::col_time(format = ""),
-      low_tide_tidal_level_cm_obs3 = readr::col_double(),
+      low_tide_level_obs3 = readr::col_double(),
       high_tide_hm_obs3 = readr::col_time(format = ""),
-      high_tide_tidal_level_cm_obs3 = readr::col_double(),
+      high_tide_level_obs3 = readr::col_double(),
       low_tide_hm_obs4 = readr::col_time(format = ""),
-      low_tide_tidal_level_cm_obs4 = readr::col_double(),
+      low_tide_level_obs4 = readr::col_double(),
       high_tide_hm_obs4 = readr::col_time(format = ""),
-      high_tide_tidal_level_cm_obs4 = readr::col_double()
+      high_tide_level_obs4 = readr::col_double()
     ))
 }
 
@@ -223,8 +225,7 @@ parse_tide <- function(d, time) {
       dplyr::transmute(tidal_level_cm = paste0(obs1, obs2, obs3, collapse = "")))
   d %>%
     purrr::set_names(paste0(time,
-                            "_tidal_level_cm",
+                            "_level",
                             "_obs",
                             seq.int(length(d))))
 }
-
