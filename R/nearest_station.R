@@ -127,6 +127,8 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
 pick_neighbor_tide_stations <- function(year, longitude, latitude,
                                         distance = 100, .unit = "km", geometry = NULL) {
   unit <- rlang::quo_name(.unit)
+  year <-
+    check_input_tidal_year(year)
   yr <-
     rlang::enquo(year)
   stations <-

@@ -57,6 +57,13 @@ check_input_coords <- function(longitude, latitude, geometry = NULL) {
   coords
 }
 
+check_input_tidal_year <- function(year) {
+  year <-
+    as.character(year)
+  rlang::arg_match(year,
+                     as.character(seq.int(1997, lubridate::year(lubridate::now()))))
+}
+
 jma_pal <- function(palette = c("absolute", "relative"), .attribute = FALSE) {
 
   rlang::arg_match(palette)

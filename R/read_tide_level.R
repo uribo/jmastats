@@ -16,12 +16,9 @@
 read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
   if (is.null(path)) {
     year <-
-      as.character(.year)
+      check_input_tidal_year(.year)
     month <-
       sprintf("%02d", .month)
-    year <-
-      rlang::arg_match(year,
-                       as.character(seq.int(1997, lubridate::year(lubridate::now()))))
     month <-
       rlang::arg_match(month,
                        sprintf("%02d", seq.int(12)))
