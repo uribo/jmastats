@@ -7,19 +7,30 @@
 
 <!-- badges: end -->
 
-The goal of jmastats is to …
+jmastats
+は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイトで公開される気象、海洋等の各種データをR上で扱えるようにするパッケージです。
 
-## Installation
+## インストール
+
+パッケージはCRANに登録されていません。GitLabを経由してインストールを行ってください。
 
 ``` r
+install.packages("remotes")
 remotes::install_gitlab("uribo/jmastats")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+## 使い方
 
 ``` r
 library(jmastats)
-## basic example code
+```
+
+  - 地点気象データ
+  - 台風資料
+  - 潮汐観測資料
+
+### 気象観測地点
+
+``` r
+data("stations", package = "jmastats")
 ```
