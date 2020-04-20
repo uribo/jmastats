@@ -238,25 +238,22 @@ jma_url <- function(item = NULL,
 convert_variable_unit <- function(.data) {
   df <-
     dplyr::mutate_at(.data,
-                   dplyr::vars(dplyr::contains("(\u2103)")),
+                   dplyr::vars(tidyselect::matches("\\(\u2103\\)$")),
                    list(~ units::set_units(., value = "\u2103"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(hPa)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(hPa\\)$")),
                      list(~ units::set_units(., value = "hPa"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(mm)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(mm\\)$")),
                      list(~ units::set_units(., value = "mm"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(cm)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(cm\\)$")),
                      list(~ units::set_units(., value = "cm"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(hour)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(hour\\)$")),
                      list(~ units::set_units(., value = "h"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(m/s)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(m/s\\)$")),
                      list(~ units::set_units(., value = "m/s"))) %>%
-    dplyr::mutate_at(dplyr::vars(dplyr::contains("(%)")),
+    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(%\\)$")),
                      list(~ units::set_units(., value = "%")))
-
-  names(df) <-
-    stringr::str_remove_all(names(df), "\\(.+\\)")
-
-  df
+  df %>%
+    purrr::set_names(stringr::str_remove_all(names(df), "\\(.+\\)"))
 }
 
 convert_error <- function(.data) {
