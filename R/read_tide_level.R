@@ -30,14 +30,14 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
           as.data.frame(stringsAsFactors = FALSE)
       ) %>%
       tibble::as_tibble() %>%
-      parse_tide_file()
+      parse_tide_file() %>%
+      dplyr::mutate_at(dplyr::vars(tidyselect::num_range("hry_",
+                                                         range = seq.int(0, 23),
+                                                         width = 2),
+                                   tidyselect::contains("tide_level")),
+                       list(~ units::set_units(., "cm")))
   }
-  d %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::num_range("hry_",
-                                                       range = seq.int(0, 23),
-                                                       width = 2),
-                                 tidyselect::contains("tide_level")),
-                     list(~ units::set_units(., "cm")))
+  d
 }
 
 request_tide_level_url <- function(.year, .month, .stn) {
