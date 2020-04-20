@@ -13,5 +13,6 @@ read_jma_weather(path)
 Read the past weather data files downloaded from JMA.
 }
 \seealso{
-\url{https://www.data.jma.go.jp/gmd/risk/obsdl/index.php}
+\url{https://www.data.jma.go.jp/gmd/risk/obsdl/index.php},
+\url{https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html}
 }

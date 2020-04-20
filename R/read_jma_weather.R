@@ -1,7 +1,8 @@
 #' Read the past weather
 #' @description Read the past weather data files downloaded from JMA.
 #' @param path The path to the downloaded file.
-#' @seealso [https://www.data.jma.go.jp/gmd/risk/obsdl/index.php](https://www.data.jma.go.jp/gmd/risk/obsdl/index.php)
+#' @seealso [https://www.data.jma.go.jp/gmd/risk/obsdl/index.php](https://www.data.jma.go.jp/gmd/risk/obsdl/index.php),
+#' [https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html](https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html)
 #' @export
 read_jma_weather <- function(path) {
   var_st_names <-
