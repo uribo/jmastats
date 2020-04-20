@@ -10,7 +10,7 @@ read_jma_weather <- function(path) {
   var_names <-
     paste0(
       read_jma_single_row(path, 4),
-      read_jma_single_row(path, 6) %>%
+      read_jma_single_row(path, 5) %>%
         stringr::str_c("_", .) %>%
         stringr::str_remove("^_$")
     )
