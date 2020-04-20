@@ -16,6 +16,7 @@ License: MIT + file LICENSE
 BugReports: https://gitlab.com/uribo/jmastats/issues
 URL: https://gitlab.com/uribo/jmastats
 Imports: 
+    crayon (>= 1.3.4), 
     dplyr (>= 0.7.5),
     forcats (>= 0.4.0),
     ggforce (>= 0.1.2),
