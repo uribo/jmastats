@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.6.2
+FROM rocker/geospatial:3.6.3
 
 ARG GITHUB_PAT
 
@@ -13,7 +13,7 @@ RUN set -x && \
   rm -rf /var/lib/apt/lists/*
 
 RUN set -x && \
-  install2.r --error --repos 'http://mran.revolutionanalytics.com/snapshot/2020-04-11' \
+  install2.r --error --repos 'http://mran.revolutionanalytics.com/snapshot/2020-04-19' \
     assertr \
     here \
     ggforce \
