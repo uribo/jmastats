@@ -21,7 +21,7 @@ read_jma_weather <- function(path) {
   d <-
     readr::read_csv(
       path,
-      skip = 6,
+      skip = 5,
       locale = readr::locale(encoding = "cp932"),
       col_names = c("date",
                     var_names_combination),
