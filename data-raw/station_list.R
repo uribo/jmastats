@@ -16,23 +16,28 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
   # http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   if (file.exists(here::here("data-raw/ame_master.csv")) == FALSE) {
-    zip_file <- "http://www.jma.go.jp/jma/kishou/know/amedas/ame_master.zip"
+    x <-
+      "http://www.data.jma.go.jp/developer/index.html" %>%
+      read_html()
+    zip_file <-
+      x %>%
+      html_nodes(css = "tr:nth-child(2) > td > div > a") %>%
+      html_attr("href") %>%
+      stringr::str_subset("ame_master.zip")
     download.file(
       zip_file,
       here::here("data-raw", basename(zip_file))
     )
     unzip(
       here::here("data-raw", basename(zip_file)),
-      exdir = here::here("data-raw")
-    )
+      exdir = here::here("data-raw"))
   }
-
   df_amedas_master <-
     read.csv(
       here::here("data-raw/ame_master.csv"),
       fileEncoding = "cp932",
       stringsAsFactors = FALSE) %>%
-    verify(dim(.) == c(1327, 16)) %>%
+    verify(dim(.) == c(1324, 16)) %>%
     tibble::as_tibble() %>%
     mutate(
       `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
@@ -42,7 +47,7 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
       latitude = as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 1, 2)) +
         as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 3, 5)) / 60
     ) %>%
-    dplyr::select(1:4, 6, 11, 14:19) %>%
+    dplyr::select(seq_len(4), 6, 11, seq.int(14, 19)) %>%
     purrr::set_names(
       c("area", "station_no", "station_type",
         "station_name", "address", "elevation",
@@ -50,15 +55,12 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
         "katakana", "longitude", "latitude")
     ) %>%
     dplyr::mutate_at(dplyr::vars(c("note1", "note2")),
-                     list(~ dplyr::if_else(. == "−", NA_character_, .))) %>%
+                     list(~ dplyr::if_else(. %in% c("−", "\uff0d"),
+                                           NA_character_,
+                                           .))) %>%
     dplyr::mutate(area = dplyr::recode(area,
                                        `オホーツク` = "網走・北見・紋別")) %>%
     verify(ncol(.) == 12L)
-
-  # # mismatch
-  # d %>%
-  #   filter(block_no == 47646) # 茨城県　つくば（館野）
-
   # 1.2. scraping  ---------------------------------------------------------------
   read_block_no <- function(prec_no) {
     Sys.sleep(2)
@@ -94,8 +96,10 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
   # 1.3 Merge ---------------------------------------------------------------
   # ~ 2 mins.
   df_stations <-
-    df_prec_no$prec_no %>%
+    df_prec_no %>%
+    dplyr::pull(prec_no) %>%
     unique() %>%
+    ensurer::ensure(length(.) == 61L) %>%
     purrr::map_df(
       read_block_no) %>%
     verify(dim(.) == c(1669, 3)) %>%
@@ -111,7 +115,8 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
     left_join(df_stations,
               by = c("station_name" = "station", "area")) %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-    tibble::new_tibble(nrow = nrow(.), class = "sf")
+    tibble::new_tibble(nrow = nrow(.), class = "sf") %>%
+    verify(nrow(.) == 1331L)
 
   stations %>%
     readr::write_rds("data-raw/amedas_raw.rds")
@@ -129,7 +134,8 @@ ne_jpn <-
 
 stations <-
   stations %>%
-  st_join(ne_jpn)
+  st_join(ne_jpn) %>%
+  verify(dim(.) == c(1331, 14L))
 
 # 1.4 Manual fix ------------------------------------------------------------
 stations <-
@@ -287,7 +293,7 @@ stations <-
          block_no,
          pref_code,
          geometry) %>%
-  verify(dim(.) == c(1334, 14))
+  verify(dim(.) == c(1331, 14))
 
 usethis::use_data(stations, overwrite = TRUE)
 
