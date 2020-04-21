@@ -7,13 +7,23 @@
 read_jma_weather <- function(path) {
   var_st_names <-
     station_head_info(path)
-  var_names <-
-    paste0(
-      read_jma_single_row(path, 4),
-      read_jma_single_row(path, 5) %>%
-        stringr::str_c("_", .) %>%
-        stringr::str_remove("^_$")
-    )
+  if (class(path) == "raw") {
+    path <-
+      iconv(rawToChar(path), from = "cp932", to = "utf8")
+    var_names <-
+      paste0(
+        read_jma_single_row(path, 4, enc_convert = FALSE),
+        read_jma_single_row(path, 5, enc_convert = FALSE) %>%
+          stringr::str_c("_", .) %>%
+          stringr::str_remove("^_$"))
+  } else {
+    var_names <-
+      paste0(
+        read_jma_single_row(path, 4),
+        read_jma_single_row(path, 5) %>%
+          stringr::str_c("_", .) %>%
+          stringr::str_remove("^_$"))
+  }
   var_names_combination <-
     paste(var_st_names,
           var_names,
@@ -30,24 +40,45 @@ read_jma_weather <- function(path) {
                            "c", length(var_names_combination)
                          ), collapse = ""))
     ) %>%
-    readr::type_convert() %>%
-    dplyr::mutate(date = lubridate::as_date(date))
+    readr::type_convert()
+  if (stringr::str_length(d$date[1]) == 8) {
+    d <-
+      d %>%
+      dplyr::mutate(date = lubridate::as_date(date))
+  } else if (stringr::str_length(d$date[1]) == 16) {
+    d <-
+      d %>%
+      dplyr::mutate(date = lubridate::as_datetime(date)) %>%
+      dplyr::rename(datetime = date)
+  }
   d
 }
 
-read_jma_single_row <- function(path, row) {
+read_jma_single_row <- function(path, row, enc_convert = TRUE) {
+  if (enc_convert == TRUE) {
+    locale <- readr::locale(encoding = "cp932")
+  } else {
+    locale <- readr::default_locale()
+  }
   readr::read_lines(path,
                     skip = row -1,
                     n_max = 1,
-                    locale = readr::locale(encoding = "cp932")) %>%
+                    locale = locale) %>%
     stringr::str_split(",", simplify = TRUE) %>%
     as.vector() %>%
     utils::tail(length(.) - 1)
 }
 
 station_head_info <- function(path) {
-  var_st_names <-
-    read_jma_single_row(path, 3)
+  if (class(path) == "raw") {
+    var_st_names <-
+      read_jma_single_row(iconv(rawToChar(path), from = "cp932", to = "utf8"),
+                          3,
+                          enc_convert = FALSE)
+  } else {
+    var_st_names <-
+      read_jma_single_row(path, 3)
+  }
   target_st <-
     unique(var_st_names)
   cat(
