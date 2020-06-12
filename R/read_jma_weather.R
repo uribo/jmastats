@@ -7,7 +7,7 @@
 read_jma_weather <- function(path) {
   var_st_names <-
     station_head_info(path)
-  if (class(path) == "raw") {
+  if (identical(class(path), "raw")) {
     path <-
       iconv(rawToChar(path), from = "cp932", to = "utf8")
     var_names <-
@@ -70,7 +70,7 @@ read_jma_single_row <- function(path, row, enc_convert = TRUE) {
 }
 
 station_head_info <- function(path) {
-  if (class(path) == "raw") {
+  if (identical(class(path), "raw")) {
     var_st_names <-
       read_jma_single_row(iconv(rawToChar(path), from = "cp932", to = "utf8"),
                           3,
