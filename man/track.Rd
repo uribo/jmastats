@@ -29,7 +29,7 @@ track_combine(
 Tidy formatting best track data and combine each point to line.
 @details
 \itemize{
-\item \code{read_rsmc_besttrack()}: Read single best track data into \link[sf:st_sf]{sf}
+\item \code{read_rsmc_besttrack()}: Read single best track data into \link[sf:sf]{sf}
 contains observation record as point.
 \item \code{track_combine()}: Combine track data to line by id
 (such as international_number and storm_name).

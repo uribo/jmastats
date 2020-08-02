@@ -1,4 +1,4 @@
-FROM rocker/geospatial:4.0.0
+FROM rocker/geospatial:4.0.2@sha256:02965624d3955f8c273eaa0f011696db16c8c15691fe9151e6eb634a4c3af193
 
 ARG GITHUB_PAT
 
@@ -13,7 +13,7 @@ RUN set -x && \
   rm -rf /var/lib/apt/lists/*
 
 RUN set -x && \
-  install2.r --error --repos 'http://mran.revolutionanalytics.com/snapshot/2020-06-10' \
+  install2.r --error --ncpus -1 --repos 'https://mran.revolutionanalytics.com/snapshot/2020-08-01' \
     assertr \
     here \
     ggforce \
