@@ -8,3 +8,4 @@ data-raw/ame_master.csv
 .DS_Store
 *.xlsx
 *.zip
+inst/besttrack/
