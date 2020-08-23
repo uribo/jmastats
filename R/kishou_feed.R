@@ -1,15 +1,24 @@
 #' Read Kishou Disaster Prevention Information Feed
-#' @param url feed url (character)
+#' @param frequency Release frequency. Select either high frequency ("high") or
+#' long term ("low")
+#' @param type Feed type. Specify the item to be retrieved as a string.
+#' See details for the items.
+#' @details The following items can be specified in the type argument.
+#' - regular: It will be announced on time.
+#' - extra: It will be announced at any time.
+#' - eqvol: Earthquakes and Volcanoes.
+#' - other: Other informations.
 #' @seealso [http://xml.kishou.go.jp/index.html](http://xml.kishou.go.jp/index.html)
 #' @examples
 #' \dontrun{
 #' read_kishou_feed("http://www.data.jma.go.jp/developer/xml/feed/extra.xml")
 #' }
-#' @return data.fram
+#' @return data.frame
 #' @export
-read_kishou_feed <- function(url) {
+read_kishou_feed <- function(frequency, type) {
   x <-
-    xml2::read_xml(url)
+    create_feed_url(frequency, type) %>%
+    xml2::read_xml()
   x_entry_index <-
     x %>%
     xml2::xml_children() %>%
@@ -22,6 +31,22 @@ read_kishou_feed <- function(url) {
     purrr::map_dfr(
       ~ parse_kishou_xml(x, .x))
   df
+}
+
+create_feed_url <- function(frequency, type) {
+  freq <-
+    rlang::arg_match(frequency,
+                     c("high",
+                       "low"))
+  freq <-
+    dplyr::if_else(freq == "low", "_l", "")
+  type <-
+    rlang::arg_match(type,
+                     c("regular",
+                       "extra",
+                       "eqvol",
+                       "other"))
+  glue::glue("http://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
 }
 
 parse_kishou_xml <- function(x, index) {

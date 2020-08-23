@@ -4,16 +4,29 @@
 \alias{read_kishou_feed}
 \title{Read Kishou Disaster Prevention Information Feed}
 \usage{
-read_kishou_feed(url)
+read_kishou_feed(frequency, type)
 }
 \arguments{
-\item{url}{feed url (character)}
+\item{frequency}{Release frequency. Select either high frequency ("high") or
+long term ("low")}
+
+\item{type}{Feed type. Specify the item to be retrieved as a string.
+See details for the items.}
 }
 \value{
-data.fram
+data.frame
 }
 \description{
 Read Kishou Disaster Prevention Information Feed
+}
+\details{
+The following items can be specified in the type argument.
+\itemize{
+\item regular: It will be announced on time.
+\item extra: It will be announced at any time.
+\item eqvol: Earthquakes and Volcanoes.
+\item other: Other informations.
+}
 }
 \examples{
 \dontrun{
