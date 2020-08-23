@@ -126,3 +126,18 @@ jma_pal <- function(palette = c("absolute", "relative"), .attribute = FALSE) {
     res
 
 }
+
+split_period_char <- function(x) {
+  stringr::str_split(x,
+                     paste0("(?=([0-9]{4}/[0-9]{1,2}|[0-9]{4}.+",
+                            intToUtf8(24180),
+                            "))"),
+                     simplify = TRUE) %>%
+    purrr::discard(~ stringr::str_length(.x) == 0)
+}
+
+glue_split_period_char <- function(x, collapse = "_") {
+  stringr::str_glue(
+    "{x[1]}{collapse}{x[2]}",
+    x = split_period_char(x))
+}

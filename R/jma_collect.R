@@ -21,6 +21,7 @@
 #' - mb5daily:
 #' - daily:
 #' - hourly:
+#' - rank:
 #' @examples
 #' \dontrun{
 #' jma_collect(item = "annually", "1284", year = 2017, month = 11)
@@ -29,6 +30,8 @@
 #' jma_collect(item = "daily", "0422", year = 2017, month = 11)
 #' # hourly
 #' jma_collect("hourly", "0010", 2018, 7, 30)
+#' # ranking
+#' jma_collect("rank", block_no = "47646", year = 2020)
 #' }
 #' @export
 jma_collect <- function(item = NULL,
@@ -43,7 +46,8 @@ jma_collect <- function(item = NULL,
     xml2::read_html(target$url) %>%
     rvest::html_table(fill = TRUE)
 
-  selected_item <- paste0(item, "_", target$station_type)
+  selected_item <-
+    paste0(item, "_", target$station_type)
 
   if (item == "annually") {
       df <-
@@ -160,7 +164,22 @@ jma_collect <- function(item = NULL,
       dplyr::mutate_all(.funs = list(~ stringr::str_remove_all(., "(]|\\))"))) %>%
       dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
       readr::type_convert()
-
+  } else if (item == "rank") {
+    value <- period <- NULL
+    df <-
+      df_raw[[3]]
+    df <-
+      df %>%
+      tidyr::pivot_longer(cols = -c(1, ncol(df)),
+                          names_to = "rank") %>%
+      tidyr::extract(col = value,
+                     into = c("value", "date"),
+                     regex = "(.+)\\((.+)\\)") %>%
+      purrr::set_names(name_sets(selected_item)) %>%
+      dplyr::mutate(period = glue_split_period_char(period,
+                                                    collapse = intToUtf8(c(12363L, 12425L))),
+                    rank = stringr::str_extract(rank, "[0-9]{1,}")) %>%
+      readr::type_convert()
   } else {
     df <- df_raw
   }
@@ -178,13 +197,24 @@ jma_url <- function(item = NULL,
   if (identical(selected_item, character(0))) {
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
-
+  if (!rlang::is_missing(month)) {
+    dummy_month <- month
+  }
   if (selected_item == "annually" & rlang::is_missing(year)) {
     year <- ""
     dummy_year <- 1
   } else {
     dummy_year <- year
   }
+  if (selected_item == "rank" & rlang::is_missing(month)) {
+    month <- ""
+    dummy_month <- 1
+  }
+  if (selected_item == "rank" & rlang::is_missing(year)) {
+    year <- ""
+    dummy_year <- 1
+  }
+
   if (rlang::is_missing(day)) {
     day <- ""
     dummy_day <- 1
@@ -192,47 +222,56 @@ jma_url <- function(item = NULL,
     dummy_day <- day
   }
 
-  if (validate_date(dummy_year, month, dummy_day)) {
-    df_target_station <-
-      subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
-      dplyr::distinct(block_no, .keep_all = TRUE)
-
-    pref <- df_target_station$prec_no
-    station_type <-
-      ifelse(df_target_station$station_type == intToUtf8(23448), "s", "a")
-
-    station_type <-
-      ifelse(df_target_station$station_name %in% c(intToUtf8(c(22825, 22478)),
-                                                   intToUtf8(c(19982, 35542, 23798)),
-                                                   intToUtf8(c(23433, 27425, 23994)),
-                                                   intToUtf8(c(24029, 24179)),
-                                                   intToUtf8(c(24950, 33391, 38291)),
-                                                   intToUtf8(c(30427, 23665)),
-                                                   intToUtf8(c(37857, 21407)),
-                                                   intToUtf8(c(26481)),
-                                                   intToUtf8(c(30707, 30000)),
-                                                   intToUtf8(c(19978, 22823, 27941)),
-                                                   intToUtf8(c(32654, 27941, 23798)),
-                                                   intToUtf8(c(38957, 12534, 23798)),
-                                                   intToUtf8(c(23567, 20516, 36032))
-                                                   ),
-             # Special pattern
-             "a",
-             station_type)
-
-    if (selected_item != "annually") {
-      station_type <- paste0(station_type, "1")
+  if (validate_date(dummy_year, dummy_month, dummy_day)) {
+    station_info <-
+      detect_station_info(.blockid)
+    if (!selected_item %in% c("annually", "rank")) {
+      station_info$station_type <-
+        paste0(station_info$station_type, "1")
     }
-
     list(
       url = as.character(glue::glue(
-        "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={pref}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
-        blockid = rlang::eval_tidy(.blockid)
+        "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+        blockid = rlang::eval_tidy(.blockid),
+        station_type = station_info$station_type,
+        prec_no = station_info$prec_no
       )),
-      station_type = station_type
+      station_type = station_info$station_type
     )
   }
 
+}
+
+detect_station_info <- function(.blockid) {
+  df_target_station <-
+    subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
+    dplyr::distinct(block_no, .keep_all = TRUE)
+  pref <-
+    df_target_station$prec_no
+  station_type <-
+    ifelse(df_target_station$station_type == intToUtf8(23448), "s", "a")
+  station_type <-
+    ifelse(df_target_station$station_name %in% c(intToUtf8(c(22825, 22478)),
+                                               intToUtf8(c(19982, 35542, 23798)),
+                                               intToUtf8(c(23433, 27425, 23994)),
+                                               intToUtf8(c(24029, 24179)),
+                                               intToUtf8(c(24950, 33391, 38291)),
+                                               intToUtf8(c(30427, 23665)),
+                                               intToUtf8(c(37857, 21407)),
+                                               intToUtf8(c(26481)),
+                                               intToUtf8(c(30707, 30000)),
+                                               intToUtf8(c(19978, 22823, 27941)),
+                                               intToUtf8(c(32654, 27941, 23798)),
+                                               intToUtf8(c(38957, 12534, 23798)),
+                                               intToUtf8(c(23567, 20516, 36032))
+  ),
+  # Special pattern
+  "a",
+  station_type)
+  list(
+    prec_no = pref,
+    station_type = station_type
+  )
 }
 
 convert_variable_unit <- function(.data) {
@@ -606,5 +645,7 @@ name_sets <- function(item) {
                               c("snow_days",
                                 "fog_days",
                                 "thunder_days"))
-    ))
+    ),
+    "rank_s" = c("element", "period", "rank", "value", "date"),
+    "rank_a" = c("element", "period", "rank", "value", "date"))
 }
