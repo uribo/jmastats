@@ -13,7 +13,7 @@ RUN set -x && \
   rm -rf /var/lib/apt/lists/*
 
 RUN set -x && \
-  install2.r --error --ncpus -1 --repos 'https://mran.revolutionanalytics.com/snapshot/2020-08-01' \
+  install2.r --error --ncpus -1 --repos 'https://mran.revolutionanalytics.com/snapshot/2020-08-14' \
     assertr \
     here \
     ggforce \
