@@ -245,6 +245,7 @@ jma_url <- function(item = NULL,
 detect_station_info <- function(.blockid) {
   df_target_station <-
     subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
+    sf::st_drop_geometry() %>%
     dplyr::distinct(block_no, .keep_all = TRUE)
   pref <-
     df_target_station$prec_no
