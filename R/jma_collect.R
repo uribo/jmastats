@@ -264,7 +264,8 @@ detect_station_info <- function(.blockid) {
                                                intToUtf8(c(19978, 22823, 27941)),
                                                intToUtf8(c(32654, 27941, 23798)),
                                                intToUtf8(c(38957, 12534, 23798)),
-                                               intToUtf8(c(23567, 20516, 36032))
+                                               intToUtf8(c(23567, 20516, 36032)),
+                                               intToUtf8(c(21338, 22810))
   ),
   # Special pattern
   "a",
