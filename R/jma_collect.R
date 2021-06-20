@@ -191,37 +191,47 @@ jma_collect <- function(item = NULL,
 jma_url <- function(item = NULL,
                     block_no, year, month, day) {
   .blockid <- rlang::enquo(block_no)
-
   selected_item <- item
-
   if (identical(selected_item, character(0))) {
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
-  if (!rlang::is_missing(month)) {
-    dummy_month <- month
+  if (selected_item == "hourly") {
+    validate_date(year, month, day)
   }
-  if (selected_item == "annually" & rlang::is_missing(year)) {
-    year <- ""
-    dummy_year <- 1
+  if (selected_item %in% c("annually", "rank")) {
+    if (rlang::is_missing(year)) {
+      year <- ""
+      month <- ""
+      dummy_year <- 1
+      dummy_month <- 1
+    } else {
+      dummy_year <- year
+      dummy_month <- 1
+    }
+    if (rlang::is_missing(month)) {
+      month <- ""
+      dummy_month <- 1
+    } else {
+      dummy_month <- month
+    }
+    if (selected_item == "rank") {
+      if (rlang::is_missing(year)) {
+        year <- ""
+        dummy_year <- 1
+      } else {
+        dummy_year <- year
+      }
+    }
   } else {
     dummy_year <- year
+    dummy_month <- month
   }
-  if (selected_item == "rank" & rlang::is_missing(month)) {
-    month <- ""
-    dummy_month <- 1
-  }
-  if (selected_item == "rank" & rlang::is_missing(year)) {
-    year <- ""
-    dummy_year <- 1
-  }
-
   if (rlang::is_missing(day)) {
     day <- ""
     dummy_day <- 1
   } else {
     dummy_day <- day
   }
-
   if (validate_date(dummy_year, dummy_month, dummy_day)) {
     station_info <-
       detect_station_info(.blockid)
@@ -239,7 +249,6 @@ jma_url <- function(item = NULL,
       station_type = station_info$station_type
     )
   }
-
 }
 
 detect_station_info <- function(.blockid) {
