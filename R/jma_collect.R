@@ -445,7 +445,7 @@ name_sets <- function(item) {
                  "max_fall_day",
                  "depth"), "(cm)"),
         paste0("cloud_covering_", c("mean")),
-        paste0("condition",
+        paste0("condition_",
                c("snow_days",
                  "fog_days",
                  "thunder_days"))
@@ -514,7 +514,7 @@ name_sets <- function(item) {
                  "depth"),
                "(cm)"),
         paste0("cloud_covering_", c("mean")),
-        paste0("condition",
+        paste0("condition_",
                c("snow_days",
                  "fog_days",
                  "thunder_days"))
@@ -578,7 +578,7 @@ name_sets <- function(item) {
                                 "depth"),
                               "(cm)"),
                        paste0("cloud_covering_", c("mean")),
-                       paste0("condition",
+                       paste0("condition_",
                               c("snow_days",
                                 "fog_days",
                                 "thunder_days"))
@@ -643,7 +643,7 @@ name_sets <- function(item) {
                                 "depth"),
                               "(cm)"),
                        paste0("cloud_covering_", c("mean")),
-                       paste0("condition",
+                       paste0("condition_",
                               c("snow_days",
                                 "fog_days",
                                 "thunder_days"))
