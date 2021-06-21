@@ -13,7 +13,7 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
   # 1. 地上気象観測地点 -------------------------------------------------------------
   # # 1.1. zip archives ---------------------------------------------------------
   # Ref) http://www.data.jma.go.jp/developer/index.html
-  # http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
+  # 地上気象観測地点 http://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   if (file.exists(here::here("data-raw/ame_master.csv")) == FALSE) {
     x <-
@@ -168,6 +168,7 @@ stations <-
                             `34292` = "04",
                             `34361` = "04",
                             `35246` = "06",
+                            `45147` = "12",
                             `45346` = "12",
                             `54012` = "15",
                             `54157` = "15",
