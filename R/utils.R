@@ -4,10 +4,8 @@ guess_unit <- function(x) {
 }
 
 validate_date <- function(year, month, day) {
-
   check_positive <-
     sapply(list(year = year, month = month, day = day), function(x) { x > 0})
-
   if (sum(check_positive) != 3L) {
     rlang::inform(paste0(
       "Input arguments should be positive\n",
@@ -15,10 +13,8 @@ validate_date <- function(year, month, day) {
       paste(names(which(check_positive == FALSE)), collapse = ", ")))
     return(FALSE)
   }
-
   x <-
     lubridate::make_date(year, month, day)
-
   if (is.na(x)) {
     rlang::inform(paste0(
       "Input arguments should be calender format\n",

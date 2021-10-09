@@ -35,7 +35,7 @@ pick_neighbor_tide_stations(
 \item{distance}{Distance from station to station to adjustment.}
 
 \item{.unit}{Unit used for extraction from the point of interest. Default \emph{m} (meters).
-This value is passed to \link[units:as_units]{units::as_units}.}
+This value is passed to \link[units:units]{units::as_units}.}
 
 \item{year}{For tide level data. Restricted to the observation points in the target year.}
 }
