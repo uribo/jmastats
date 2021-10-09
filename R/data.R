@@ -3,7 +3,7 @@ globalVariables(c("stations", "tide_station"))
 #' Japan Meteorological Agency's Stations list
 #'
 #' @description XXX
-#' @format A data frame with 1334 rows 14 variables:
+#' @format A data frame with 1330 rows 14 variables:
 #' \itemize{
 #'   \item{area}
 #'   \item{station_no}
@@ -29,7 +29,7 @@ globalVariables(c("stations", "tide_station"))
 #' Tidal observation stations of Japan Meteorological Agency
 #'
 #' @description XXX
-#' @format A data frame with 1670 rows 7 variables
+#' @format A data frame with 1739 rows 7 variables
 #' @examples
 #' head(tide_station)
 "tide_station"
