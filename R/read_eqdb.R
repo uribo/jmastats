@@ -30,6 +30,6 @@ read_eqdb_csv <- function(path, show_metadata = TRUE) {
                          sep = "[[:space:]]") %>%
     dplyr::mutate(`震度` = stringi::stri_trans_general(`震度`, "nfkc") %>%
                     stringr::str_remove("震度"),
-                  `気象庁の震度観測点` = stringr::str_detect(`観測点名`, "\uff0a"),
+                  `気象庁の震度観測点` = stringr::str_detect(`観測点名`, "\uff0a", negate = TRUE),
                   `観測点名` = stringr::str_remove(`観測点名`, "\uff0a"))
 }
