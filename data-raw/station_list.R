@@ -3,6 +3,7 @@
 # Last Update: 2021-10-09
 # 1. 地上気象観測地点,地域気象観測所
 # 2. 潮位観測地点
+# 3. 震度観測点
 #####################################
 library(dplyr)
 library(sf)
@@ -345,3 +346,54 @@ tide_station <-
   verify(dim(.) == c(1739, 7))
 
 usethis::use_data(tide_station, overwrite = TRUE)
+
+
+# 3. 震度観測点 ----------------------------------------------------------------
+x <-
+  read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
+x %>%
+  html_element(css = "#main > h1") %>%
+  html_text() # 令和3年7月1日現在
+
+earthquake_station <-
+  x %>%
+  html_elements(css = "#main > table") %>%
+  html_table() %>%
+  purrr::set_names(x %>%
+              html_elements(css = "#main > p > a") %>%
+              html_text()) %>%
+  purrr::map_dfr(
+    ~ mutate(.x,
+             across(.cols = everything(),
+                    .fns = as.character)),
+    .id = "prefecture"
+  ) %>%
+  verify(dim(.) == c(1101, 10)) %>%
+  readr::type_convert(col_types = "ccccididcc") %>%
+  purrr::set_names(c("prefecture", "area", "station_name", "address",
+                     "lat_do", "lat_fun",
+                     "lng_do", "lng_fun",
+                     "observation_begin", "observation_end"))
+
+earthquake_station <-
+  earthquake_station %>%
+  mutate(longitude = purrr::pmap_chr(.,
+                                    ~ kuniezu::parse_lon_dohunbyo(paste0("東経", ..7, "度", ..8, "秒"))),
+         latitude = purrr::pmap_chr(.,
+                                    ~ kuniezu::parse_lat_dohunbyo(paste0("北緯", ..5, "度", ..6, "秒")))) %>%
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) %>%
+  sf::st_transform(crs = 4326) %>%
+  select(!c(ends_with("_do"), ends_with("_fun"))) %>%
+  verify(dim(.) == c(1101, 7)) %>%
+  filter(is.na(observation_end)) %>%
+  verify(nrow(.) == 670L)
+
+usethis::use_data(earthquake_station, overwrite = TRUE)
+
+# mapview::mapview(earthquake_station)
+
+# st_point(c(kuniezu::parse_lon_dohunbyo(paste0("東経", earthquake_station$lng_do[1], "度", earthquake_station$lng_fun[1], "秒")),
+#            kuniezu::parse_lat_dohunbyo(paste0("北緯", earthquake_station$lat_do[1], "度", earthquake_station$lat_fun[1], "秒")))) %>%
+#   st_sfc(crs = 4612) %>%
+#   st_transform(crs = 4326) %>%
+#   mapview::mapview()

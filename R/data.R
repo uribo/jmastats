@@ -1,4 +1,4 @@
-globalVariables(c("stations", "tide_station"))
+globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's Stations list
 #'
@@ -33,3 +33,11 @@ globalVariables(c("stations", "tide_station"))
 #' @examples
 #' head(tide_station)
 "tide_station"
+
+#' Japan Meteorological Agency's earthquake observe stations
+#'
+#' @description XXX
+#' @format A simple feature data frame with 670 rows  7 variables
+#' @examples
+#' head(earthquake_station)
+"earthquake_station"

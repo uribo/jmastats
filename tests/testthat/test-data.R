@@ -51,3 +51,10 @@ test_that("tidal station", {
     c(1739, 7)
   )
 })
+
+test_that("earthquake station", {
+  expect_equal(
+    dim(earthquake_station),
+    c(670, 7)
+  )
+})
