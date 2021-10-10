@@ -3,6 +3,7 @@
 #' @param show_metadata logical. If *FALSE*, returns only the values
 #' observed at each location.
 #' @rdname read_eqdb_csv
+#' @seealso [https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)
 #' @export
 read_eqdb_csv <- function(path, show_metadata = TRUE) {
   `観測点名` <- `震度` <- NULL

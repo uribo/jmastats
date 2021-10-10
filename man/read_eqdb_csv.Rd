@@ -15,3 +15,6 @@ observed at each location.}
 \description{
 Read the csv of the earthquake database
 }
+\seealso{
+\url{https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html}
+}
