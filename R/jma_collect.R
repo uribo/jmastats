@@ -72,10 +72,10 @@ jma_collect <- function(item = NULL,
       tweak_df()
   } else if (item == "daily") {
     df <-
-      .jma_collect_daily(df_raw, vars, target$station_type)
+      .jma_collect_daily(df_raw, vars, year, month, date = day, target$station_type)
   } else if (item == "hourly") {
     df <-
-      .jma_collect_hourly(df_raw, vars)
+      .jma_collect_hourly(df_raw, vars, year, month, day)
   } else if (item == "10min") {
     df <-
       .jma_collect_10min(df_raw, vars, target$station_type)
@@ -116,7 +116,7 @@ tweak_df <- function(df) {
     readr::type_convert()
 }
 
-.jma_collect_daily <- function(df, vars, station_type) {
+.jma_collect_daily <- function(df, vars, year, month, date, station_type) {
   if (station_type == "a1") {
     df <-
       df[[6]][-c(1:2), ]
@@ -133,7 +133,7 @@ tweak_df <- function(df) {
     readr::type_convert()
 }
 
-.jma_collect_hourly <- function(df, vars) {
+.jma_collect_hourly <- function(df, vars, year, month, day) {
   df <-
     df[[5]][-c(1), ] %>%
     purrr::set_names(vars) %>%
