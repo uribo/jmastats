@@ -30,7 +30,8 @@ The following items can be specified in the type argument.
 }
 \examples{
 \dontrun{
-read_kishou_feed("https://www.data.jma.go.jp/developer/xml/feed/extra.xml")
+read_kishou_feed("high", type = "regular")
+read_kishou_feed("low", "other")
 }
 }
 \seealso{

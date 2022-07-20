@@ -11,7 +11,8 @@
 #' @seealso [https://xml.kishou.go.jp/index.html](https://xml.kishou.go.jp/index.html)
 #' @examples
 #' \dontrun{
-#' read_kishou_feed("https://www.data.jma.go.jp/developer/xml/feed/extra.xml")
+#' read_kishou_feed("high", type = "regular")
+#' read_kishou_feed("low", "other")
 #' }
 #' @return data.frame
 #' @export
