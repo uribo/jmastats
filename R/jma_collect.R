@@ -5,8 +5,9 @@
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
+#' @param pack Whether to packing common variables or not
 #' @import rlang
-#' @importFrom dplyr funs mutate mutate_all mutate_if select
+#' @importFrom dplyr mutate select
 #' @importFrom glue glue
 #' @importFrom readr type_convert
 #' @importFrom rvest html_table
@@ -35,12 +36,15 @@
 #' }
 #' @export
 jma_collect <- function(item = NULL,
-                        block_no, year, month, day) {
-
-  .blockid <- rlang::enquo(block_no)
+                        block_no, year, month, day,
+                        pack = TRUE) {
 
   target <-
-    jma_url(item, !!.blockid, year, month, day)
+    detect_target(item, block_no, year, month, day)
+
+  cat(
+    cli::col_br_blue("Data from:"),
+    cli::col_cyan(cli::style_hyperlink(target$url, target$url)))
 
   df_raw <-
     xml2::read_html(target$url) %>%
@@ -72,7 +76,9 @@ jma_collect <- function(item = NULL,
       tweak_df()
   } else if (item == "daily") {
     df <-
-      .jma_collect_daily(df_raw, vars, year, month, date = day, target$station_type)
+      .jma_collect_daily(df_raw, vars,
+                         year, month, date = day,
+                         target$station_type)
   } else if (item == "hourly") {
     df <-
       .jma_collect_hourly(df_raw, vars, year, month, day)
@@ -100,7 +106,49 @@ jma_collect <- function(item = NULL,
   }
   # convert_variable_unit(df) %>%
   #   tibble::as_tibble()
-  tibble::as_tibble(df)
+  out <-
+    tibble::as_tibble(df)
+  if (pack == TRUE) {
+    if (!item %in% c("hourly", "10min")) {
+      out <-
+        pack_df(out, unpack = FALSE)
+    }
+  }
+}
+
+pack_df <- function(df, unpack = FALSE) {
+  if (unpack == FALSE) {
+    df <-
+      df %>%
+      tidyr::pack(atmosphere = tidyselect::starts_with("atmosphere"),
+                  pressure = tidyselect::starts_with("pressure"),
+                  precipitation = tidyselect::starts_with("precipitation"),
+                  temperature = tidyselect::starts_with("temperature"),
+                  humidity = tidyselect::starts_with("humidity"),
+                  wind = tidyselect::starts_with("wind"),
+                  sunshine = tidyselect::starts_with("sunshine"),
+                  daylight = tidyselect::starts_with("daylight"),
+                  snow = tidyselect::starts_with("snow"),
+                  solar_irradiance = tidyselect::starts_with("solar_irradiance"),
+                  cloud_covering = tidyselect::starts_with("cloud_covering"),
+                  condition = tidyselect::starts_with("condition"),
+                  weather_time = tidyselect::matches("weather.*time"),
+                  .names_sep = "_")
+    df[, c(names(purrr::discard(df, tibble::is_tibble)),
+           df[, names(purrr::keep(df, tibble::is_tibble))] %>%
+             purrr::map(~ ncol(.x)) %>%
+             purrr::discard(~ .x == 0L) %>%
+             names())]
+  } else {
+    df %>%
+      tidyr::unpack(tidyselect::everything(),
+                    names_sep = "_")
+  }
+}
+
+detect_target <- function(item, block_no, year, month, day) {
+  .blockid <- rlang::enquo(block_no)
+  jma_url(item, !!.blockid, year, month, day)
 }
 
 tweak_df <- function(df) {
@@ -116,7 +164,9 @@ tweak_df <- function(df) {
     readr::type_convert()
 }
 
-.jma_collect_daily <- function(df, vars, year, month, date, station_type) {
+.jma_collect_daily <- function(df, vars,
+                               year, month, date,
+                               station_type) {
   if (station_type == "a1") {
     df <-
       df[[6]][-c(1:2), ]
@@ -256,33 +306,51 @@ detect_station_info <- function(.blockid) {
 
 convert_variable_unit <- function(.data) {
   df <-
-    dplyr::mutate_at(.data,
-                   dplyr::vars(tidyselect::matches("\\(\u2103\\)$")),
-                   list(~ units::set_units(., value = "\u2103"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(hPa\\)$")),
-                     list(~ units::set_units(., value = "hPa"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(mm\\)$")),
-                     list(~ units::set_units(., value = "mm"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(cm\\)$")),
-                     list(~ units::set_units(., value = "cm"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(hour\\)$")),
-                     list(~ units::set_units(., value = "h"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(m/s\\)$")),
-                     list(~ units::set_units(., value = "m/s"))) %>%
-    dplyr::mutate_at(dplyr::vars(tidyselect::matches("\\(%\\)$")),
-                     list(~ units::set_units(., value = "%")))
+    dplyr::mutate(
+      .data,
+      dplyr::across(
+        tidyselect::matches("\\(\u2103\\)$"),
+        .fns = ~ units::set_units(., value = "\u2103"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(hPa\\)$"),
+        ~ units::set_units(., value = "hPa"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(mm\\)$"),
+        ~ units::set_units(., value = "mm"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(cm\\)$"),
+        ~ units::set_units(., value = "cm"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(hour\\)$"),
+        ~ units::set_units(., value = "h"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(m/s\\)$"),
+        ~ units::set_units(., value = "m/s"))) %>%
+    dplyr::mutate(
+      dplyr::across(
+        tidyselect::matches("\\(%\\)$"),
+        ~ units::set_units(., value = "%")))
   df %>%
     purrr::set_names(stringr::str_remove_all(names(df), "\\(.+\\)"))
 }
 
 convert_error <- function(.data) {
-  dplyr::mutate_all(.data,
-                    .funs = list(~
-                      dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)), intToUtf8(c(215)), "", intToUtf8(c(35))),
-                                     NA_character_, .))) %>%
-    dplyr::mutate_all(.funs = list(~
-                        dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
-
+  dplyr::mutate(
+    .data,
+    dplyr::across(tidyselect::everything(),
+                  .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)),
+                                                   intToUtf8(c(215)),
+                                                   "",
+                                                   intToUtf8(c(35))),
+                                          NA_character_, .))) %>%
+    dplyr::mutate(
+      dplyr::across(tidyselect::everything(),
+                    .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
 }
 
 jma_vars <- list(atmosphere = paste0("atmosphere_",
@@ -378,32 +446,32 @@ name_sets <- function(item) {
                c("daytime (06:00-18:00)", "nighttime (18:00-06:00)"))
       ),
       "hourly_a1" = c("time",
-                      paste0("precipitation_", "(mm)"),
-                      paste0("temperature_", "(\u2103)"),
-                      paste0("dew_point_", "(\u2103)"),
-                      paste0("vapor_", "(hPa)"),
-                      paste0("humidity_", "(%)"),
+                      paste0("precipitation", "(mm)"),
+                      paste0("temperature", "(\u2103)"),
+                      paste0("dew_point", "(\u2103)"),
+                      paste0("vapor", "(hPa)"),
+                      paste0("humidity", "(%)"),
                       paste0("wind_", c(paste0("speed", "(m/s)"), "direction")),
                       jma_vars$daylight,
                       paste0("snow_", c("fall_moment", "fall_period"), "(cm)")),
       "hourly_s1" = c("time",
                       jma_vars$atmosphere,
-                      paste0("precipitation_", "(mm)"),
-                      paste0("temperature_", "(\u2103)"),
-                      paste0("dew_point_", "(\u2103)"),
-                      paste0("vapor_", "(hPa)"),
-                      paste0("humidity_", "(%)"),
+                      paste0("precipitation", "(mm)"),
+                      paste0("temperature", "(\u2103)"),
+                      paste0("dew_point", "(\u2103)"),
+                      paste0("vapor", "(hPa)"),
+                      paste0("humidity", "(%)"),
                       paste0("wind_", c(paste0("speed", "(m/s)"), "direction")),
                       jma_vars$daylight,
-                      paste0("solar_irradiance_", "(MJ/m^2)"),
+                      paste0("solar_irradiance", "(MJ/m^2)"),
                       paste0("snow_", c("fall_moment", "fall_period"), "(cm)"),
                       paste0("weather"),
                       paste0("cloud_covering"),
-                      paste0("visibility_", "(km)")
+                      paste0("visibility", "(km)")
                       ),
       "10min_a1" = c("time",
-                     paste0("precipitation_", "(mm)"),
-                     paste0("temperature_", "(\u2103)"),
+                     paste0("precipitation", "(mm)"),
+                     paste0("temperature", "(\u2103)"),
                      paste0("relative_humidity", "(%)"),
                      paste0("wind_",
                             c(c(paste0("speed", "(m/s)"), "direction"),
@@ -413,8 +481,8 @@ name_sets <- function(item) {
                      ),
       "10min_s1" = c("time",
                      jma_vars$atmosphere,
-                     paste0("precipitation_", "(mm)"),
-                     paste0("temperature_", "(\u2103)"),
+                     paste0("precipitation", "(mm)"),
+                     paste0("temperature", "(\u2103)"),
                      paste0("relative_humidity", "(%)"),
                      paste0("wind_",
                             c(c(paste0("speed", "(m/s)"), "direction"),

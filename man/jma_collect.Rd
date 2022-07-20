@@ -4,7 +4,7 @@
 \alias{jma_collect}
 \title{Collect JMA Stats Data}
 \usage{
-jma_collect(item = NULL, block_no, year, month, day)
+jma_collect(item = NULL, block_no, year, month, day, pack = TRUE)
 }
 \arguments{
 \item{item}{url}
@@ -16,6 +16,8 @@ jma_collect(item = NULL, block_no, year, month, day)
 \item{month}{select month}
 
 \item{day}{select date (default \code{NULL})}
+
+\item{pack}{Whether to packing common variables or not}
 }
 \description{
 Collect JMA Stats Data
