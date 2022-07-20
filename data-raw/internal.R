@@ -2,7 +2,7 @@ library(tibble)
 library(magrittr)
 
 x <-
-  xml2::read_html("http://www.data.jma.go.jp/obd/stats/etrn/index.php?prec_no=40&block_no=47646&year=2018&month=5&day=7&view=")
+  xml2::read_html("https://www.data.jma.go.jp/obd/stats/etrn/index.php?prec_no=40&block_no=47646&year=2018&month=5&day=7&view=")
 
 df_jma_pages <-
   data_frame(

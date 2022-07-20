@@ -19,7 +19,7 @@
 #' @importFrom tibble as_tibble
 #' @importFrom tidyr extract
 #' @importFrom utils read.table
-#' @details See <http://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm> for more details.
+#' @details See <https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm> for more details.
 #' @rdname track
 #' @export
 read_rsmc_besttrack <- function(path) {

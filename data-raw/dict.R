@@ -5,7 +5,7 @@ library(rvest)
 library(ensurer)
 library(assertr)
 x <-
-  "http://www.data.jma.go.jp/developer/multilingual.html" %>%
+  "https://www.data.jma.go.jp/developer/multilingual.html" %>%
   read_html()
 
 # 2020年3月17日更新：11か国語から14か国語に拡充
@@ -18,8 +18,8 @@ if (!file.exists(here::here("data-raw/", basename(target_url)))) {
     x %>%
     html_nodes(css = "#ncontents2 > font > div > a:nth-child(1)") %>%
     html_attr("href") %>%
-    xml2::url_relative("http://www.data.jma.go.jp/") %>%
-    stringr::str_c("http://www.data.jma.go.jp/developer/", .)
+    xml2::url_relative("https://www.data.jma.go.jp/") %>%
+    stringr::str_c("https://www.data.jma.go.jp/developer/", .)
   download.file(
     target_url,
     destfile = here::here("data-raw/", basename(target_url))

@@ -31,7 +31,7 @@ test_that("multiplication works", {
   expect_equal(
     x,
     list(
-      url = "http://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=48&block_no=0422&year=2017&month=6&day=&view=", # nolint
+      url = "https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=48&block_no=0422&year=2017&month=6&day=&view=", # nolint
       station_type = "a1")
   )
   x <-
@@ -42,7 +42,7 @@ test_that("multiplication works", {
   expect_equal(
     x,
     list(
-      url = "http://www.data.jma.go.jp/obd/stats/etrn/view/annually_a.php?prec_no=12&block_no=0010&year=2017&month=12&day=&view=", # nolint
+      url = "https://www.data.jma.go.jp/obd/stats/etrn/view/annually_a.php?prec_no=12&block_no=0010&year=2017&month=12&day=&view=", # nolint
       station_type = "a")
   )
 })

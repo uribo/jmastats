@@ -8,10 +8,10 @@
 #' - extra: It will be announced at any time.
 #' - eqvol: Earthquakes and Volcanoes.
 #' - other: Other informations.
-#' @seealso [http://xml.kishou.go.jp/index.html](http://xml.kishou.go.jp/index.html)
+#' @seealso [https://xml.kishou.go.jp/index.html](https://xml.kishou.go.jp/index.html)
 #' @examples
 #' \dontrun{
-#' read_kishou_feed("http://www.data.jma.go.jp/developer/xml/feed/extra.xml")
+#' read_kishou_feed("https://www.data.jma.go.jp/developer/xml/feed/extra.xml")
 #' }
 #' @return data.frame
 #' @export
@@ -46,7 +46,7 @@ create_feed_url <- function(frequency, type) {
                        "extra",
                        "eqvol",
                        "other"))
-  glue::glue("http://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
+  glue::glue("https://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
 }
 
 parse_kishou_xml <- function(x, index) {

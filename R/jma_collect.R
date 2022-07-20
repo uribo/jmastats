@@ -241,7 +241,7 @@ jma_url <- function(item = NULL,
     }
     list(
       url = as.character(glue::glue(
-        "http://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+        "https://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
         blockid = rlang::eval_tidy(.blockid),
         station_type = station_info$station_type,
         prec_no = station_info$prec_no
