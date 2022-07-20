@@ -39,7 +39,6 @@ Imports:
     units (>= 0.5.1),
     xml2 (>= 1.2.0)
 Suggests: 
-    jpndistrict (>= 0.3.3),
     knitr (>= 1.20),
     lwgeom (>= 0.1-4),
     rmarkdown (>= 1.9),

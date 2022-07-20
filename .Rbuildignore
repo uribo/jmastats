@@ -9,3 +9,4 @@
 ^\*\.xlsx$
 ^inst/besttrack$
 ^README\.Rmd$
+^\.github$
