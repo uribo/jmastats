@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# jmastats
+# jmastats <img src="man/figures/logo.png" align="right" width="120px" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -22,11 +22,12 @@ jmastats は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイ�
 
 ## インストール
 
-パッケージはCRANに登録されていません。GitLabを経由してインストールを行ってください。
+パッケージはCRANに登録されていません。次のコマンドを実行することでインストールが行われます。
 
 ``` r
-install.packages("remotes")
-remotes::install_gitlab("uribo/jmastats")
+install.packages(
+   "jmastats", 
+   repos = c(mm = "https://uribo.r-universe.dev", getOption("repos")))
 ```
 
 ## 使い方

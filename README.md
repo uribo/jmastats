@@ -1,10 +1,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# jmastats
+# jmastats <img src="man/figures/logo.png" align="right" width="120px" />
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 jmastats
@@ -12,11 +11,12 @@ jmastats
 
 ## インストール
 
-パッケージはCRANに登録されていません。GitLabを経由してインストールを行ってください。
+パッケージはCRANに登録されていません。次のコマンドを実行することでインストールが行われます。
 
 ``` r
-install.packages("remotes")
-remotes::install_gitlab("uribo/jmastats")
+install.packages(
+   "jmastats", 
+   repos = c(mm = "https://uribo.r-universe.dev", getOption("repos")))
 ```
 
 ## 使い方
@@ -27,14 +27,15 @@ library(jmastats)
 
 ### 地点気象データ
 
-取得したい対象データを`item`引数に指定、観測所の位置する `block_no` と対象の年 `year` 月 `month` 日
-`day`を必要に応じて与えて実行します。
+取得したい対象データを`item`引数に指定、観測所の位置する `block_no`
+と対象の年 `year` 月 `month` 日 `day`を必要に応じて与えて実行します。
 
 ``` r
 jma_collect(item = "hourly", block_no = 47646, year = 2020, month = 1, day = 1)
 ```
 
-`block_no` が不明の時は 対象地点の緯度経度を元に`nearest_station()`で検索できます。
+`block_no` が不明の時は
+対象地点の緯度経度を元に`nearest_station()`で検索できます。
 
 ``` r
 nearest_station(longitude = 140.112, latitude = 36.083)
@@ -64,10 +65,10 @@ data("stations", package = "jmastats")
 
 `station_type` により観測種目が異なります。
 
-| 略字 | 観測装置の種類   | 観測種目                                          |
-| -- | :-------- | :-------------------------------------------- |
-| 四  | 有線ロボット気象計 | 降水量、気温、風向、風速、日照時間                             |
-| 三  | 有線ロボット気象計 | 降水量、気温、風向、風速                                  |
-| 官  | 地上気象観測装置  | 降水量、気温、風向、風速、日照時間（一部の観測所を除く）、積雪の深さ（一部の観測所を除く） |
-| 雨  | 有線ロボット気象計 | 降水量                                           |
-| 雪  | 有線ロボット積雪計 | 積雪量                                           |
+| 略字 | 観測装置の種類     | 観測種目                                                                                   |
+|------|:-------------------|:-------------------------------------------------------------------------------------------|
+| 四   | 有線ロボット気象計 | 降水量、気温、風向、風速、日照時間                                                         |
+| 三   | 有線ロボット気象計 | 降水量、気温、風向、風速                                                                   |
+| 官   | 地上気象観測装置   | 降水量、気温、風向、風速、日照時間（一部の観測所を除く）、積雪の深さ（一部の観測所を除く） |
+| 雨   | 有線ロボット気象計 | 降水量                                                                                     |
+| 雪   | 有線ロボット積雪計 | 積雪量                                                                                     |
