@@ -76,6 +76,9 @@ jma_collect <- function(item = NULL,
   } else if (item == "hourly") {
     df <-
       .jma_collect_hourly(df_raw, vars)
+  } else if (item == "10min") {
+    df <-
+      .jma_collect_10min(df_raw, vars, target$station_type)
   } else if (item == "rank") {
     value <- period <- NULL
     df <-
@@ -139,6 +142,19 @@ tweak_df <- function(df) {
     dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
     dplyr::select(date, dplyr::everything()) %>%
     readr::type_convert()
+}
+
+.jma_collect_10min <- function(df, vars, station_type) {
+  if (station_type == "a1") {
+    df <-
+      df[[5]][-c(1:2), ]
+  } else if (station_type == "s1") {
+    df <-
+      df[[5]][-1, ]
+  }
+  df %>%
+    purrr::set_names(vars) %>%
+    tweak_df()
 }
 
 jma_url <- function(item = NULL,
@@ -385,6 +401,26 @@ name_sets <- function(item) {
                       paste0("cloud_covering"),
                       paste0("visibility_", "(km)")
                       ),
+      "10min_a1" = c("time",
+                     paste0("precipitation_", "(mm)"),
+                     paste0("temperature_", "(\u2103)"),
+                     paste0("relative_humidity", "(%)"),
+                     paste0("wind_",
+                            c(c(paste0("speed", "(m/s)"), "direction"),
+                              c(paste0("max_instantaneous_speed", "(m/s)"),
+                                "max_instantaneous_direction"))),
+                     paste0("daylight_", "(min)")
+                     ),
+      "10min_s1" = c("time",
+                     jma_vars$atmosphere,
+                     paste0("precipitation_", "(mm)"),
+                     paste0("temperature_", "(\u2103)"),
+                     paste0("relative_humidity", "(%)"),
+                     paste0("wind_",
+                            c(c(paste0("speed", "(m/s)"), "direction"),
+                              c(paste0("max_instantaneous_speed", "(m/s)"),
+                                "max_instantaneous_direction"))),
+                     paste0("daylight_", "(min)")),
       "10daily_a1" = c(
         "month",
         "season",
