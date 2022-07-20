@@ -1,3 +1,5 @@
+# jmastats (development version)
+
 # jmastats 0.1.0
 
 * Data is now downloaded and saved in a local folder using rappdir package. 
