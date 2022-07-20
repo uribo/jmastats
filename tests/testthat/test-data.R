@@ -4,7 +4,7 @@ test_that("check stations statement", {
   expect_is(stations,
             c("sf", "tbl_df", "tbl", "data.frame"))
   expect_equal(dim(stations),
-               c(1330L, 14L))
+               c(1321L, 14L))
   expect_named(
     stations,
     c(
@@ -48,13 +48,13 @@ test_that("check stations statement", {
 test_that("tidal station", {
   expect_equal(
     dim(tide_station),
-    c(1739, 7)
+    c(1809, 7)
   )
 })
 
 test_that("earthquake station", {
   expect_equal(
     dim(earthquake_station),
-    c(670, 7)
+    c(671, 7)
   )
 })

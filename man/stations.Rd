@@ -5,7 +5,7 @@
 \alias{stations}
 \title{Japan Meteorological Agency's Stations list}
 \format{
-A data frame with 1330 rows 14 variables:
+A data frame with 1321 rows 14 variables:
 \itemize{
 \item{area}
 \item{station_no}

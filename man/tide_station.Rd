@@ -5,7 +5,7 @@
 \alias{tide_station}
 \title{Tidal observation stations of Japan Meteorological Agency}
 \format{
-A data frame with 1739 rows 7 variables
+A data frame with 1809 rows 7 variables
 }
 \usage{
 tide_station
