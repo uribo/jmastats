@@ -30,9 +30,9 @@ The following items can be specified in the type argument.
 }
 \examples{
 \dontrun{
-read_kishou_feed("http://www.data.jma.go.jp/developer/xml/feed/extra.xml")
+read_kishou_feed("https://www.data.jma.go.jp/developer/xml/feed/extra.xml")
 }
 }
 \seealso{
-\url{http://xml.kishou.go.jp/index.html}
+\url{https://xml.kishou.go.jp/index.html}
 }

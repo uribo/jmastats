@@ -36,5 +36,5 @@ contains observation record as point.
 }
 }
 \details{
-See \url{http://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details.
+See \url{https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details.
 }
