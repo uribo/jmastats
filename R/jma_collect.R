@@ -48,122 +48,34 @@ jma_collect <- function(item = NULL,
 
   selected_item <-
     paste0(item, "_", target$station_type)
+  vars <- name_sets(selected_item)
 
   if (item == "annually") {
-      df <-
-        df_raw[[4]][-c(1:2), ]
-
-      names(df) <-
-        name_sets(selected_item)
-
-      df <-
-        convert_error(df) %>%
-        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-        readr::type_convert()
-
-  } else if (item == "monthly" & target$station_type == "a1") {
     df <-
-      df_raw[[6]][-c(1:2), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
+      df_raw[[4]][-c(1:2), ] %>%
+      purrr::set_names(vars) %>%
+      tweak_df()
+  } else if (item == "monthly") {
     df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-      readr::type_convert()
-
-  } else if (item == "10daily" & target$station_type == "a1") {
-
+      df_raw[[6]][-c(1:2), ] %>%
+      purrr::set_names(vars) %>%
+      tweak_df()
+  } else if (item == "10daily") {
     df <-
-      df_raw[[6]][-c(1:2), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
+      df_raw[[6]][-c(1:2), ] %>%
+      purrr::set_names(vars) %>%
+      tweak_df()
+  } else if (item == "mb5daily") {
     df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-      readr::type_convert()
-
-  } else if (item == "daily" & target$station_type == "a1") {
+      df_raw[[6]][-c(1:2), ] %>%
+      purrr::set_names(vars) %>%
+      tweak_df()
+  } else if (item == "daily") {
     df <-
-      df_raw[[6]][-c(1:2), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-      dplyr::mutate(date = as.Date(paste(year,
-                                  stringr::str_pad(month, width = 2, pad = "0"),
-                                  stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
-      readr::type_convert()
-  } else if (item == "daily" & target$station_type == "s1") {
-    df <-
-      df_raw[[6]][-c(1:3), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-      dplyr::mutate(date = as.Date(paste(year,
-                                         stringr::str_pad(month, width = 2, pad = "0"),
-                                         stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
-      readr::type_convert()
-
+      .jma_collect_daily(df_raw, vars, target$station_type)
   } else if (item == "hourly") {
-    if (target$station_type == "a1") {
-      df <-
-        df_raw[[5]][-c(1), ]
-
-      names(df) <-
-        name_sets(selected_item)
-
-      df <-
-        convert_error(df) %>%
-        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-        readr::type_convert()
-    } else if (target$station_type == "s1") {
-      df <-
-        df_raw[[5]][-c(1), ]
-
-      names(df) <-
-        name_sets(selected_item)
-
-      df <-
-        convert_error(df) %>%
-        dplyr::mutate_all(.funs = list(~ stringr::str_remove(., "]"))) %>%
-        dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-        readr::type_convert()
-    }
-
     df <-
-      df %>%
-      dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
-      dplyr::select(date, dplyr::everything()) %>%
-      readr::type_convert()
-  } else if (item == "monthly" & target$station_type == "s1") {
-    df <-
-      df_raw[[6]][-c(1:2), ]
-
-    names(df) <-
-      name_sets(selected_item)
-
-    df <-
-      convert_error(df) %>%
-      dplyr::mutate_all(.funs = list(~ stringr::str_remove_all(., "(]|\\))"))) %>%
-      dplyr::mutate_if(is.character,.funs = list(~ stringr::str_trim(., side = "both"))) %>%
-      readr::type_convert()
+      .jma_collect_hourly(df_raw, vars)
   } else if (item == "rank") {
     value <- period <- NULL
     df <-
@@ -186,6 +98,47 @@ jma_collect <- function(item = NULL,
   # convert_variable_unit(df) %>%
   #   tibble::as_tibble()
   tibble::as_tibble(df)
+}
+
+tweak_df <- function(df) {
+  convert_error(df) %>%
+    dplyr::mutate(
+      dplyr::across(tidyselect::everything(),
+                    .fns = list(~ stringr::str_remove_all(., "(]|\\))")),
+                    .names = "{.col}")) %>%
+    dplyr::mutate(
+      dplyr::across(where(is.character),
+                    .funs = list(~ stringr::str_trim(., side = "both")),
+                    .names = "{.col}")) %>%
+    readr::type_convert()
+}
+
+.jma_collect_daily <- function(df, vars, station_type) {
+  if (station_type == "a1") {
+    df <-
+      df[[6]][-c(1:2), ]
+  } else if (station_type == "s1") {
+    df <-
+      df[[6]][-c(1:3), ]
+  }
+  df %>%
+    purrr::set_names(vars) %>%
+    tweak_df() %>%
+    dplyr::mutate(date = as.Date(paste(year,
+                                       stringr::str_pad(month, width = 2, pad = "0"),
+                                       stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
+    readr::type_convert()
+}
+
+.jma_collect_hourly <- function(df, vars) {
+  df <-
+    df[[5]][-c(1), ] %>%
+    purrr::set_names(vars) %>%
+    tweak_df()
+  df %>%
+    dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
+    dplyr::select(date, dplyr::everything()) %>%
+    readr::type_convert()
 }
 
 jma_url <- function(item = NULL,
@@ -316,8 +269,44 @@ convert_error <- function(.data) {
 
 }
 
-name_sets <- function(item) {
+jma_vars <- list(atmosphere = paste0("atmosphere_",
+                        c("land", "surface"), "(hPa)"),
+                 precipitation = paste0("precipitation_",
+                        c("sum",
+                          "max_per_day",
+                          "max_1hour",
+                          "max_10minutes"), "(mm)"),
+                 temperature = paste0("temperature_",
+                        c("average",
+                          "average_max",
+                          "average_min",
+                          "max",
+                          "min"), "(\u2103)"),
+                 humid = paste0("humidity_",
+                                c("average", "min"),
+                                "(%)"),
+                 wind = paste0("wind_",
+                        c("average_speed",
+                          "max_speed",
+                          "max_speed_direction",
+                          "max_instantaneous_speed",
+                          "max_instantaneous_direction"),
+                        "(m/s)"),
+                 daylight = paste0("daylight_", "(h)"),
+                 solar = paste0("solar_irradiance_",
+                                c("average"), "(MJ/m^2)"),
+                 snow = paste0("snow_",
+                        c("fall",
+                          "max_fall_day",
+                          "depth"),
+                        "(cm)"),
+                 cloud = paste0("cloud_covering_", c("mean")),
+                 condition = paste0("condition_",
+                        c("snow_days",
+                          "fog_days",
+                          "thunder_days")))
 
+name_sets <- function(item) {
     switch(item,
       "daily_a1" = c(
         "date",
@@ -329,6 +318,7 @@ name_sets <- function(item) {
                c("average",
                  "max",
                  "min"), "(\u2103)"),
+        jma_vars$humid,
         paste0("wind_",
                c("average_speed",
                  "max_speed",
@@ -355,9 +345,7 @@ name_sets <- function(item) {
                c("average",
                  "max",
                  "min"), "(\u2103)"),
-        paste0("humidity_",
-               c("average",
-                 "min"), "(%)"),
+        jma_vars$humid,
         paste0("wind_",
                c("average_speed",
                  "max_speed",
@@ -376,19 +364,21 @@ name_sets <- function(item) {
       "hourly_a1" = c("time",
                       paste0("precipitation_", "(mm)"),
                       paste0("temperature_", "(\u2103)"),
+                      paste0("dew_point_", "(\u2103)"),
+                      paste0("vapor_", "(hPa)"),
+                      paste0("humidity_", "(%)"),
                       paste0("wind_", c("speed", "direction"), "(m/s)"),
-                      paste0("dailight_", "(h)"),
+                      jma_vars$daylight,
                       paste0("snow_", c("fall_moment", "fall_period"), "(cm)")),
       "hourly_s1" = c("time",
-                      paste0("atmosphere_",
-                      c("land", "surface"), "(hPa)"),
+                      jma_vars$atmosphere,
                       paste0("precipitation_", "(mm)"),
                       paste0("temperature_", "(\u2103)"),
                       paste0("dew_point_", "(\u2103)"),
                       paste0("vapor_", "(hPa)"),
                       paste0("humidity_", "(%)"),
                       paste0("wind_", c("speed", "direction"), "(m/s)"),
-                      paste0("daylight_", "(h)"),
+                      jma_vars$daylight,
                       paste0("solar_irradiance_", "(MJ/m^2)"),
                       paste0("snow_", c("fall_moment", "fall_period"), "(cm)"),
                       paste0("weather"),
@@ -398,265 +388,87 @@ name_sets <- function(item) {
       "10daily_a1" = c(
         "month",
         "season",
-        paste0("precipitation_",
-               c("sum",
-                 "max_per_day",
-                 "max_1hour",
-                 "max_10minutes"), "(mm)"),
-        paste0("temperature_",
-               c("average",
-                 "average_max",
-                 "average_min",
-                 "max",
-                 "min"), "(\u2103)"),
-        paste0("wind_",
-               c("average_speed",
-                 "max_speed",
-                 "max_speed_direction",
-                 "max_instantaneous_speed",
-                 "max_instantaneous_direction"),
-               "(m/s)"),
-        paste0("daylight_", "(h)"),
-        paste0("snow_",
-               c("fall",
-                 "max_fall_day",
-                 "depth"), "(cm)")
+        jma_vars$precipitation,
+        jma_vars$temperature,
+        jma_vars$humid,
+        jma_vars$wind,
+        jma_vars$daylight,
+        jma_vars$snow
       ),
       "10daily_s1" = c(
         "month",
         "season",
-        paste0("atmosphere_",
-               c("land", "surface"), "(hPa)"),
-        paste0("precipitation_",
-               c("max",
-                 "max_per_day",
-                 "max_1hour",
-                 "max_10minutes"), "(mm)"),
-        paste0("temperature_",
-               c("average",
-                 "average_max",
-                 "average_min",
-                 "max",
-                 "min"), "(\u2103)"),
-        paste0("humidity_", c("average", "min"), "(%)"),
-        paste0("wind_",
-               c("average_speed",
-                 "max_speed",
-                 "max_speed_direction",
-                 "max_instantaneous_speed",
-                 "max_instantaneous_direction"),
-               "(m/s)"),
-        paste0("dailight_", "(h)"),
-        paste0("solar_irradiance_",
-               c("average"), "(MJ/m^2)"),
-        paste0("snow_",
-               c("fall",
-                 "max_fall_day",
-                 "depth"), "(cm)"),
-        paste0("cloud_covering_", c("mean")),
-        paste0("condition_",
-               c("snow_days",
-                 "fog_days",
-                 "thunder_days"))
+        jma_vars$atmosphere,
+        jma_vars$precipitation,
+        jma_vars$temperature,
+        jma_vars$humid,
+        jma_vars$wind,
+        jma_vars$daylight,
+        jma_vars$solar,
+        jma_vars$snow,
+        jma_vars$cloud,
+        jma_vars$condition
       ),
       "mb5daily_a1" = c(
         "month",
         "interval_5days",
         "day",
-        paste0("precipitation_",
-               c("max",
-                 "max_per_day",
-                 "max_1hour",
-                 "max_10minutes"), "(mm)"),
-        paste0("temperature_",
-               c("average",
-                 "average_max",
-                 "average_min",
-                 "max",
-                 "min"), "(\u2103)"),
-        paste0("wind_",
-               c("average_speed",
-                 "max_speed",
-                 "max_speed_direction",
-                 "max_instantaneous_speed",
-                 "max_instantaneous_direction"),
-               "(m/s)"),
-        paste0("daylight_", "(h)"),
-        paste0("snow_",
-               c("fall",
-                 "max_fall_day",
-                 "depth"), "(cm)")
-        ),
+        jma_vars$precipitation,
+        jma_vars$temperature,
+        jma_vars$humid,
+        jma_vars$wind,
+        jma_vars$daylight,
+        jma_vars$snow),
       "mb5daily_s1" = c(
         "month",
         "interval_5days",
         "day",
-        paste0("atmosphere_",
-               c("land", "surface"), "(hPa)"),
-        paste0("precipitation_",
-               c("max",
-                 "max_per_day",
-                 "max_1hour",
-                 "max_10minutes"),
-               "(mm)"),
-        paste0("temperature_",
-               c("average",
-                 "average_max",
-                 "average_min",
-                 "max",
-                 "min"),
-               "(\u2103)"),
-        paste0("humidity_", c("average", "min"), "(%)"),
-        paste0("wind_",
-               c("average_speed",
-                 "max_speed",
-                 "max_speed_direction",
-                 "max_instantaneous_speed",
-                 "max_instantaneous_direction"),
-               "(m/s)"),
-        paste0("daylight_", "(h)"),
-        paste0("solar_irradiance_",
-               c("average"), "(MJ/m^2)"),
-        paste0("snow_",
-               c("fall",
-                 "max_fall_day",
-                 "depth"),
-               "(cm)"),
-        paste0("cloud_covering_", c("mean")),
-        paste0("condition_",
-               c("snow_days",
-                 "fog_days",
-                 "thunder_days"))
-      ),
+        jma_vars$atmosphere,
+        jma_vars$precipitation,
+        jma_vars$temperature,
+        jma_vars$humid,
+        jma_vars$wind,
+        jma_vars$daylight,
+        jma_vars$solar,
+        jma_vars$snow,
+        jma_vars$cloud,
+        jma_vars$condition),
       "monthly_a1" = c("month",
-                       paste0("precipitation_",
-                              c("max",
-                                "max_per_day",
-                                "max_1hour",
-                                "max_10minutes"),
-                              "(mm)"),
-                       paste0("temperature_",
-                              c("average",
-                                "average_max",
-                                "average_min",
-                                "max",
-                                "min"), "(\u2103)"),
-                       paste0("wind_",
-                              c("average_speed",
-                                "max_speed",
-                                "max_speed_direction",
-                                "max_instantaneous_speed",
-                                "max_instantaneous_direction"),
-                              "(m/s)"),
-                       paste0("daylight_", "(h)"),
-                       paste0("snow_",
-                              c("fall",
-                                "max_fall_day",
-                                "depth"),
-                              "(cm)")
-      ),
+                       jma_vars$precipitation,
+                       jma_vars$temperature,
+                       jma_vars$humid,
+                       jma_vars$wind,
+                       jma_vars$daylight,
+                       jma_vars$snow),
       "monthly_s1" = c("month",
-                       paste0("atmosphere_",
-                              c("land", "surface"), "(hPa)"),
-                       paste0("precipitation_",
-                              c("max",
-                                "max_per_day",
-                                "max_1hour",
-                                "max_10minutes"),
-                              "(mm)"),
-                       paste0("temperature_",
-                              c("average",
-                                "average_max",
-                                "average_min",
-                                "max",
-                                "min"), "(\u2103)"),
-                       paste0("humidity", c("average", "min"), "(%)"),
-                       paste0("wind_",
-                              c("average_speed",
-                                "max_speed",
-                                "max_speed_direction",
-                                "max_instantaneous_speed",
-                                "max_instantaneous_direction"),
-                              "(m/s)"),
-                       paste0("daylight_", "(h)"),
-                       paste0("solar_irradiance_",
-                              c("average"), "(MJ/m^2)"),
-                       paste0("snow_",
-                              c("fall",
-                                "max_fall_day",
-                                "depth"),
-                              "(cm)"),
-                       paste0("cloud_covering_", c("mean")),
-                       paste0("condition_",
-                              c("snow_days",
-                                "fog_days",
-                                "thunder_days"))
-      ),
+                       jma_vars$atmosphere,
+                       jma_vars$precipitation,
+                       jma_vars$temperature,
+                       jma_vars$humid,
+                       jma_vars$wind,
+                       jma_vars$daylight,
+                       jma_vars$solar,
+                       jma_vars$snow,
+                       jma_vars$cloud,
+                       jma_vars$condition),
       "annually_a" = c("year",
-                      paste0("precipitation_",
-                             c("max",
-                               "max_per_day",
-                               "max_1hour",
-                               "max_10minutes"),
-                             "(mm)"),
-                      paste0("temperature_",
-                             c("average",
-                               "average_max",
-                               "average_min",
-                               "max",
-                               "min"),
-                             "(\u2103)"),
-                      paste0("wind_",
-                             c("average_speed",
-                               "max_speed",
-                               "max_speed_direction",
-                               "max_instantaneous_speed",
-                               "max_instantaneous_direction"),
-                             "(m/s)"),
-                      paste0("daylight_", "(h)"),
-                      paste0("snow_",
-                             c("fall",
-                               "max_fall_day",
-                               "depth"),
-                             "(cm)")
-      ),
+                       jma_vars$precipitation,
+                       jma_vars$temperature,
+                       jma_vars$humid,
+                       jma_vars$wind,
+                       jma_vars$daylight,
+                       jma_vars$snow),
       "annually_s" = c("year",
-                       paste0("atmosphere_",
-                              c("land", "surface"), "(hPa)"),
-                       paste0("precipitation_",
-                              c("sum",
-                                "max_per_day",
-                                "max_1hour",
-                                "max_10minutes"), "(mm)"),
-                       paste0("temperature_",
-                              c("average",
-                                "average_max",
-                                "average_min",
-                                "max",
-                                "min"), "(\u2103)"),
-                       paste0("humidity_",
-                              c("average",
-                                "min"), "(%)"),
-                       paste0("wind_",
-                              c("average_speed",
-                                "max_speed",
-                                "max_speed_direction",
-                                "max_instantaneous_speed",
-                                "max_instantaneous_direction"),
-                              "(m/s)"),
-                       paste0("daylight_", "(h)"),
-                       paste0("solar_irradiance_", "(MJ/m^2)"),
-                       paste0("snow_",
-                              c("fall",
-                                "max_fall_day",
-                                "depth"),
-                              "(cm)"),
-                       paste0("cloud_covering_", c("mean")),
-                       paste0("condition_",
-                              c("snow_days",
-                                "fog_days",
-                                "thunder_days"))
-    ),
+                       jma_vars$atmosphere,
+                       jma_vars$precipitation,
+                       jma_vars$temperature,
+                       jma_vars$humid,
+                       jma_vars$wind,
+                       jma_vars$daylight,
+                       jma_vars$solar,
+                       jma_vars$snow,
+                       jma_vars$cloud,
+                       jma_vars$condition),
     "rank_s" = c("element", "period", "rank", "value", "date"),
     "rank_a" = c("element", "period", "rank", "value", "date"))
 }

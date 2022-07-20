@@ -1,3 +1,5 @@
+utils::globalVariables("where")
+
 guess_unit <- function(x) {
   stringr::str_extract(x, "\\(.+?\\)") %>%
     stringr::str_remove_all("\\(|\\)")
