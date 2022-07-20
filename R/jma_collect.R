@@ -5,6 +5,7 @@
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
+#' @param cache use cash and save to cache
 #' @param pack Whether to packing common variables or not
 #' @import rlang
 #' @importFrom dplyr mutate select
@@ -37,7 +38,67 @@
 #' @export
 jma_collect <- function(item = NULL,
                         block_no, year, month, day,
-                        pack = TRUE) {
+                        cache = TRUE, pack = TRUE) {
+  target <-
+    detect_target(item, block_no, year, month, day)
+  if (cache) {
+    param <-
+      xml2::url_parse(target$url)$query
+    file_loc <-
+      search_cache_file(item, target$station_type, param)
+    if (file.exists(file_loc)) {
+      out <- readRDS(file_loc)
+    } else {
+      out <-
+        jma_collect_raw(item, block_no, year, month, day)
+      saveRDS(out, file = file_loc)
+    }
+  } else {
+    out <-
+      jma_collect_raw(item, block_no, year, month, day)
+  }
+  if (pack == TRUE) {
+    if (!item %in% c("hourly", "10min")) {
+      out <-
+        pack_df(out, unpack = FALSE)
+    }
+  }
+  out
+}
+
+pack_df <- function(df, unpack = FALSE) {
+  if (unpack == FALSE) {
+    df <-
+      df %>%
+      tidyr::pack(atmosphere = tidyselect::starts_with("atmosphere"),
+                  pressure = tidyselect::starts_with("pressure"),
+                  precipitation = tidyselect::starts_with("precipitation"),
+                  temperature = tidyselect::starts_with("temperature"),
+                  humidity = tidyselect::starts_with("humidity"),
+                  wind = tidyselect::starts_with("wind"),
+                  sunshine = tidyselect::starts_with("sunshine"),
+                  daylight = tidyselect::starts_with("daylight"),
+                  snow = tidyselect::starts_with("snow"),
+                  solar_irradiance = tidyselect::starts_with("solar_irradiance"),
+                  cloud_covering = tidyselect::starts_with("cloud_covering"),
+                  condition = tidyselect::starts_with("condition"),
+                  weather_time = tidyselect::matches("weather.*time"),
+                  .names_sep = "_")
+    df[, c(names(purrr::discard(df, tibble::is_tibble)),
+           df[, names(purrr::keep(df, tibble::is_tibble))] %>%
+             purrr::map(~ ncol(.x)) %>%
+             purrr::discard(~ .x == 0L) %>%
+             names())]
+  } else {
+    df %>%
+      tidyr::unpack(tidyselect::everything(),
+                    names_sep = "_")
+  }
+}
+
+jma_collect_raw <- function(item = NULL,
+                        block_no, year, month, day,
+                        cache = TRUE) {
 
   target <-
     detect_target(item, block_no, year, month, day)
@@ -106,44 +167,7 @@ jma_collect <- function(item = NULL,
   }
   # convert_variable_unit(df) %>%
   #   tibble::as_tibble()
-  out <-
-    tibble::as_tibble(df)
-  if (pack == TRUE) {
-    if (!item %in% c("hourly", "10min")) {
-      out <-
-        pack_df(out, unpack = FALSE)
-    }
-  }
-}
-
-pack_df <- function(df, unpack = FALSE) {
-  if (unpack == FALSE) {
-    df <-
-      df %>%
-      tidyr::pack(atmosphere = tidyselect::starts_with("atmosphere"),
-                  pressure = tidyselect::starts_with("pressure"),
-                  precipitation = tidyselect::starts_with("precipitation"),
-                  temperature = tidyselect::starts_with("temperature"),
-                  humidity = tidyselect::starts_with("humidity"),
-                  wind = tidyselect::starts_with("wind"),
-                  sunshine = tidyselect::starts_with("sunshine"),
-                  daylight = tidyselect::starts_with("daylight"),
-                  snow = tidyselect::starts_with("snow"),
-                  solar_irradiance = tidyselect::starts_with("solar_irradiance"),
-                  cloud_covering = tidyselect::starts_with("cloud_covering"),
-                  condition = tidyselect::starts_with("condition"),
-                  weather_time = tidyselect::matches("weather.*time"),
-                  .names_sep = "_")
-    df[, c(names(purrr::discard(df, tibble::is_tibble)),
-           df[, names(purrr::keep(df, tibble::is_tibble))] %>%
-             purrr::map(~ ncol(.x)) %>%
-             purrr::discard(~ .x == 0L) %>%
-             names())]
-  } else {
-    df %>%
-      tidyr::unpack(tidyselect::everything(),
-                    names_sep = "_")
-  }
+  tibble::as_tibble(df)
 }
 
 detect_target <- function(item, block_no, year, month, day) {

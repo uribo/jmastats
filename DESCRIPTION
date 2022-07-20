@@ -26,6 +26,7 @@ Imports:
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
     purrr (>= 0.2.5),
+    rappdirs (>= 0.3.3),
     readr (>= 1.1.1),
     rlang (>= 0.2.1),
     rvest (>= 0.3.2),
