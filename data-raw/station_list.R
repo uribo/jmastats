@@ -123,6 +123,12 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
     left_join(df_stations,
               by = c("station_name", "area")) |>
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
+    dplyr::mutate(
+      dplyr::across(.cols = c(area, station_type, station_name,
+                              address, observation_begin, note1, note2,
+                              katakana),
+                    .fns = ~ stringi::stri_conv(.x, to = "UTF8"),
+                    .names = "{.col}")) %>%
     tibble::new_tibble(nrow = nrow(.), class = "sf") %>%
     verify(nrow(.) == 1321L)
   stations |>
