@@ -1,6 +1,6 @@
 #####################################
 # Stations list
-# Last Update: 2022-07-20
+# Last Update: 2023-02-10 (適用日：2022年11月22日)
 # 1. 地上気象観測地点,地域気象観測所
 # 2. 潮位観測地点
 # 3. 震度観測点
@@ -19,7 +19,7 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
   # 地上気象観測地点 https://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  if (!file.exists(here::here("data-raw/ame_master.csv"))) {
+  if (!file.exists(here::here("data-raw/ame_master_20221122.csv"))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
     #   html_elements(css = "#contents_area2 > div > font > table") |>
@@ -37,10 +37,10 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
   }
   df_amedas_master <-
     read.csv(
-      here::here("data-raw/ame_master_20220701.csv"),
+      here::here("data-raw/ame_master_20221122.csv"),
       fileEncoding = "cp932",
       stringsAsFactors = FALSE) %>%
-    verify(dim(.) == c(1314, 16)) |>
+    assertr::verify(dim(.) == c(1315, 16)) |>
     tibble::as_tibble() |>
     mutate(
       `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
@@ -64,7 +64,7 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
                                 .names = "{.col}")) %>%
     dplyr::mutate(area = dplyr::recode(area,
                                        `オホーツク` = "網走・北見・紋別")) %>%
-    verify(ncol(.) == 12L)
+    assertr::verify(ncol(.) == 12L)
   # 1.2. scraping  ---------------------------------------------------------------
   read_block_no <- function(prec_no) {
     url <-
@@ -107,10 +107,10 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
     ensurer::ensure(length(.) == 61L) |>
     purrr::map_df(
       read_block_no) %>%
-    verify(dim(.) == c(1674, 3)) |>
-    left_join(df_prec_no, by = "prec_no") |>
+    assertr::verify(dim(.) == c(1676, 3)) |>
+    left_join(df_prec_no, by = join_by(prec_no)) |>
     mutate(area = stringr::str_remove(area, "地方")) %>%
-    verify(dim(.) == c(1674, 4)) |>
+    verify(dim(.) == c(1676, 4)) |>
     mutate(area = stringr::str_remove(area, "(都|府|県)$"),
            area = dplyr::if_else(station == "竜王山", "徳島", area),
            station = stringr::str_remove(station, "（.+）")) %>%
@@ -118,10 +118,16 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
 
   # 現在も観測が行われているものに制限される
   # 例) ピヤシリ山 (block_no=0007)は除外
+
+  df_stations %>%
+    filter(station_name == "三倉")
+
   stations <-
-    df_amedas_master |>
+    df_amedas_master %>%
     left_join(df_stations,
-              by = c("station_name", "area")) |>
+              by = join_by(station_name, area),
+              multiple = "all") %>%
+    ensurer::ensure(nrow(.) == 1322L) %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
     dplyr::mutate(
       dplyr::across(.cols = c(area, station_type, station_name,
@@ -130,7 +136,7 @@ if (!file.exists("data-raw/amedas_raw.rds")) {
                     .fns = ~ stringi::stri_conv(.x, to = "UTF8"),
                     .names = "{.col}")) %>%
     tibble::new_tibble(nrow = nrow(.), class = "sf") %>%
-    verify(nrow(.) == 1321L)
+    verify(nrow(.) == 1322L)
   stations |>
     readr::write_rds("data-raw/amedas_raw.rds")
 } else {
@@ -148,7 +154,7 @@ ne_jpn <-
 stations <-
   stations |>
   st_join(ne_jpn) %>%
-  verify(dim(.) == c(1321, 14L))
+  verify(dim(.) == c(1322, 14L))
 
 # 1.4 Manual fix ------------------------------------------------------------
 prefecture_code <- c(`13061` = "01",
@@ -315,9 +321,9 @@ stations |>
 
 stations <-
   stations |>
-  dplyr::mutate(dplyr::across(tidyselect:::where(is.character),
-                   .funs = list(~ stringi::stri_conv(str = ., to = "UTF8")))) |>
-  select(area,
+  dplyr::mutate(dplyr::across(tidyselect::where(is.character),
+                              .fns = list(~ stringi::stri_conv(str = ., to = "UTF8")))) |>
+  dplyr::select(area,
          station_no,
          station_type,
          station_name,
@@ -331,7 +337,7 @@ stations <-
          block_no,
          pref_code,
          geometry) %>%
-  verify(dim(.) == c(1321, 14))
+  assertr::verify(dim(.) == c(1322, 14))
 
 usethis::use_data(stations, overwrite = TRUE)
 
@@ -347,38 +353,43 @@ years <-
 tide_station <-
   years |>
   purrr::set_names(as.character(years)) |>
-  purrr::map_df(
-    ~ polite::bow(glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/genbo/station.php?year={.x}")) %>%
-      polite::scrape() %>%
-      html_table(fill = TRUE) |>
-      purrr::pluck(1) |>
-      tibble::repair_names() |>
-      tibble::as_tibble(),
-    .id = "year")
+  purrr::map(
+    function(.x) {
+      Sys.sleep(7)
+      polite::bow(glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/genbo/station.php?year={.x}")) %>%
+        polite::scrape() %>%
+        rvest::html_table(fill = TRUE) |>
+        purrr::pluck(1) |>
+        tibble::repair_names() |>
+        tibble::as_tibble()
+    }) %>%
+  purrr::list_rbind(names_to = "year")
 
 tide_station <-
   tide_station |>
-  filter(stringr::str_detect(`地点番号`, "\uff0a", negate = TRUE),
+  dplyr::filter(stringr::str_detect(`地点番号`, "\uff0a", negate = TRUE),
          `地点番号` != "地点番号") |>
-  select(seq.int(8)) |>
+  dplyr::select(seq.int(8)) |>
   purrr::set_names(c("year", "id", "stn", "station_name", "address",
                      "latitude", "longitude", "type")) |>
-  mutate_at(vars(longitude, latitude),
-            list(~ stringr::str_replace_all(., c("\u309c" = "\u00b0")))) |>
+  mutate(across(c(longitude, latitude),
+                .fns = list(~ stringr::str_replace_all(.,
+                                                       c("\u309c" = "\u00b0"))),
+                .names = "{.col}")) |>
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) |>
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-  verify(dim(.) == c(1809, 7))
+  assertr::verify(dim(.) == c(1879, 7))
 
 usethis::use_data(tide_station, overwrite = TRUE)
 
 
 # 3. 震度観測点 ----------------------------------------------------------------
 x <-
-  read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
+  rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x %>%
-  html_element(css = "#main > h1") %>%
-  html_text() # 令和4年2月24日現在
+  rvest::html_element(css = "#main > h1") %>%
+  rvest::html_text() # 令和4年11月24日現在
 
 earthquake_station <-
   x %>%
@@ -387,13 +398,13 @@ earthquake_station <-
   purrr::set_names(x %>%
               html_elements(css = "#main > p > a") %>%
               html_text()) %>%
-  purrr::map_dfr(
+  purrr::map(
     ~ mutate(.x,
              across(.cols = everything(),
-                    .fns = as.character)),
-    .id = "prefecture"
+                    .fns = as.character))
   ) %>%
-  verify(dim(.) == c(1112, 10)) %>%
+  purrr::list_rbind(names_to = "prefecture") %>%
+  verify(dim(.) == c(1114, 10)) %>%
   readr::type_convert(col_types = "ccccididcc") %>%
   purrr::set_names(c("prefecture", "area", "station_name", "address",
                      "lat_do", "lat_fun",
@@ -409,7 +420,7 @@ earthquake_station <-
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) %>%
   sf::st_transform(crs = 4326) %>%
   select(!c(ends_with("_do"), ends_with("_fun"))) %>%
-  verify(dim(.) == c(1112, 7)) %>%
+  verify(dim(.) == c(1114, 7)) %>%
   filter(is.na(observation_end)) %>%
   verify(nrow(.) == 671L)
 
