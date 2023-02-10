@@ -12,14 +12,14 @@ read_eqdb_csv <- function(path, show_metadata = TRUE) {
       readr::read_csv(path,
                n_max = 1,
                col_types = "Dtccccdc")
-    cli::cli_inform(c("地震の概要",
-                  "x" = glue::glue("発生日時: {meta$地震の発生日} {meta$地震の発生時刻}"),
-                  "x" = glue::glue("震央地名: {meta$震央地名}"),
-                  "*" = glue::glue("緯度: {meta$緯度}"),
-                  "*" = glue::glue("経度: {meta$経度}"),
-                  "!" = glue::glue("深さ: {meta$深さ}"),
-                  "!" = glue::glue("マグニチュード: {meta$Ｍ}"),
-                  "!" = glue::glue("最大震度: {meta$最大震度}")
+    cli::cli_inform(c("\u5730\u9707\u306e\u6982\u8981",
+                  "x" = glue::glue("\u767a\u751f\u65e5\u6642: {meta$地震の発生日} {meta$地震の発生時刻}"),
+                  "x" = glue::glue("\u9707\u592e\u5730\u540d: {meta$震央地名}"),
+                  "*" = glue::glue("\u7def\u5ea6: {meta$緯度}"),
+                  "*" = glue::glue("\u7d4c\u5ea6: {meta$経度}"),
+                  "!" = glue::glue("\u6df1\u3055: {meta$深さ}"),
+                  "!" = glue::glue("\u30de\u30b0\u30cb\u30c1\u30e5\u30fc\u30c9: {meta$Ｍ}"),
+                  "!" = glue::glue("\u6700\u5927\u9707\u5ea6: {meta$最大震度}")
                   ))
   }
   record <-
@@ -30,7 +30,7 @@ read_eqdb_csv <- function(path, show_metadata = TRUE) {
     tidyr::separate_rows(`観測点名`,
                          sep = "[[:space:]]") %>%
     dplyr::mutate(`震度` = stringi::stri_trans_general(`震度`, "nfkc") %>%
-                    stringr::str_remove("震度"),
+                    stringr::str_remove("\u9707\u5ea6"),
                   `気象庁の震度観測点` = stringr::str_detect(`観測点名`, "\uff0a", negate = TRUE),
                   `観測点名` = stringr::str_remove(`観測点名`, "\uff0a"))
 }
