@@ -13,8 +13,8 @@ Authors@R: c(person(given = "Shinya",
 Depends: 
     R (>= 3.1)
 License: MIT + file LICENSE
-BugReports: https://gitlab.com/uribo/jmastats/issues
-URL: https://gitlab.com/uribo/jmastats
+BugReports: https://github.com/uribo/jmastats/issues
+URL: https://github.com/uribo/jmastats
 Imports: 
     cli,
     crayon (>= 1.3.4), 
@@ -47,5 +47,5 @@ Encoding: UTF-8
 LazyData: true
 ByteCompile: true
 VignetteBuilder: knitr
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
