@@ -182,8 +182,8 @@ tweak_df <- function(df) {
                     .fns = list(~ stringr::str_remove_all(., "(]|\\))")),
                     .names = "{.col}")) %>%
     dplyr::mutate(
-      dplyr::across(where(is.character),
-                    .funs = list(~ stringr::str_trim(., side = "both")),
+      dplyr::across(tidyselect::where(is.character),
+                    .fns = list(~ stringr::str_trim(., side = "both")),
                     .names = "{.col}")) %>%
     readr::type_convert()
 }
