@@ -367,11 +367,15 @@ convert_error <- function(.data) {
   dplyr::mutate(
     .data,
     dplyr::across(tidyselect::everything(),
-                  .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)),
-                                                   intToUtf8(c(215)),
-                                                   "",
-                                                   intToUtf8(c(35))),
-                                          NA_character_, .))) %>%
+                  .fns = ~ stringr::str_remove_all(., "(\\)|\\])$") %>%
+                    stringr::str_squish())) %>%
+    dplyr::mutate(
+      dplyr::across(tidyselect::everything(),
+                    .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)),
+                                                     intToUtf8(c(215)),
+                                                     "",
+                                                     intToUtf8(c(35))),
+                                            NA_character_, .))) %>%
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
