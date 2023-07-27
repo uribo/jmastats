@@ -4,7 +4,7 @@ test_that("check stations statement", {
   expect_is(stations,
             c("sf", "tbl_df", "tbl", "data.frame"))
   expect_equal(dim(stations),
-               c(1322L, 14L))
+               c(1323L, 14L))
   expect_named(
     stations,
     c(

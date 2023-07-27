@@ -11,7 +11,7 @@ A simple feature data frame with 671 rows  7 variables
 earthquake_station
 }
 \description{
-XXX
+This data corresponds to the July 13, 2023 update.
 }
 \examples{
 head(earthquake_station)

@@ -5,7 +5,7 @@
 \alias{stations}
 \title{Japan Meteorological Agency's Stations list}
 \format{
-A data frame with 1321 rows 14 variables:
+A data frame with 1323 rows 14 variables:
 \itemize{
 \item{area}
 \item{station_no}
@@ -28,7 +28,7 @@ A data frame with 1321 rows 14 variables:
 stations
 }
 \description{
-XXX
+This data corresponds to the March 23, 2023 update.
 }
 \examples{
 head(stations)

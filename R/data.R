@@ -2,8 +2,8 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's Stations list
 #'
-#' @description XXX
-#' @format A data frame with 1321 rows 14 variables:
+#' @description This data corresponds to the March 23, 2023 update.
+#' @format A data frame with 1323 rows 14 variables:
 #' \itemize{
 #'   \item{area}
 #'   \item{station_no}
@@ -28,15 +28,16 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Tidal observation stations of Japan Meteorological Agency
 #'
-#' @description XXX
-#' @format A data frame with 1809 rows 7 variables
+#' @description Observation stations from 1997 to 2023.
+#' This data corresponds to the January 1, 2023 update.
+#' @format A data frame with 1879 rows 7 variables
 #' @examples
 #' head(tide_station)
 "tide_station"
 
 #' Japan Meteorological Agency's earthquake observe stations
 #'
-#' @description XXX
+#' @description This data corresponds to the July 13, 2023 update.
 #' @format A simple feature data frame with 671 rows  7 variables
 #' @examples
 #' head(earthquake_station)
