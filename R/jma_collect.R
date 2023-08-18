@@ -365,7 +365,17 @@ convert_variable_unit <- function(.data) {
     purrr::set_names(stringr::str_remove_all(names(df), "\\(.+\\)"))
 }
 
+# see) https://www.data.jma.go.jp/obd/stats/data/mdrr/man/remark.html
 convert_error <- function(.data) {
+  msg <-
+    .data %>%
+    purrr::map(note_message) %>%
+    purrr::keep(~ length(.x) > 0)
+  msg %>%
+    purrr::map2(names(msg),
+                ~ cat(cli::col_red(paste0(
+                  "Treated as missing: lines ",
+                  paste0(.x, collapse = ", "), " at ", .y, "\n"))))
   dplyr::mutate(
     .data,
     dplyr::across(tidyselect::everything(),
@@ -381,6 +391,29 @@ convert_error <- function(.data) {
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
+}
+
+note_vars <- function(var) {
+  syms <-
+    var %>%
+    stringr::str_which(paste0("(",
+                              paste0(c(intToUtf8(c(47, 47, 47)),
+                                       intToUtf8(c(215)),
+                                       intToUtf8(c(35))), collapse = "|"),
+                              "|",
+                              "\\+|\\-|\\)|\\]",
+                              ")"))
+  append(
+    syms,
+    var %>%
+      stringr::str_which("^$")
+  )
+}
+
+note_message <- function(var) {
+  res <-
+    note_vars(var) %>%
+    purrr::keep(~ length(.x) > 0)
 }
 
 jma_vars <- list(atmosphere = paste0("atmosphere_",
