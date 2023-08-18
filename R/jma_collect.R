@@ -53,12 +53,12 @@ jma_collect <- function(item = NULL,
       out <- readRDS(file_loc)
     } else {
       out <-
-        jma_collect_raw(item, block_no, year, month, day, quiet)
+        slow_jma_collect(item, block_no, year, month, day, quiet)
       saveRDS(out, file = file_loc)
     }
   } else {
     out <-
-      jma_collect_raw(item, block_no, year, month, day, quiet)
+      slow_jma_collect(item, block_no, year, month, day, quiet)
   }
   if (pack == TRUE) {
     if (!item %in% c("hourly", "10min")) {
@@ -172,6 +172,18 @@ jma_collect_raw <- function(item = NULL,
   #   tibble::as_tibble()
   tibble::as_tibble(df)
 }
+
+slow_jma_collect <-
+  purrr::slowly(function(item,
+                         block_no, year, month, day, quiet) {
+  jma_collect_raw(item = item,
+                  block_no = block_no,
+                  year = year,
+                  month = month,
+                  day = day,
+                  quiet = quiet)},
+  rate = purrr::rate_delay(pause = 7),
+  quiet = FALSE)
 
 detect_target <- function(item, block_no, year, month, day) {
   .blockid <- rlang::enquo(block_no)
