@@ -7,6 +7,9 @@
 #' @param day select date (default `NULL`)
 #' @param cache use cash and save to cache
 #' @param pack Whether to packing common variables or not
+#' @param quiet Whether to output information on variable and
+#' row combinations that were treated as missing values
+#' for some reason. (`TRUE`, the default)
 #' @import rlang
 #' @importFrom dplyr mutate select
 #' @importFrom glue glue
@@ -38,7 +41,7 @@
 #' @export
 jma_collect <- function(item = NULL,
                         block_no, year, month, day,
-                        cache = TRUE, pack = TRUE) {
+                        cache = TRUE, pack = TRUE, quiet = FALSE) {
   target <-
     detect_target(item, block_no, year, month, day)
   if (cache) {
@@ -50,12 +53,12 @@ jma_collect <- function(item = NULL,
       out <- readRDS(file_loc)
     } else {
       out <-
-        jma_collect_raw(item, block_no, year, month, day)
+        jma_collect_raw(item, block_no, year, month, day, quiet)
       saveRDS(out, file = file_loc)
     }
   } else {
     out <-
-      jma_collect_raw(item, block_no, year, month, day)
+      jma_collect_raw(item, block_no, year, month, day, quiet)
   }
   if (pack == TRUE) {
     if (!item %in% c("hourly", "10min")) {
@@ -97,8 +100,7 @@ pack_df <- function(df, unpack = FALSE) {
 }
 
 jma_collect_raw <- function(item = NULL,
-                        block_no, year, month, day,
-                        cache = TRUE) {
+                        block_no, year, month, day, quiet) {
 
   target <-
     detect_target(item, block_no, year, month, day)
@@ -119,33 +121,34 @@ jma_collect_raw <- function(item = NULL,
     df <-
       df_raw[[4]][-c(1:2), ] %>%
       purrr::set_names(vars) %>%
-      tweak_df()
+      tweak_df(quiet = quiet)
   } else if (item == "monthly") {
     df <-
       df_raw[[6]][-c(1:2), ] %>%
       purrr::set_names(vars) %>%
-      tweak_df()
+      tweak_df(quiet = quiet)
   } else if (item == "10daily") {
     df <-
       df_raw[[6]][-c(1:2), ] %>%
       purrr::set_names(vars) %>%
-      tweak_df()
+      tweak_df(quiet = quiet)
   } else if (item == "mb5daily") {
     df <-
       df_raw[[6]][-c(1:2), ] %>%
       purrr::set_names(vars) %>%
-      tweak_df()
+      tweak_df(quiet = quiet)
   } else if (item == "daily") {
     df <-
       .jma_collect_daily(df_raw, vars,
                          year, month, date = day,
-                         target$station_type)
+                         target$station_type,
+                         quiet)
   } else if (item == "hourly") {
     df <-
-      .jma_collect_hourly(df_raw, vars, year, month, day)
+      .jma_collect_hourly(df_raw, vars, year, month, day, quiet)
   } else if (item == "10min") {
     df <-
-      .jma_collect_10min(df_raw, vars, target$station_type)
+      .jma_collect_10min(df_raw, vars, target$station_type, quiet)
   } else if (item == "rank") {
     value <- period <- NULL
     df <-
@@ -175,8 +178,8 @@ detect_target <- function(item, block_no, year, month, day) {
   jma_url(item, !!.blockid, year, month, day)
 }
 
-tweak_df <- function(df) {
-  convert_error(df) %>%
+tweak_df <- function(df, quiet) {
+  convert_error(df, quiet) %>%
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = list(~ stringr::str_remove_all(., "(]|\\))")),
@@ -190,7 +193,8 @@ tweak_df <- function(df) {
 
 .jma_collect_daily <- function(df, vars,
                                year, month, date,
-                               station_type) {
+                               station_type,
+                               quiet) {
   if (station_type == "a1") {
     df <-
       df[[6]][-c(1:2), ]
@@ -200,25 +204,25 @@ tweak_df <- function(df) {
   }
   df %>%
     purrr::set_names(vars) %>%
-    tweak_df() %>%
+    tweak_df(quiet = quiet) %>%
     dplyr::mutate(date = as.Date(paste(year,
                                        stringr::str_pad(month, width = 2, pad = "0"),
                                        stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
     readr::type_convert()
 }
 
-.jma_collect_hourly <- function(df, vars, year, month, day) {
+.jma_collect_hourly <- function(df, vars, year, month, day, quiet) {
   df <-
     df[[5]][-c(1), ] %>%
     purrr::set_names(vars) %>%
-    tweak_df()
+    tweak_df(quiet = quiet)
   df %>%
     dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
     dplyr::select(date, dplyr::everything()) %>%
     readr::type_convert()
 }
 
-.jma_collect_10min <- function(df, vars, station_type) {
+.jma_collect_10min <- function(df, vars, station_type, quiet) {
   if (station_type == "a1") {
     df <-
       df[[5]][-c(1:2), ]
@@ -228,7 +232,7 @@ tweak_df <- function(df) {
   }
   df %>%
     purrr::set_names(vars) %>%
-    tweak_df()
+    tweak_df(quiet = quiet)
 }
 
 jma_url <- function(item = NULL,
@@ -366,16 +370,18 @@ convert_variable_unit <- function(.data) {
 }
 
 # see) https://www.data.jma.go.jp/obd/stats/data/mdrr/man/remark.html
-convert_error <- function(.data) {
-  msg <-
-    .data %>%
-    purrr::map(note_message) %>%
-    purrr::keep(~ length(.x) > 0)
-  msg %>%
-    purrr::map2(names(msg),
-                ~ cat(cli::col_red(paste0(
-                  "Treated as missing: lines ",
-                  paste0(.x, collapse = ", "), " at ", .y, "\n"))))
+convert_error <- function(.data, quiet) {
+  if (!quiet) {
+    msg <-
+      .data %>%
+      purrr::map(note_message) %>%
+      purrr::keep(~ length(.x) > 0)
+    msg %>%
+      purrr::map2(names(msg),
+                  ~ cat(cli::col_red(paste0(
+                    "Treated as missing: lines ",
+                    paste0(.x, collapse = ", "), " at ", .y, "\n"))))
+  }
   dplyr::mutate(
     .data,
     dplyr::across(tidyselect::everything(),

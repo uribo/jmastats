@@ -4,7 +4,16 @@
 \alias{jma_collect}
 \title{Collect JMA Stats Data}
 \usage{
-jma_collect(item = NULL, block_no, year, month, day, cache = TRUE, pack = TRUE)
+jma_collect(
+  item = NULL,
+  block_no,
+  year,
+  month,
+  day,
+  cache = TRUE,
+  pack = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{item}{url}
@@ -20,6 +29,10 @@ jma_collect(item = NULL, block_no, year, month, day, cache = TRUE, pack = TRUE)
 \item{cache}{use cash and save to cache}
 
 \item{pack}{Whether to packing common variables or not}
+
+\item{quiet}{Whether to output information on variable and
+row combinations that were treated as missing values
+for some reason. (\code{TRUE}, the default)}
 }
 \description{
 Collect JMA Stats Data
