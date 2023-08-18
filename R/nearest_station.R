@@ -104,12 +104,14 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
   unit <- rlang::quo_name(.unit)
   coords <-
     check_input_coords(longitude, latitude, geometry)
-  stations[which(sf::st_is_within_distance(st_sfc(st_point(c(coords$longitude,
-                                                             coords$latitude)),
-                                                  crs = 4326),
-                                           stations,
-                                           dist = units::as_units(distance, value = unit),
-                                           sparse = FALSE)[1, ]), ] %>%
+  stations[which(sf::st_is_within_distance(
+    sf::st_sfc(
+      sf::st_point(c(coords$longitude[1],
+                     coords$latitude[1])),
+      crs = 4326),
+    stations,
+    dist = units::as_units(distance, value = unit),
+    sparse = FALSE)[1, ]), ] %>%
     dplyr::transmute(
       area,
       station_no,
@@ -117,8 +119,10 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
       block_no,
       distance = sf::st_distance(
         geometry,
-        sf::st_sfc(sf::st_point(c(coords$longitude, coords$latitude)),
-                   crs = 4326))[, 1]) %>%
+        sf::st_sfc(
+          sf::st_point(c(coords$longitude,
+                         coords$latitude)),
+          crs = 4326))[, 1]) %>%
     dplyr::arrange(distance)
 }
 
