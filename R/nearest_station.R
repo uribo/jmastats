@@ -53,43 +53,32 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
                                 coords$latitude,
                                 distance = 10,
                                 .unit = "km")
-  if (nrow(res) > 1)
-    res <- res %>%
-    dplyr::top_n(1, dplyr::desc(distance))
-  else
+  if (nrow(res) == 0)
     res <- pick_neighbor_stations(coords$longitude,
                                   coords$latitude,
                                   distance = 100,
                                   .unit = "km")
-  if (nrow(res) > 1)
-    res <- res %>%
-    dplyr::top_n(1, dplyr::desc(distance))
-  else
+  if (nrow(res) == 0)
     res <- pick_neighbor_stations(coords$longitude,
                                   coords$latitude,
                                   distance = 500,
                                   .unit = "km")
-  if (nrow(res) > 1)
-    res <- res %>%
-    dplyr::top_n(1, dplyr::desc(distance))
-  else
+  if (nrow(res) == 0)
     res <- pick_neighbor_stations(coords$longitude,
                                   coords$latitude,
                                   distance = 1000,
                                   .unit = "km")
-  if (nrow(res) > 1)
-    res <- res %>%
-    dplyr::top_n(1, dplyr::desc(distance))
-  else
+  if (nrow(res) == 0)
     res <- pick_neighbor_stations(coords$longitude,
                                   coords$latitude,
                                   distance = 3200,
-                                  .unit = "km") %>%
-    dplyr::top_n(1, dplyr::desc(distance))
+                                  .unit = "km")
   if (nrow(res) == 0)
     rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
-  else
+
   res %>%
+    dplyr::top_n(1, dplyr::desc(distance)) %>%
+    dplyr::distinct(station_no, .keep_all = TRUE) |>
     dplyr::select(area,
                   station_no,
                   station_name,

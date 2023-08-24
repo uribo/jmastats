@@ -23,6 +23,11 @@ test_that("multiplication works", {
     12471L
   )
 
+  expect_equal(
+    nrow(nearest_station(longitude = 141.6084, latitude = 40.50878)),
+    nrow(dplyr::filter(stations, station_no == 31602))-1L
+  )
+
   res <-
     nearest_station(longitude = NULL,
                     latitude  = NULL,
