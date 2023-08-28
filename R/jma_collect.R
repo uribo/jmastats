@@ -12,10 +12,9 @@
 #' for some reason. (`TRUE`, the default)
 #' @import rlang
 #' @importFrom dplyr mutate select
-#' @importFrom glue glue
 #' @importFrom readr type_convert
 #' @importFrom rvest html_table
-#' @importFrom stringr str_pad str_remove str_trim
+#' @importFrom stringr str_glue str_pad str_remove str_trim
 #' @importFrom xml2 read_html
 #' @note
 #' The parameter `item` chooses one from these:
@@ -299,7 +298,7 @@ jma_url <- function(item = NULL,
         paste0(station_info$station_type, "1")
     }
     list(
-      url = as.character(glue::glue(
+      url = as.character(stringr::str_glue(
         "https://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
         blockid = rlang::eval_tidy(.blockid),
         station_type = station_info$station_type,

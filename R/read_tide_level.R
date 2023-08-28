@@ -62,7 +62,7 @@ request_tide_level_url <- function(.year, .month, .stn) {
   if (length(stn) == 0) {
     rlang::abort("In that year, there was no data from the target observatory.")
   }
-  glue::glue("{jma_site}/gmd/kaiyou/data/db/tide/genbo/{year}/{year}{month}/hry{year}{month}{stn}.txt") # nolint
+  stringr::str_glue("{jma_site}/gmd/kaiyou/data/db/tide/genbo/{year}/{year}{month}/hry{year}{month}{stn}.txt") # nolint
 }
 
 parse_tide_file <- function(data) {

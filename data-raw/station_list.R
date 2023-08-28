@@ -72,7 +72,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 1.2. scraping  ---------------------------------------------------------------
   read_block_no <- function(prec_no) {
     url <-
-      polite::bow(glue::glue(
+      polite::bow(stringr::str_glue(
       "https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no={prec_no}&block_no=&year=&month=&day=&view="))
     polite::scrape(url) |>
       rvest::html_elements(css = "#ncontents2 > map > area") |>
@@ -375,7 +375,7 @@ tide_station <-
   purrr::map(
     function(.x) {
       Sys.sleep(7)
-      polite::bow(glue::glue("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/genbo/station.php?year={.x}")) |>
+      polite::bow(stringr::str_glue("https://www.data.jma.go.jp/gmd/kaiyou/db/tide/genbo/station.php?year={.x}")) |>
         polite::scrape() |>
         rvest::html_table(fill = TRUE) |>
         purrr::pluck(1) |>

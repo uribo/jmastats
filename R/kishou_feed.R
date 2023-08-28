@@ -47,7 +47,7 @@ create_feed_url <- function(frequency, type) {
                        "extra",
                        "eqvol",
                        "other"))
-  glue::glue("https://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
+  stringr::str_glue("https://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
 }
 
 parse_kishou_xml <- function(x, index) {
