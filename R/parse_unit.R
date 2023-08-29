@@ -16,7 +16,7 @@ parse_unit <- function(data, rename = TRUE) {
   candidate_vars <-
     original_vars[original_vars != c("date")]
   candidate_vars <-
-    candidate_vars[stringr::str_detect(candidate_vars, "(\\/|-)", negate = TRUE)]
+    candidate_vars[stringr::str_detect(candidate_vars, "-", negate = TRUE)]
   candidate_vars <-
     candidate_vars[stringr::str_detect(candidate_vars, "\\(.+\\)$")]
 
@@ -38,7 +38,8 @@ parse_unit <- function(data, rename = TRUE) {
     purrr::map2_dfc(
       seq.int(ncol(data_candidate)),
       var_units,
-      function(x, y) units::as_units(data_candidate[[x]], value = y)
+      function(x, y) units::as_units(as.numeric(data_candidate[[x]]),
+                                     value = y)
     ) %>%
     purrr::set_names(names(data_candidate)[!names(data_candidate) %in% names(df_drop)])
 
