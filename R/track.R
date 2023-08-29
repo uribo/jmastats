@@ -8,8 +8,8 @@
 #' (such as international_number and storm_name).
 #' @param path path to best track data (.txt)
 #' @import rlang
-#' @importFrom dplyr arrange bind_rows group_by lead select
-#' left_join if_else mutate mutate_at ungroup rowwise vars
+#' @importFrom dplyr across arrange bind_rows group_by lead select
+#' left_join if_else mutate ungroup rowwise
 #' @importFrom forcats fct_inorder
 #' @importFrom lubridate ymd_h
 #' @importFrom purrr set_names reduce
@@ -145,7 +145,9 @@ read_rsmc_besttrack <- function(path) {
       longitude = as.numeric(longitude) / 10,
       international_number = rep(df_header$international_number,
                                  df_header$nrow)) %>%
-    dplyr::mutate_at(dplyr::vars(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`), as.numeric) %>%
+    dplyr::mutate(
+      dplyr::across(c(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`),
+                    as.numeric)) %>%
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
     dplyr::left_join(df_header, by = "international_number") %>%
     dplyr::arrange(datetime) %>%
@@ -174,6 +176,6 @@ track_combine <- function(data, group_vars = c("international_number", "storm_na
                                           sf::st_as_sfc(bb)) %>%
                     sf::st_cast("LINESTRING")) %>%
     dplyr::ungroup() %>%
-    dplyr::select(-aa, -bb) %>%
+    dplyr::select(!c(aa, bb)) %>%
     sf::st_sf(crs = 4326)
 }

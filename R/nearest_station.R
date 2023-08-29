@@ -16,7 +16,7 @@
 #' @param .unit Unit used for extraction from the point of interest. Default *m* (meters).
 #' This value is passed to [units::as_units].
 #' @param year For tide level data. Restricted to the observation points in the target year.
-#' @importFrom dplyr filter select mutate transmute
+#' @importFrom dplyr filter select mutate
 #' @importFrom purrr map_dbl
 #' @importFrom rlang enquo quo_name
 #' @importFrom sf st_distance st_point st_set_geometry st_sfc
@@ -76,7 +76,8 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
   if (nrow(res) == 0)
     rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
 
-  res %>%
+  if (nrow(res) > 0)
+    res %>%
     dplyr::top_n(1, dplyr::desc(distance)) %>%
     dplyr::distinct(station_no, .keep_all = TRUE) |>
     dplyr::select(area,
@@ -93,25 +94,28 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
   unit <- rlang::quo_name(.unit)
   coords <-
     check_input_coords(longitude, latitude, geometry)
-  stations[which(sf::st_is_within_distance(
+  coords <-
     sf::st_sfc(
-      sf::st_point(c(coords$longitude[1],
-                     coords$latitude[1])),
-      crs = 4326),
+    sf::st_point(c(coords$longitude,
+                   coords$latitude)),
+    crs = 4326)
+  stations[which(sf::st_is_within_distance(
+    coords,
     stations,
     dist = units::as_units(distance, value = unit),
     sparse = FALSE)[1, ]), ] %>%
-    dplyr::transmute(
+    dplyr::mutate(
+      distance = sf::st_distance(
+        geometry,
+        coords)[, 1]
+    ) %>%
+    dplyr::select(
       area,
       station_no,
       station_name,
       block_no,
-      distance = sf::st_distance(
-        geometry,
-        sf::st_sfc(
-          sf::st_point(c(coords$longitude,
-                         coords$latitude)),
-          crs = 4326))[, 1]) %>%
+      distance,
+      geometry) %>%
     dplyr::arrange(distance)
 }
 
@@ -128,23 +132,26 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
     tide_station %>% filter(year == !!yr)
   coords <-
     check_input_coords(longitude, latitude, geometry)
-  stations[which(sf::st_is_within_distance(st_sfc(st_point(c(coords$longitude,
-                                                             coords$latitude)),
-                                                  crs = 4326),
+  coords <-
+    st_sfc(st_point(c(coords$longitude,
+                    coords$latitude)),
+         crs = 4326)
+
+  stations[which(sf::st_is_within_distance(coords,
                                            stations,
                                            dist = units::as_units(distance, value = unit),
                                            sparse = FALSE)[1, ]), ] %>%
-    dplyr::transmute(
+    dplyr::mutate(distance = sf::st_distance(
+      geometry,
+      coords)[, 1]) %>%
+    dplyr::select(
       year,
       id,
       stn,
       station_name,
       address,
       type,
-      distance = sf::st_distance(
-        geometry,
-        sf::st_sfc(sf::st_point(c(coords$longitude, coords$latitude)),
-                   crs = 4326))[, 1],
+      distance,
       geometry
     ) %>%
     dplyr::arrange(distance)

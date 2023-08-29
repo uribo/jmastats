@@ -85,7 +85,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
         block_no = purrr::map_chr(., "href") |>
           stringr::str_extract("block_no=[0-9]{3,5}") |>
           stringr::str_remove("block_no=")) |>
-      dplyr::select(-1) |>
+      dplyr::select(!1) |>
       dplyr::filter(!is.na(block_no)) |>
       dplyr::distinct()
   }
@@ -99,7 +99,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
       prec_no = purrr::map_chr(., "href") |>
         stringr::str_extract("prec_no=[0-9]{2}") |>
         stringr::str_remove("prec_no=")) |>
-    dplyr::select(-1) %>% # magrittr
+    dplyr::select(!1) %>% # magrittr
     assertr::verify(dim(.) == c(61, 2))
 
   # 1.3 Merge ---------------------------------------------------------------
@@ -167,7 +167,8 @@ ne_jpn <-
   tibble::new_tibble(nrow = nrow(.), class = "sf") |>
   arrange(iso_3166_2) |>
   select(iso_3166_2) |>
-  transmute(pref_code = stringr::str_remove(iso_3166_2, "JP-"))
+  mutate(pref_code = stringr::str_remove(iso_3166_2, "JP-"),
+         .keep = "none")
 
 stations <-
   stations |>

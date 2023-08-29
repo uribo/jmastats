@@ -29,8 +29,9 @@ read_kishou_feed <- function(frequency, type) {
   df <-
     seq.int(min(x_entry_index),
             max(x_entry_index)) %>%
-    purrr::map_dfr(
-      ~ parse_kishou_xml(x, .x))
+    purrr::map(
+      ~ parse_kishou_xml(x, .x)) %>%
+    purrr::list_rbind()
   df
 }
 

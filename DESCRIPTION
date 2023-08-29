@@ -11,7 +11,7 @@ Authors@R: c(person(given = "Shinya",
                                      role  = c("aut", "cre"),
                                      comment = c(ORCID = "0000-0002-0493-6186")))
 Depends: 
-    R (>= 3.1)
+    R (>= 3.5)
 License: MIT + file LICENSE
 BugReports: https://github.com/uribo/jmastats/issues
 URL: https://github.com/uribo/jmastats
@@ -24,7 +24,7 @@ Imports:
     janitor (>= 1.0.0),
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
-    purrr (>= 0.2.5),
+    purrr (>= 1.0.2),
     rappdirs (>= 0.3.3),
     readr (>= 1.1.1),
     rlang (>= 0.2.1),
