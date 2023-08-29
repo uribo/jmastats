@@ -3,7 +3,6 @@
 #' @param data data
 #' @param rename *logical*
 #' @importFrom dplyr bind_cols select
-#' @importFrom janitor clean_names
 #' @importFrom purrr keep map map2_dfc reduce set_names
 #' @importFrom stringr str_subset
 #' @importFrom tidyselect all_of where
@@ -50,7 +49,9 @@ parse_unit <- function(data, rename = TRUE) {
   if (rename == TRUE) {
     df_res <-
       df_res %>%
-      janitor::clean_names(case = "snake")
+      purrr::set_names(colnames(df_res) %>%
+                         stringr::str_remove("\\(.+\\)") |>
+                         stringr::str_remove("_$"))
   }
 
   return(df_res)

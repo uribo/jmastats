@@ -21,7 +21,6 @@ Imports:
     dplyr (>= 1.1.0),
     forcats (>= 0.4.0),
     ggplot2 (>= 2.2.1),
-    janitor (>= 1.0.0),
     lubridate (>= 1.7.4),
     magrittr (>= 1.5),
     purrr (>= 1.0.2),
