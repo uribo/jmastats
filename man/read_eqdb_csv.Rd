@@ -15,6 +15,9 @@ observed at each location.}
 \description{
 Read the csv of the earthquake database
 }
+\examples{
+read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
+}
 \seealso{
 \url{https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html}
 }

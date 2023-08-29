@@ -2,6 +2,8 @@
 #' @param path local file path to earthquake record file.
 #' @param show_metadata logical. If *FALSE*, returns only the values
 #' observed at each location.
+#' @examples
+#' read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
 #' @rdname read_eqdb_csv
 #' @seealso [https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)
 #' @export
