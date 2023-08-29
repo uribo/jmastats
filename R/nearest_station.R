@@ -77,8 +77,8 @@ nearest_station <- function(longitude, latitude, geometry = NULL) {
     rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
 
   if (nrow(res) > 0)
-    res %>%
-    dplyr::top_n(1, dplyr::desc(distance)) %>%
+    res |>
+    dplyr::top_n(1, dplyr::desc(distance)) |>
     dplyr::distinct(station_no, .keep_all = TRUE) |>
     dplyr::select(area,
                   station_no,
@@ -103,19 +103,19 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
     coords,
     stations,
     dist = units::as_units(distance, value = unit),
-    sparse = FALSE)[1, ]), ] %>%
+    sparse = FALSE)[1, ]), ] |>
     dplyr::mutate(
       distance = sf::st_distance(
         geometry,
         coords)[, 1]
-    ) %>%
+    ) |>
     dplyr::select(
       area,
       station_no,
       station_name,
       block_no,
       distance,
-      geometry) %>%
+      geometry) |>
     dplyr::arrange(distance)
 }
 
@@ -129,7 +129,7 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
   yr <-
     rlang::enquo(year)
   stations <-
-    tide_station %>% filter(year == !!yr)
+    tide_station |> filter(year == !!yr)
   coords <-
     check_input_coords(longitude, latitude, geometry)
   coords <-
@@ -140,10 +140,10 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
   stations[which(sf::st_is_within_distance(coords,
                                            stations,
                                            dist = units::as_units(distance, value = unit),
-                                           sparse = FALSE)[1, ]), ] %>%
+                                           sparse = FALSE)[1, ]), ] |>
     dplyr::mutate(distance = sf::st_distance(
       geometry,
-      coords)[, 1]) %>%
+      coords)[, 1]) |>
     dplyr::select(
       year,
       id,
@@ -153,6 +153,6 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
       type,
       distance,
       geometry
-    ) %>%
+    ) |>
     dplyr::arrange(distance)
 }

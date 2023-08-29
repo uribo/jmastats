@@ -20,13 +20,13 @@ parse_unit <- function(data, rename = TRUE) {
     candidate_vars[stringr::str_detect(candidate_vars, "\\(.+\\)$")]
 
   data_candidate <-
-    data %>%
-    dplyr::select(tidyselect::all_of(candidate_vars)) %>%
+    data |>
+    dplyr::select(tidyselect::all_of(candidate_vars)) |>
     dplyr::select(tidyselect::where(function(x) sum(is.na(x)) != nrow(data)))
 
   var_units <-
-    names(data_candidate) %>%
-    purrr::map_vec(guess_unit) %>%
+    names(data_candidate) |>
+    purrr::map_vec(guess_unit) |>
     purrr::keep(function(x) !is.na(x))
 
   df_drop <-
@@ -39,17 +39,17 @@ parse_unit <- function(data, rename = TRUE) {
       var_units,
       function(x, y) units::as_units(as.numeric(data_candidate[[x]]),
                                      value = y)
-    ) %>%
+    ) |>
     purrr::set_names(names(data_candidate)[!names(data_candidate) %in% names(df_drop)])
 
   df_res <-
-    dplyr::bind_cols(df_drop, df_units) %>%
+    dplyr::bind_cols(df_drop, df_units) |>
     dplyr::select(names(data))
 
   if (rename == TRUE) {
     df_res <-
-      df_res %>%
-      purrr::set_names(colnames(df_res) %>%
+      df_res |>
+      purrr::set_names(colnames(df_res) |>
                          stringr::str_remove("\\(.+\\)") |>
                          stringr::str_remove("_$"))
   }

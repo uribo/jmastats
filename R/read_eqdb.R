@@ -26,10 +26,10 @@ read_eqdb_csv <- function(path, show_metadata = TRUE) {
     readr::read_csv(path,
              skip = 2,
              col_types = "ccc")
-  record %>%
+  record |>
     tidyr::separate_rows(`観測点名`,
-                         sep = "[[:space:]]") %>%
-    dplyr::mutate(`震度` = stringi::stri_trans_general(`震度`, "nfkc") %>%
+                         sep = "[[:space:]]") |>
+    dplyr::mutate(`震度` = stringi::stri_trans_general(`震度`, "nfkc") |>
                     stringr::str_remove("\u9707\u5ea6"),
                   `気象庁の震度観測点` = stringr::str_detect(`観測点名`, "\uff0a", negate = TRUE),
                   `観測点名` = stringr::str_remove(`観測点名`, "\uff0a"))

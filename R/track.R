@@ -32,11 +32,11 @@ read_rsmc_besttrack <- function(path) {
   xx <-
     lines[stringr::str_detect(lines, "^66666")]
   df_header <-
-    seq.int(length(xx)) %>%
+    seq.int(length(xx)) |>
     purrr::map(
       function(x) {
-        parse_x <- xx[x] %>%
-          stringr::str_split("[[:space:]]", simplify = TRUE) %>%
+        parse_x <- xx[x] |>
+          stringr::str_split("[[:space:]]", simplify = TRUE) |>
           stringr::str_subset(".+")
         if (length(parse_x) == 7L) {
           parse_x <-
@@ -51,7 +51,7 @@ read_rsmc_besttrack <- function(path) {
               NA_character_,
               parse_x[5:8])
         }
-        parse_x %>%
+        parse_x |>
           set_names(c("indicator_66666",
                       "international_number", "nrow",
                       "tropical_cyclone_number",
@@ -59,23 +59,23 @@ read_rsmc_besttrack <- function(path) {
                       "flag_last_data_line",
                       "DTM", "storm_name", "last_update"))
       }
-    ) %>%
-    purrr::reduce(dplyr::bind_rows) %>%
-    tibble::as_tibble() %>%
-    readr::type_convert(col_types = "dcdcccdcc") %>%
+    ) |>
+    purrr::reduce(dplyr::bind_rows) |>
+    tibble::as_tibble() |>
+    readr::type_convert(col_types = "dcdcccdcc") |>
     dplyr::mutate(last_update = lubridate::ymd(last_update))
 
-  if (df_header %>%
-      dplyr::pull(international_number) %>%
-      stringr::str_sub(1, 2) %>%
+  if (df_header |>
+      dplyr::pull(international_number) |>
+      stringr::str_sub(1, 2) |>
       dplyr::n_distinct() == 1) {
     df_header <-
-      df_header %>%
-      dplyr::arrange(international_number) %>%
+      df_header |>
+      dplyr::arrange(international_number) |>
       dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
   } else {
     df_header <-
-      df_header %>%
+      df_header |>
       dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
   }
   data_common_vars <-
@@ -93,47 +93,47 @@ read_rsmc_besttrack <- function(path) {
   xx <-
     lines[stringr::str_detect(lines, "^66666", negate = TRUE)]
   df_record <-
-    seq.int(1, length(xx)) %>%
+    seq.int(1, length(xx)) |>
     purrr::map(
       function(x) {
-        parse_x <- xx[x] %>%
-          stringr::str_split("[[:space:]]", simplify = TRUE) %>%
+        parse_x <- xx[x] |>
+          stringr::str_split("[[:space:]]", simplify = TRUE) |>
           stringr::str_subset(".+")
         if (length(parse_x) <= 7L) {
           tmp_d <-
-            as.data.frame(parse_x) %>%
-            t() %>%
+            as.data.frame(parse_x) |>
+            t() |>
             tibble::as_tibble(.name_repair = "minimal")
           if (length(parse_x) == 6L) {
-            tmp_d %>%
+            tmp_d |>
               purrr::set_names(data_common_vars[-length(data_common_vars)])
           } else if (length(parse_x) == 7L) {
-            tmp_d %>%
+            tmp_d |>
               purrr::set_names(data_common_vars)
           }
         } else {
           tmp_d <-
-            parse_x %>%
-            as.data.frame() %>%
-            t() %>%
-            tibble::as_tibble(.name_repair = "minimal") %>%
-            purrr::set_names(paste0("v", seq.int(ncol(.)))) %>%
-            tidyr::extract(v8, into = c("H", "I"), regex = "([0-9]{1})([0-9]{4})") %>%
+            parse_x |>
+            as.data.frame() |>
+            t() |>
+            tibble::as_tibble(.name_repair = "minimal") |>
+            purrr::set_names(paste0("v", seq.int(ncol(.)))) |>
+            tidyr::extract(v8, into = c("H", "I"), regex = "([0-9]{1})([0-9]{4})") |>
             tidyr::extract(v10, into = c("K", "L"), regex = "([0-9]{1})([0-9]{4})")
           if (length(parse_x) == 11L) {
-            tmp_d %>%
+            tmp_d |>
               purrr::set_names(c(data_common_vars,
                                  data_typhoon_vars))
           } else if (length(parse_x) == 12L) {
-            tmp_d %>%
+            tmp_d |>
               purrr::set_names(c(data_common_vars,
                                  data_typhoon_vars,
                                  "indicator_of_landfall_or_passage"))
           }
         }
       }
-    ) %>%
-    purrr::reduce(dplyr::bind_rows) %>%
+    ) |>
+    purrr::reduce(dplyr::bind_rows) |>
     dplyr::mutate(
       datetime = lubridate::ymd_h(
         paste0(
@@ -144,13 +144,13 @@ read_rsmc_besttrack <- function(path) {
       latitude = as.numeric(latitude) / 10,
       longitude = as.numeric(longitude) / 10,
       international_number = rep(df_header$international_number,
-                                 df_header$nrow)) %>%
+                                 df_header$nrow)) |>
     dplyr::mutate(
       dplyr::across(c(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`),
-                    as.numeric)) %>%
-    sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
-    dplyr::left_join(df_header, by = "international_number") %>%
-    dplyr::arrange(datetime) %>%
+                    as.numeric)) |>
+    sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
+    dplyr::left_join(df_header, by = "international_number") |>
+    dplyr::arrange(datetime) |>
     dplyr::select(names(.)[!names(.) %in% attr(., "sf_column")])
   df_record
 }
@@ -164,18 +164,18 @@ read_rsmc_besttrack <- function(path) {
 track_combine <- function(data, group_vars = c("international_number", "storm_name"),
                           keep_vars = NULL, geometry = geometry) {
   aa <- bb <- NULL
-  data %>%
-    dplyr::select(group_vars, keep_vars, geometry) %>%
-    dplyr::group_by(!!! rlang::syms(group_vars)) %>%
+  data |>
+    dplyr::select(group_vars, keep_vars, geometry) |>
+    dplyr::group_by(!!! rlang::syms(group_vars)) |>
     dplyr::mutate(aa  = sf::st_as_text(geometry),
-                  bb = dplyr::lead(sf::st_as_text(geometry))) %>%
-    dplyr::ungroup() %>%
-    dplyr::filter(!is.na(bb)) %>%
-    dplyr::rowwise() %>%
+                  bb = dplyr::lead(sf::st_as_text(geometry))) |>
+    dplyr::ungroup() |>
+    dplyr::filter(!is.na(bb)) |>
+    dplyr::rowwise() |>
     dplyr::mutate(geometry = sf::st_union(sf::st_as_sfc(aa),
-                                          sf::st_as_sfc(bb)) %>%
-                    sf::st_cast("LINESTRING")) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(!c(aa, bb)) %>%
+                                          sf::st_as_sfc(bb)) |>
+                    sf::st_cast("LINESTRING")) |>
+    dplyr::ungroup() |>
+    dplyr::select(!c(aa, bb)) |>
     sf::st_sf(crs = 4326)
 }

@@ -71,7 +71,7 @@ jma_collect <- function(item = NULL,
 pack_df <- function(df, unpack = FALSE) {
   if (unpack == FALSE) {
     df <-
-      df %>%
+      df |>
       tidyr::pack(atmosphere = tidyselect::starts_with("atmosphere"),
                   pressure = tidyselect::starts_with("pressure"),
                   precipitation = tidyselect::starts_with("precipitation"),
@@ -87,12 +87,12 @@ pack_df <- function(df, unpack = FALSE) {
                   weather_time = tidyselect::matches("weather.*time"),
                   .names_sep = "_")
     df[, c(names(purrr::discard(df, tibble::is_tibble)),
-           df[, names(purrr::keep(df, tibble::is_tibble))] %>%
-             purrr::map(~ ncol(.x)) %>%
-             purrr::discard(~ .x == 0L) %>%
+           df[, names(purrr::keep(df, tibble::is_tibble))] |>
+             purrr::map(~ ncol(.x)) |>
+             purrr::discard(~ .x == 0L) |>
              names())]
   } else {
-    df %>%
+    df |>
       tidyr::unpack(tidyselect::everything(),
                     names_sep = "_")
   }
@@ -109,7 +109,7 @@ jma_collect_raw <- function(item = NULL,
     cli::col_cyan(cli::style_hyperlink(target$url, target$url)))
 
   df_raw <-
-    xml2::read_html(target$url) %>%
+    xml2::read_html(target$url) |>
     rvest::html_table(fill = TRUE)
 
   selected_item <-
@@ -118,23 +118,23 @@ jma_collect_raw <- function(item = NULL,
 
   if (item == "annually") {
     df <-
-      df_raw[[4]][-c(1:2), ] %>%
-      purrr::set_names(vars) %>%
+      df_raw[[4]][-c(1:2), ] |>
+      purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
   } else if (item == "monthly") {
     df <-
-      df_raw[[6]][-c(1:2), ] %>%
-      purrr::set_names(vars) %>%
+      df_raw[[6]][-c(1:2), ] |>
+      purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
   } else if (item == "10daily") {
     df <-
-      df_raw[[6]][-c(1:2), ] %>%
-      purrr::set_names(vars) %>%
+      df_raw[[6]][-c(1:2), ] |>
+      purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
   } else if (item == "mb5daily") {
     df <-
-      df_raw[[6]][-c(1:2), ] %>%
-      purrr::set_names(vars) %>%
+      df_raw[[6]][-c(1:2), ] |>
+      purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
   } else if (item == "daily") {
     df <-
@@ -153,21 +153,21 @@ jma_collect_raw <- function(item = NULL,
     df <-
       df_raw[[3]]
     df <-
-      df %>%
+      df |>
       tidyr::pivot_longer(cols = -c(1, ncol(df)),
-                          names_to = "rank") %>%
+                          names_to = "rank") |>
       tidyr::extract(col = value,
                      into = c("value", "date"),
-                     regex = "(.+)\\((.+)\\)") %>%
-      purrr::set_names(name_sets(selected_item)) %>%
+                     regex = "(.+)\\((.+)\\)") |>
+      purrr::set_names(name_sets(selected_item)) |>
       dplyr::mutate(period = glue_split_period_char(period,
                                                     collapse = intToUtf8(c(12363L, 12425L))),
-                    rank = stringr::str_extract(rank, "[0-9]{1,}")) %>%
+                    rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
   } else {
     df <- df_raw
   }
-  # convert_variable_unit(df) %>%
+  # convert_variable_unit(df) |>
   #   tibble::as_tibble()
   tibble::as_tibble(df)
 }
@@ -190,15 +190,15 @@ detect_target <- function(item, block_no, year, month, day) {
 }
 
 tweak_df <- function(df, quiet) {
-  convert_error(df, quiet) %>%
+  convert_error(df, quiet) |>
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = list(~ stringr::str_remove_all(., "(]|\\))")),
-                    .names = "{.col}")) %>%
+                    .names = "{.col}")) |>
     dplyr::mutate(
       dplyr::across(tidyselect::where(is.character),
                     .fns = list(~ stringr::str_trim(., side = "both")),
-                    .names = "{.col}")) %>%
+                    .names = "{.col}")) |>
     readr::type_convert()
 }
 
@@ -213,23 +213,23 @@ tweak_df <- function(df, quiet) {
     df <-
       df[[6]][-c(1:3), ]
   }
-  df %>%
-    purrr::set_names(vars) %>%
-    tweak_df(quiet = quiet) %>%
+  df |>
+    purrr::set_names(vars) |>
+    tweak_df(quiet = quiet) |>
     dplyr::mutate(date = as.Date(paste(year,
                                        stringr::str_pad(month, width = 2, pad = "0"),
-                                       stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) %>%
+                                       stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) |>
     readr::type_convert()
 }
 
 .jma_collect_hourly <- function(df, vars, year, month, day, quiet) {
   df <-
-    df[[5]][-c(1), ] %>%
-    purrr::set_names(vars) %>%
+    df[[5]][-c(1), ] |>
+    purrr::set_names(vars) |>
     tweak_df(quiet = quiet)
-  df %>%
-    dplyr::mutate(date = lubridate::make_date(year, month, day)) %>%
-    dplyr::select(date, dplyr::everything()) %>%
+  df |>
+    dplyr::mutate(date = lubridate::make_date(year, month, day)) |>
+    dplyr::select(date, dplyr::everything()) |>
     readr::type_convert()
 }
 
@@ -241,8 +241,8 @@ tweak_df <- function(df, quiet) {
     df <-
       df[[5]][-1, ]
   }
-  df %>%
-    purrr::set_names(vars) %>%
+  df |>
+    purrr::set_names(vars) |>
     tweak_df(quiet = quiet)
 }
 
@@ -311,8 +311,8 @@ jma_url <- function(item = NULL,
 
 detect_station_info <- function(.blockid) {
   df_target_station <-
-    subset(stations, block_no == rlang::eval_tidy(.blockid)) %>%
-    sf::st_drop_geometry() %>%
+    subset(stations, block_no == rlang::eval_tidy(.blockid)) |>
+    sf::st_drop_geometry() |>
     dplyr::distinct(block_no, .keep_all = TRUE)
   pref <-
     df_target_station$prec_no
@@ -351,32 +351,32 @@ convert_variable_unit <- function(.data) {
       .data,
       dplyr::across(
         tidyselect::matches("\\(\u2103\\)$"),
-        .fns = ~ units::set_units(., value = "\u2103"))) %>%
+        .fns = ~ units::set_units(., value = "\u2103"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(hPa\\)$"),
-        ~ units::set_units(., value = "hPa"))) %>%
+        ~ units::set_units(., value = "hPa"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(mm\\)$"),
-        ~ units::set_units(., value = "mm"))) %>%
+        ~ units::set_units(., value = "mm"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(cm\\)$"),
-        ~ units::set_units(., value = "cm"))) %>%
+        ~ units::set_units(., value = "cm"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(hour\\)$"),
-        ~ units::set_units(., value = "h"))) %>%
+        ~ units::set_units(., value = "h"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(m/s\\)$"),
-        ~ units::set_units(., value = "m/s"))) %>%
+        ~ units::set_units(., value = "m/s"))) |>
     dplyr::mutate(
       dplyr::across(
         tidyselect::matches("\\(%\\)$"),
         ~ units::set_units(., value = "%")))
-  df %>%
+  df |>
     purrr::set_names(stringr::str_remove_all(names(df), "\\(.+\\)"))
 }
 
@@ -384,10 +384,10 @@ convert_variable_unit <- function(.data) {
 convert_error <- function(.data, quiet) {
   if (!quiet) {
     msg <-
-      .data %>%
-      purrr::map(note_message) %>%
+      .data |>
+      purrr::map(note_message) |>
       purrr::keep(~ length(.x) > 0)
-    msg %>%
+    msg |>
       purrr::map2(names(msg),
                   ~ cat(cli::col_red(paste0(
                     "Treated as missing: lines ",
@@ -396,15 +396,15 @@ convert_error <- function(.data, quiet) {
   dplyr::mutate(
     .data,
     dplyr::across(tidyselect::everything(),
-                  .fns = ~ stringr::str_remove_all(., "(\\)|\\])$") %>%
-                    stringr::str_squish())) %>%
+                  .fns = ~ stringr::str_remove_all(., "(\\)|\\])$") |>
+                    stringr::str_squish())) |>
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(47, 47, 47)),
                                                      intToUtf8(c(215)),
                                                      "",
                                                      intToUtf8(c(35))),
-                                            NA_character_, .))) %>%
+                                            NA_character_, .))) |>
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
                     .fns = ~ dplyr::if_else(. %in% c(intToUtf8(c(45, 45))), "0.0", .)))
@@ -412,7 +412,7 @@ convert_error <- function(.data, quiet) {
 
 note_vars <- function(var) {
   syms <-
-    var %>%
+    var |>
     stringr::str_which(paste0("(",
                               paste0(c(intToUtf8(c(47, 47, 47)),
                                        intToUtf8(c(215)),
@@ -422,14 +422,14 @@ note_vars <- function(var) {
                               ")"))
   append(
     syms,
-    var %>%
+    var |>
       stringr::str_which("^$")
   )
 }
 
 note_message <- function(var) {
   res <-
-    note_vars(var) %>%
+    note_vars(var) |>
     purrr::keep(~ length(.x) > 0)
 }
 

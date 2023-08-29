@@ -17,7 +17,7 @@ Convert and split tidal level data
 }
 \examples{
 \dontrun{
-read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt") \%>\%
+read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt") |>
   pivot_tide_level()
 }
 }

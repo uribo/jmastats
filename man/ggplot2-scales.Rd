@@ -32,8 +32,8 @@ Scales to use for ggplot2
 \dontrun{
 library(dplyr)
 d <-
-jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) \%>\%
-select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) \%>\%
+jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
+select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) |>
 parse_unit()
 
 library(ggplot2)

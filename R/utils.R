@@ -1,7 +1,7 @@
 utils::globalVariables("where")
 
 guess_unit <- function(x) {
-  stringr::str_extract(x, "\\(.+?\\)") %>%
+  stringr::str_extract(x, "\\(.+?\\)") |>
     stringr::str_remove_all("\\(|\\)")
 }
 
@@ -130,7 +130,7 @@ split_period_char <- function(x) {
                      paste0("(?=([0-9]{4}/[0-9]{1,2}|[0-9]{4}.+",
                             intToUtf8(24180),
                             "))"),
-                     simplify = TRUE) %>%
+                     simplify = TRUE) |>
     purrr::discard(~ stringr::str_length(.x) == 0)
 }
 

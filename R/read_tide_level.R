@@ -22,16 +22,16 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
     readr::read_lines(path)
   if (raw == FALSE) {
     d <-
-      d %>%
+      d |>
       purrr::map(
-        ~ .x %>%
+        ~ .x |>
           stringr::str_split(pattern = stringr::boundary("character"),
-                             simplify = TRUE) %>%
+                             simplify = TRUE) |>
           as.data.frame(stringsAsFactors = FALSE)
-      ) %>%
-      purrr::list_rbind() %>%
-      tibble::as_tibble() %>%
-      parse_tide_file() %>%
+      ) |>
+      purrr::list_rbind() |>
+      tibble::as_tibble() |>
+      parse_tide_file() |>
       dplyr::mutate(
         dplyr::across(c(tidyselect::num_range("hry_",
                                               range = seq.int(0, 23),
@@ -56,8 +56,8 @@ request_tide_level_url <- function(.year, .month, .stn) {
     rlang::abort("Old format")
   }
   stn_candidate <-
-    tide_station %>%
-    dplyr::filter(year == !!rlang::enquo(year)) %>%
+    tide_station |>
+    dplyr::filter(year == !!rlang::enquo(year)) |>
     dplyr::pull(stn)
   stn <-
     stn_candidate[stn_candidate %in% .stn]
@@ -69,7 +69,7 @@ request_tide_level_url <- function(.year, .month, .stn) {
 
 parse_tide_file <- function(data) {
   year_last2 <- month_last2 <- day_last2 <- stn <- NULL
-  seq.int(nrow(data)) %>%
+  seq.int(nrow(data)) |>
     purrr::map(
       function(.x) {
         cbind(parse_hry(data[.x, ]),
@@ -81,14 +81,14 @@ parse_tide_file <- function(data) {
               parse_tide(data[.x, ], "low_tide"),
               parse_hm(data[.x, ], "high_tide"),
               parse_tide(data[.x, ], "high_tide")
-        ) %>%
+        ) |>
           dplyr::mutate(date = lubridate::make_date(year = paste0("20", year_last2),
                                              month_last2,
-                                             day_last2)) %>%
-          dplyr::select(!c(year_last2, month_last2, day_last2)) %>%
+                                             day_last2)) |>
+          dplyr::select(!c(year_last2, month_last2, day_last2)) |>
           tibble::as_tibble()
-      }) %>%
-    purrr::list_rbind() %>%
+      }) |>
+    purrr::list_rbind() |>
     dplyr::select(
       tidyselect::starts_with("hry"),
       date,
@@ -96,13 +96,13 @@ parse_tide_file <- function(data) {
       tidyselect::ends_with("obs1"),
       tidyselect::ends_with("obs2"),
       tidyselect::ends_with("obs3"),
-      tidyselect::ends_with("obs4")) %>%
+      tidyselect::ends_with("obs4")) |>
     dplyr::mutate(
       dplyr::across(c(tidyselect::contains("tide_hm_obs")),
-                    function(x) dplyr::na_if(x, "99:99"))) %>%
+                    function(x) dplyr::na_if(x, "99:99"))) |>
     dplyr::mutate(
       dplyr::across(c(tidyselect::contains("tide_tidal_level_cm_obs")),
-                    function(x) dplyr::na_if(x, "99:99"))) %>%
+                    function(x) dplyr::na_if(x, "99:99"))) |>
     readr::type_convert(col_types = readr::cols(
       stn = readr::col_character(),
       low_tide_hm_obs1 = readr::col_time(format = ""),
@@ -128,16 +128,16 @@ parse_hry <- function(d) {
   purrr::map2_chr(
     .x = seq.int(1, 72, by = 3),
     .y = seq.int(1, 72, by = 3) + 2,
-    .f = ~ d[.x:.y] %>%
+    .f = ~ d[.x:.y] |>
       paste(collapse = "")
-  ) %>%
-    purrr::set_names(paste0("hry_", sprintf("%02d", seq.int(0, 23)))) %>%
-    as.data.frame() %>%
-    t() %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
+  ) |>
+    purrr::set_names(paste0("hry_", sprintf("%02d", seq.int(0, 23)))) |>
+    as.data.frame() |>
+    t() |>
+    as.data.frame(stringsAsFactors = FALSE) |>
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
-                    readr::parse_number)) %>%
+                    readr::parse_number)) |>
     tibble::as_tibble()
 }
 
@@ -150,32 +150,32 @@ parse_ymd <- function(d, type) {
   index_list <-
     switch (type,
     "year" = index_list,
-    "month" = index_list %>%
+    "month" = index_list |>
       purrr::list_modify(x = index_list$x + 2,
                          y = index_list$y + 2),
-    "day" = index_list %>%
+    "day" = index_list |>
       purrr::list_modify(x = index_list$x + 4,
                          y = index_list$y + 4)
   )
-  d[seq.int(index_list$x, index_list$y)] %>%
-    paste(collapse = "") %>%
-    purrr::set_names(paste0(type, "_last2")) %>%
-    as.data.frame() %>%
-    t() %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
+  d[seq.int(index_list$x, index_list$y)] |>
+    paste(collapse = "") |>
+    purrr::set_names(paste0(type, "_last2")) |>
+    as.data.frame() |>
+    t() |>
+    as.data.frame(stringsAsFactors = FALSE) |>
     dplyr::mutate(
       dplyr::across(tidyselect::everything(),
-                    readr::parse_number)) %>%
+                    readr::parse_number)) |>
     tibble::as_tibble()
 }
 
 parse_tide_station <- function(d) {
-  d[seq.int(79, 80)] %>%
-    paste(collapse = "") %>%
-    purrr::set_names("stn") %>%
-    as.data.frame() %>%
-    t() %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
+  d[seq.int(79, 80)] |>
+    paste(collapse = "") |>
+    purrr::set_names("stn") |>
+    as.data.frame() |>
+    t() |>
+    as.data.frame(stringsAsFactors = FALSE) |>
     tibble::as_tibble()
 }
 
@@ -200,19 +200,19 @@ parse_hm <- function(d, time) {
     purrr::map2(
     index_list$x,
     index_list$y,
-    ~ d[seq.int(.x, .y)] %>%
-      purrr::set_names(c("h1", "h2", "m1", "m2")) %>%
+    ~ d[seq.int(.x, .y)] |>
+      purrr::set_names(c("h1", "h2", "m1", "m2")) |>
       dplyr::mutate(
         across(tidyselect::everything(),
                function(x) stringr::str_replace(x,
                                                 pattern = "[[:blank:]]",
-                                                replacement = "0"))) %>%
+                                                replacement = "0"))) |>
       dplyr::mutate(hm = paste(paste0(h1, h2, collapse = ""),
                                paste0(m1, m2, collapse = ""),
                                sep = ":"),
-                    .keep = "none")) %>%
+                    .keep = "none")) |>
     purrr::list_cbind()
-  d %>%
+  d |>
     purrr::set_names(paste0(time,
                             "_hm",
                             "_obs",
@@ -240,18 +240,18 @@ parse_tide <- function(d, time) {
     purrr::map2(
     index_list$x,
     index_list$y,
-    ~ d[seq.int(.x, .y)] %>%
-      purrr::set_names(c("obs1", "obs2", "obs3")) %>%
+    ~ d[seq.int(.x, .y)] |>
+      purrr::set_names(c("obs1", "obs2", "obs3")) |>
       dplyr::mutate(
         dplyr::across(
           tidyselect::everything(),
           function(x) stringr::str_replace(x,
                                            pattern = "[[:blank:]]",
-                                           replacement = "0"))) %>%
+                                           replacement = "0"))) |>
       dplyr::mutate(tidal_level_cm = paste0(obs1, obs2, obs3, collapse = ""),
-                    .keep = "none")) %>%
+                    .keep = "none")) |>
     purrr::list_cbind()
-  d %>%
+  d |>
     purrr::set_names(paste0(time,
                             "_level",
                             "_obs",

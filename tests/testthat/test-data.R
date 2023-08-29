@@ -25,7 +25,9 @@ test_that("check stations statement", {
     )
   )
   expect_equal(
-    stations %>% purrr::map(class) %>% unname(),
+    stations |>
+      purrr::map(class) |>
+      unname(),
     list(
       "character",
       "integer",
