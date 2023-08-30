@@ -23,7 +23,7 @@ install.packages(
 
 - 過去の気象データのほか、気象庁が公開するさまざまな気象ファイルをRで扱いやすい形式で読み込みます。
   - 地理空間情報が利用できる場合、適切な種類（ポイント、ライン等）のsfオブジェクトに変換します。
-  - `jmastats::parse_unit()`関数により、気象データの単位系（SI単位系）をunitsオブジェクトに変換します。
+  - `parse_unit()`関数により、気象データの単位系（SI単位系）をunitsオブジェクトに変換します。
 - 取得した気象データはコンピュータ内にキャッシュとして保存されます。そのため、一度取得したデータはインターネット接続ができない状態でも参照可能です。キャッシュの利用により、取得時の気象庁ウェブサイトへの負荷も軽減されます。
 
 ## 使い方
@@ -58,30 +58,30 @@ Tokyo](https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/trackarchives
 ``` r
 read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |> 
   dplyr::glimpse()
-#> Rows: 1
+#> Rows: 2
 #> Columns: 22
 #> $ datetime                                                    <dttm> 1991-09-2…
-#> $ indicator_002                                               <chr> "002"
-#> $ grade                                                       <chr> "5"
-#> $ `central_pressure(hPa)`                                     <dbl> 935
-#> $ `maximum_sustained_wind_speed(knot)`                        <dbl> 95
-#> $ `_direction_of_the_longest_radius_of_50kt_winds_or_greater` <chr> "3"
-#> $ `_the_longest_radius_of_50kt_winds_or_greater(nm)`          <chr> "0180"
-#> $ `_the_shortest_radius_of_50kt_winds_or_greater(nm)`         <chr> "0140"
-#> $ `_direction_of_the_longest_radius_of_30kt_winds_or_greater` <chr> "3"
-#> $ `_the_longest_radius_of_30kt_winds_or_greater(nm)`          <chr> "0400"
-#> $ `_the_shortest_radius_of_30kt_winds_or_greater(nm)`         <chr> "0260"
-#> $ indicator_of_landfall_or_passage                            <chr> "#"
-#> $ international_number                                        <chr> "9119"
+#> $ indicator_002                                               <chr> "002", "00…
+#> $ grade                                                       <chr> "5", "5"
+#> $ `central_pressure(hPa)`                                     <dbl> 935, 994
+#> $ `maximum_sustained_wind_speed(knot)`                        <dbl> 95, NA
+#> $ `_direction_of_the_longest_radius_of_50kt_winds_or_greater` <chr> "3", NA
+#> $ `_the_longest_radius_of_50kt_winds_or_greater(nm)`          <chr> "0180", NA
+#> $ `_the_shortest_radius_of_50kt_winds_or_greater(nm)`         <chr> "0140", NA
+#> $ `_direction_of_the_longest_radius_of_30kt_winds_or_greater` <chr> "3", NA
+#> $ `_the_longest_radius_of_30kt_winds_or_greater(nm)`          <chr> "0400", NA
+#> $ `_the_shortest_radius_of_30kt_winds_or_greater(nm)`         <chr> "0260", NA
+#> $ indicator_of_landfall_or_passage                            <chr> "#", NA
+#> $ international_number                                        <chr> "9119", "9…
 #> $ geometry                                                    <POINT [°]> POINT (129…
-#> $ indicator_66666                                             <dbl> 66666
-#> $ nrow                                                        <dbl> 1
-#> $ tropical_cyclone_number                                     <chr> "0045"
-#> $ international_number_copy                                   <chr> "9119"
-#> $ flag_last_data_line                                         <chr> "0"
-#> $ DTM                                                         <dbl> 6
-#> $ storm_name                                                  <fct> MIRREILE
-#> $ last_update                                                 <date> 1992-07-01
+#> $ indicator_66666                                             <dbl> 66666, 666…
+#> $ nrow                                                        <dbl> 1, 1
+#> $ tropical_cyclone_number                                     <chr> "0045", "0…
+#> $ international_number_copy                                   <chr> "9119", "9…
+#> $ flag_last_data_line                                         <chr> "0", "0"
+#> $ DTM                                                         <dbl> 6, 6
+#> $ storm_name                                                  <fct> MIRREILE, …
+#> $ last_update                                                 <date> 1992-07-01…
 ```
 
 URLを直接指定した読み込みも可能です。
@@ -147,7 +147,11 @@ data("stations", package = "jmastats")
 ## 関連するパッケージ
 
 - [worldmet](https://cran.r-project.org/package=worldmet)
+- [rnoaa](https://cran.r-project.org/package=rnoaa)
 - [GSODR](https://cran.r-project.org/package=GSODR)
 - [stationaRy](https://cran.r-project.org/package=stationaRy)
+- [rdwd](https://cran.r-project.org/package=rdwd)
 - [weathercan](https://github.com/ropensci/weathercan)
 - [aemet](https://github.com/SevillaR/aemet)
+- [climate](https://github.com/bczernecki/climate)
+- [rrricanes](https://github.com/ropensci/rrricanes)

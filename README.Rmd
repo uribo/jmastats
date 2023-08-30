@@ -36,7 +36,7 @@ install.packages(
 
 - 過去の気象データのほか、気象庁が公開するさまざまな気象ファイルをRで扱いやすい形式で読み込みます。
     - 地理空間情報が利用できる場合、適切な種類（ポイント、ライン等）のsfオブジェクトに変換します。
-    - `jmastats::parse_unit()`関数により、気象データの単位系（SI単位系）をunitsオブジェクトに変換します。
+    - `parse_unit()`関数により、気象データの単位系（SI単位系）をunitsオブジェクトに変換します。
 - 取得した気象データはコンピュータ内にキャッシュとして保存されます。そのため、一度取得したデータはインターネット接続ができない状態でも参照可能です。キャッシュの利用により、取得時の気象庁ウェブサイトへの負荷も軽減されます。
 
 ## 使い方
@@ -124,8 +124,11 @@ data("stations", package = "jmastats")
 ## 関連するパッケージ
 
 - [worldmet](https://cran.r-project.org/package=worldmet)
+- [rnoaa](https://cran.r-project.org/package=rnoaa)
 - [GSODR](https://cran.r-project.org/package=GSODR)
 - [stationaRy](https://cran.r-project.org/package=stationaRy)
+- [rdwd](https://cran.r-project.org/package=rdwd)
 - [weathercan](https://github.com/ropensci/weathercan)
 - [aemet](https://github.com/SevillaR/aemet)
-
+- [climate](https://github.com/bczernecki/climate)
+- [rrricanes](https://github.com/ropensci/rrricanes)
