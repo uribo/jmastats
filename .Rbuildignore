@@ -10,3 +10,5 @@
 ^inst/besttrack$
 ^README\.Rmd$
 ^\.github$
+^inst/\.gitignore$
+^inst/real$

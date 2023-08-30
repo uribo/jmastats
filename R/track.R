@@ -1,18 +1,19 @@
-#' Read RSMC Tokyo best track data
+#' Read RSMC Tokyo-Typhoon Center's best track data
 #'
 #' @description Tidy formatting best track data and combine each point to line.
-#'  @details
+#' @details
 #' * `read_rsmc_besttrack()`: Read single best track data into [sf][sf::st_sf]
 #' contains observation record as point.
 #' * `track_combine()`: Combine track data to line by id
 #' (such as international_number and storm_name).
-#' @param path path to best track data (.txt)
+#' @param path path to best track data (`.txt`). Give the path as a directory
+#' in the user's computer or the URL.
 #' @import rlang
-#' @importFrom dplyr across arrange bind_rows group_by lead select
+#' @importFrom dplyr across arrange bind_rows group_by lead join_by select
 #' left_join if_else mutate ungroup rowwise
 #' @importFrom forcats fct_inorder
 #' @importFrom lubridate ymd_h
-#' @importFrom purrr set_names reduce
+#' @importFrom purrr map set_names
 #' @importFrom readr read_lines
 #' @importFrom sf st_as_sf st_as_sfc st_as_text st_cast st_sf st_union
 #' @importFrom stringr str_detect str_split str_subset
@@ -21,11 +22,14 @@
 #' @importFrom utils read.table
 #' @details See <https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm> for more details.
 #' @rdname track
+#' @examples
+#' read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats"))
 #' @export
 read_rsmc_besttrack <- function(path) {
 
-  . <- last_update <- international_number <- storm_name <-
-  `central_pressure(hPa)` <- `maximum_sustained_wind_speed(knot)` <- datetime <- latitude <- longitude <- NULL
+  last_update <- international_number <- storm_name <-
+  `central_pressure(hPa)` <- `maximum_sustained_wind_speed(knot)` <-
+    datetime <- latitude <- longitude <- NULL
   v8 <- v10 <- NULL
 
   lines <- readr::read_lines(path)
@@ -52,7 +56,7 @@ read_rsmc_besttrack <- function(path) {
               parse_x[5:8])
         }
         parse_x |>
-          set_names(c("indicator_66666",
+          purrr::set_names(c("indicator_66666",
                       "international_number", "nrow",
                       "tropical_cyclone_number",
                       "international_number_copy",
@@ -60,7 +64,7 @@ read_rsmc_besttrack <- function(path) {
                       "DTM", "storm_name", "last_update"))
       }
     ) |>
-    purrr::reduce(dplyr::bind_rows) |>
+    dplyr::bind_rows() |>
     tibble::as_tibble() |>
     readr::type_convert(col_types = "dcdcccdcc") |>
     dplyr::mutate(last_update = lubridate::ymd(last_update))
@@ -117,9 +121,13 @@ read_rsmc_besttrack <- function(path) {
             as.data.frame() |>
             t() |>
             tibble::as_tibble(.name_repair = "minimal") |>
-            purrr::set_names(paste0("v", seq.int(ncol(.)))) |>
-            tidyr::extract(v8, into = c("H", "I"), regex = "([0-9]{1})([0-9]{4})") |>
-            tidyr::extract(v10, into = c("K", "L"), regex = "([0-9]{1})([0-9]{4})")
+            purrr::set_names(paste0("v", seq.int(length(parse_x)))) |>
+            tidyr::extract(v8,
+                           into = c("H", "I"),
+                           regex = "([0-9]{1})([0-9]{4})") |>
+            tidyr::extract(v10,
+                           into = c("K", "L"),
+                           regex = "([0-9]{1})([0-9]{4})")
           if (length(parse_x) == 11L) {
             tmp_d |>
               purrr::set_names(c(data_common_vars,
@@ -131,9 +139,10 @@ read_rsmc_besttrack <- function(path) {
                                  "indicator_of_landfall_or_passage"))
           }
         }
-      }
+      },
+      .progress = TRUE
     ) |>
-    purrr::reduce(dplyr::bind_rows) |>
+    dplyr::bind_rows() |>
     dplyr::mutate(
       datetime = lubridate::ymd_h(
         paste0(
@@ -146,12 +155,14 @@ read_rsmc_besttrack <- function(path) {
       international_number = rep(df_header$international_number,
                                  df_header$nrow)) |>
     dplyr::mutate(
-      dplyr::across(c(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`),
+      dplyr::across(c(`central_pressure(hPa)`,
+                      `maximum_sustained_wind_speed(knot)`),
                     as.numeric)) |>
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
-    dplyr::left_join(df_header, by = "international_number") |>
-    dplyr::arrange(datetime) |>
-    dplyr::select(names(.)[!names(.) %in% attr(., "sf_column")])
+    dplyr::left_join(df_header,
+                     by = dplyr::join_by(international_number)) |>
+    dplyr::arrange(datetime)
+
   df_record
 }
 

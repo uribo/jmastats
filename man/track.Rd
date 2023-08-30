@@ -3,7 +3,7 @@
 \name{read_rsmc_besttrack}
 \alias{read_rsmc_besttrack}
 \alias{track_combine}
-\title{Read RSMC Tokyo best track data}
+\title{Read RSMC Tokyo-Typhoon Center's best track data}
 \usage{
 read_rsmc_besttrack(path)
 
@@ -15,7 +15,8 @@ track_combine(
 )
 }
 \arguments{
-\item{path}{path to best track data (.txt)}
+\item{path}{path to best track data (\code{.txt}). Give the path as a directory
+in the user's computer or the URL.}
 
 \item{data}{Import data using \link{read_rsmc_besttrack}}
 
@@ -27,14 +28,17 @@ track_combine(
 }
 \description{
 Tidy formatting best track data and combine each point to line.
-@details
+}
+\details{
 \itemize{
 \item \code{read_rsmc_besttrack()}: Read single best track data into \link[sf:sf]{sf}
 contains observation record as point.
 \item \code{track_combine()}: Combine track data to line by id
 (such as international_number and storm_name).
 }
-}
-\details{
+
 See \url{https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details.
+}
+\examples{
+read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats"))
 }
