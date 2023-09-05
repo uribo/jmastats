@@ -144,6 +144,14 @@ data("stations", package = "jmastats")
 | 雨   | 有線ロボット気象計 | 降水量                                                                                     |
 | 雪   | 有線ロボット積雪計 | 積雪量                                                                                     |
 
+## 引用
+
+このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
+
+> Uryu S (2023). *jmastats: Download Weather Data from Japan
+> Meteorological Agency Website*. R package version 0.2.0,
+> <https://github.com/uribo/jmastats>.
+
 ## 関連するパッケージ
 
 - [worldmet](https://cran.r-project.org/package=worldmet)
