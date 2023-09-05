@@ -319,6 +319,10 @@ detect_station_info <- function(.blockid) {
   station_type <-
     ifelse(df_target_station$station_type == intToUtf8(23448), "s", "a")
   station_type <-
+    ifelse(df_target_station$station_name == intToUtf8(c(39640, 26494)) & df_target_station$station_no == 23281,
+         "a",
+         station_type)
+  station_type <-
     ifelse(df_target_station$station_name %in% c(intToUtf8(c(22825, 22478)),
                                                intToUtf8(c(19982, 35542, 23798)),
                                                intToUtf8(c(23433, 27425, 23994)),
@@ -334,7 +338,17 @@ detect_station_info <- function(.blockid) {
                                                intToUtf8(c(23567, 20516, 36032)),
                                                intToUtf8(c(40372, 19992)),
                                                intToUtf8(c(28317, 36794)),
-                                               intToUtf8(c(21338, 22810))
+                                               intToUtf8(c(21338, 22810)),
+                                               intToUtf8(c(22768, 21839)),
+                                               intToUtf8(c(26412, 27850)),
+                                               intToUtf8(c(26481, 31070, 27005)),
+                                               intToUtf8(c(21315, 27507)),
+                                               intToUtf8(c(32011, 21029, 23567, 21521)),
+                                               intToUtf8(c(33457, 24059)),
+                                               intToUtf8(c(32701, 30000)),
+                                               intToUtf8(c(38745, 23713, 31354, 28207)),
+                                               intToUtf8(c(26494, 23665, 21335, 21513, 30000)),
+                                               intToUtf8(c(36196, 27743))
   ),
   # Special pattern
   "a",
