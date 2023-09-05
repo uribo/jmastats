@@ -12,3 +12,4 @@
 ^\.github$
 ^inst/\.gitignore$
 ^inst/real$
+^cran-comments\.md$
