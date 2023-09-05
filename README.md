@@ -7,16 +7,22 @@
 <!-- badges: end -->
 
 jmastats
-は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイトで公開される気象、海洋等の各種データをR上で扱えるようにするパッケージです。
+は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイトで公開される気象、地震、海洋等の各種データをR上で扱うためのパッケージです。
 
 ## インストール
 
-パッケージはCRANに登録されていません。次のコマンドを実行することでインストールが行われます。
+CRANからインストールが可能です。
+
+``` r
+install.packages("jmastats")
+```
+
+開発版を利用したい場合は次のコマンドを実行することでインストールが行われます。
 
 ``` r
 install.packages(
    "jmastats", 
-   repos = c(mm = "https://uribo.r-universe.dev", getOption("repos")))
+   repos = c(uribo = "https://uribo.r-universe.dev", getOption("repos")))
 ```
 
 ## 特徴
