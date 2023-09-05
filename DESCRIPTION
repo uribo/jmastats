@@ -1,10 +1,12 @@
 Package: jmastats
 Version: 0.1.0.9000
 Title: Download Weather Data from Japan Meteorological Agency Website
-Description: Provides the features to download weather data published 
-    by the Japan Meteorological Agency website (<https://www.data.jma.go.jp/obd/stats/etrn/index.php>).
-    Data can refer to published data from 1976, and items correspond to those of the website. In addition to this, 
-    it is possible to process the best track data of typhoons and to check nearby observation stations.
+Description: This package provides features that allow users to download 
+  weather data published by the Japan Meteorological Agency website 
+  (<https://www.jma.go.jp/jma/index.html>). The data includes information 
+  dating back to 1976 and aligns with the categories available on the website. 
+  Additionally, users can process the best track data of typhoons and easily 
+  handle earthquake record files.
 Authors@R: c(person(given = "Shinya",
                                      family = "Uryu",
                                      email = "suika1127@gmail.com",
