@@ -1,8 +1,5 @@
-^\.env$
 ^jmastats\.Rproj$
 ^\.Rproj\.user$
-^Dockerfile$
-^docker-compose\.yml$
 ^data-raw$
 ^LICENSE\.md$
 ^\.DS_Store$
