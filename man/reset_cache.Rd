@@ -2,10 +2,17 @@
 % Please edit documentation in R/appdir.R
 \name{reset_cache}
 \alias{reset_cache}
-\title{Remove cache files}
+\title{Remove all cache files}
 \usage{
 reset_cache()
 }
+\value{
+None
+}
 \description{
 Remove all package cache files.
+}
+\examples{
+if (interactive())
+  reset_cache()
 }

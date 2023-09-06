@@ -1,9 +1,15 @@
-#' Remove cache files
+#' Remove all cache files
 #'
 #' @description Remove all package cache files.
+#' @importFrom utils askYesNo
+#' @examples
+#' if (interactive())
+#'   reset_cache()
 #' @rdname reset_cache
 #' @export
+#' @return None
 reset_cache <- function() {
+if (utils::askYesNo("Delete all cache files. Is it OK?"))
   unlink(rappdirs::user_cache_dir("jmastats"),
          recursive = TRUE)
 }

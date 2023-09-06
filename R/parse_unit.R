@@ -7,7 +7,11 @@
 #' @importFrom stringr str_subset
 #' @importFrom tidyselect all_of where
 #' @importFrom units as_units
+#' @examples
+#' jma_collect("hourly", "0010", 2018, 7, 30) |>
+#'   parse_unit(rename = TRUE)
 #' @export
+#' @return a `tbl` object
 parse_unit <- function(data, rename = TRUE) {
 
   original_vars <-

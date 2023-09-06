@@ -17,11 +17,14 @@ read_tide_level(path = NULL, .year, .month, .stn, raw = FALSE)
 
 \item{raw}{If \emph{TRUE}, return raw format data}
 }
+\value{
+a \code{tbl} object
+}
 \description{
 Read and parse tide level text data
 }
 \examples{
-\dontrun{
+\donttest{
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
 
 read_tide_level(.year = 2020, .month = 2, .stn = "TK")

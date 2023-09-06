@@ -22,7 +22,6 @@
 #' @importFrom sf st_distance st_point st_set_geometry st_sfc
 #' @importFrom units as_units set_units
 #' @examples
-#' \dontrun{
 #' nearest_station(142.9313, 43.70417)
 #'
 #' pick_neighbor_stations(140.10, 36.08, 300000)
@@ -35,7 +34,6 @@
 #' pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
 #'                             year = 2020,
 #'                             distance = 100, .unit = "km")
-#' }
 #' @name nearest_station
 NULL
 

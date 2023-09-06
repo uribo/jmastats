@@ -38,6 +38,9 @@ numeric value is specified, it is processed as a string.}
 row combinations that were treated as missing values
 for some reason. (\code{TRUE}, the default)}
 }
+\value{
+a \code{tbl} object
+}
 \description{
 Refer to the data available in the JMA Historical Weather Data Search.
 Executed by specifying the target location and date.
@@ -58,7 +61,7 @@ for each location.
 }
 }
 \examples{
-\dontrun{
+\donttest{
 jma_collect(item = "annually", "1284", year = 2017, month = 11)
 # daily
 jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11)

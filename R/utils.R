@@ -35,7 +35,7 @@ validate_date <- function(year, month, day) {
 
 check_input_coords <- function(longitude, latitude, geometry = NULL) {
   if (!is.null(geometry)) {
-    if (!rlang::is_missing(longitude) | !rlang::is_missing(latitude)) {
+    if (!rlang::is_missing(longitude) || !rlang::is_missing(latitude)) {
       rlang::inform("the condition assigned coord and geometry, only the geometry will be used") # nolint
     }
     if (sf::st_is(geometry, "POINT")) {

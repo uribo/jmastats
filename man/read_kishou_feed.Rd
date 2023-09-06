@@ -14,7 +14,7 @@ long term ("low")}
 See details for the items.}
 }
 \value{
-data.frame
+a \code{tbl} object
 }
 \description{
 Read Kishou Disaster Prevention Information Feed
@@ -29,11 +29,11 @@ The following items can be specified in the type argument.
 }
 }
 \examples{
-\dontrun{
+\donttest{
 read_kishou_feed("high", type = "regular")
 read_kishou_feed("low", "other")
 }
 }
 \seealso{
-\url{https://xml.kishou.go.jp/index.html}
+\url{https://xml.kishou.go.jp}
 }

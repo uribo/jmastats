@@ -2,12 +2,12 @@
 #'
 #' @param data tidal level data
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt") |>
 #'   pivot_tide_level()
 #' }
 #' @seealso [read_tide_level()]
-#' @return List to store two datasets. hourly observation data and tide.
+#' @return List to store two datasets containing hourly and tide level data.
 #' @export
 pivot_tide_level <- function(data) {
   list(

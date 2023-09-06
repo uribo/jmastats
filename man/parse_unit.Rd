@@ -11,6 +11,13 @@ parse_unit(data, rename = TRUE)
 
 \item{rename}{\emph{logical}}
 }
+\value{
+a \code{tbl} object
+}
 \description{
 Parse data variable units
+}
+\examples{
+jma_collect("hourly", "0010", 2018, 7, 30) |>
+  parse_unit(rename = TRUE)
 }

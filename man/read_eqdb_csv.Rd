@@ -12,6 +12,9 @@ read_eqdb_csv(path, show_metadata = TRUE)
 \item{show_metadata}{logical. If \emph{FALSE}, returns only the values
 observed at each location.}
 }
+\value{
+a \code{tbl} object
+}
 \description{
 Read the csv of the earthquake database
 }

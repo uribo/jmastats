@@ -24,12 +24,13 @@ scale_fill_jma_relative(type = "amedas", ...)
 }
 \value{
 A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
+
+gg scale object
 }
 \description{
 Scales to use for ggplot2
 }
 \examples{
-\dontrun{
 library(dplyr)
 d <-
 jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
@@ -38,11 +39,10 @@ parse_unit()
 
 library(ggplot2)
 library(units)
-ggplot(d, aes(date, precipitation_sum_mm,
-          color = units::drop_units(precipitation_sum_mm),
-          fill = units::drop_units(precipitation_sum_mm))) +
+ggplot(d, aes(date, precipitation_sum,
+          color = drop_units(precipitation_sum),
+          fill = drop_units(precipitation_sum))) +
   geom_bar(stat = "identity") +
   scale_color_jma_absolute(type = "precipitation") +
   scale_fill_jma_absolute(type = "precipitation")
-}
 }

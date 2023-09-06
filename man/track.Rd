@@ -26,6 +26,9 @@ in the user's computer or the URL.}
 
 \item{geometry}{geometry column name (default \code{geometry}).}
 }
+\value{
+a \code{tbl} object
+}
 \description{
 Tidy formatting best track data and combine each point to line.
 }
@@ -36,9 +39,13 @@ contains observation record as point.
 \item \code{track_combine()}: Combine track data to line by id
 (such as international_number and storm_name).
 }
-
-See \url{https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm} for more details.
 }
 \examples{
 read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats"))
+
+read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |>
+  track_combine()
+}
+\seealso{
+\url{https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm}
 }

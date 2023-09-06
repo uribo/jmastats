@@ -5,8 +5,9 @@
 #' @examples
 #' read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
 #' @rdname read_eqdb_csv
-#' @seealso [https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)
+#' @seealso <https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html>
 #' @export
+#' @return a `tbl` object
 read_eqdb_csv <- function(path, show_metadata = TRUE) {
   if (show_metadata == TRUE) {
     meta <-
