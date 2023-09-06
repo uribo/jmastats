@@ -1,14 +1,20 @@
-#' Collect JMA Stats Data
+#' Collect JMA Historical Weather Data
 #'
-#' @param item url
-#' @param block_no Block number of the area to be observed. It is assumed that
+#' @description
+#' Refer to the data available in the JMA Historical Weather Data Search.
+#' Executed by specifying the target location and date.
+#' Currently, not all types of data acquisition are supported.
+#' @param item Type of weather data to be acquired. Mainly specifies
+#' the interval between records (e.g. `daily` or `hourly`).
+#' See NOTE for details.
+#' @param block_no Block number of the location to be observed. It is assumed that
 #' block_no is input as a string consisting of a 4- or 5-digit number. If a
 #' numeric value is specified, it is processed as a string.
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
-#' @param cache use cash and save to cache
-#' @param pack Whether to packing common variables or not
+#' @param cache use cash and save to cache.  (`TRUE`, the default)
+#' @param pack Whether to packing common variables or not.  (`TRUE`, the default)
 #' @param quiet Whether to output information on variable and
 #' row combinations that were treated as missing values
 #' for some reason. (`TRUE`, the default)
@@ -20,14 +26,15 @@
 #' @importFrom xml2 read_html url_parse
 #' @note
 #' The parameter `item` chooses one from these:
-#' - annually:
-#' - monthly:
-#' - 3monthly:
-#' - 10daily:
-#' - mb5daily:
-#' - daily:
-#' - hourly:
-#' - rank:
+#' - annually: Annual value. Please specify a location by `block_no`.
+#' - monthly: Monthly value. Please specify location and year.
+#' - 3monthly: Value every 3 months. Please specify location and year.
+#' - 10daily: Seasonal value. Please specify location and year.
+#' - mb5daily: Semi-seasonal value. Please specify location and year.
+#' - daily: Daily value. Please specify location, year and month.
+#' - hourly: Hourly value. Please specify location, year, month and day.
+#' - rank: Values of the largest in the history of observations
+#' for each location.
 #' @examples
 #' \dontrun{
 #' jma_collect(item = "annually", "1284", year = 2017, month = 11)
