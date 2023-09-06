@@ -58,13 +58,24 @@ library(jmastats)
 取得したい対象データを`item`引数に指定、観測所の位置する `block_no` と対象の年 `year` 月 `month` 日 `day`を必要に応じて与えて実行します。
 
 ```{r}
+# データの種類: hourly (１時間ごとの値)
+# ブロック番号: 47646 （「つくば」）
+# 対象年月日: 2022年1月1日
 jma_collect(item = "hourly", block_no = 47646, year = 2022, month = 1, day = 1)
 ```
 
-`block_no` が不明の時は 対象地点の緯度経度を元に`nearest_station()`で検索できます。
+`block_no` が不明の時は 対象地点の緯度経度を元に`nearest_station()`関数や後述の気象観測地点データから検索できます。
 
 ```{r}
+# 任意の緯度経度座標から最寄りの観測所と座標との距離を出力
 nearest_station(longitude = 140.112, latitude = 36.083)
+```
+
+ユーザーが任意の地点、項目、期間等の組みあわせで出力可能な、`過去の気象データ`のcsvファイルを読み込む関数として`read_jma_weather()`関数が利用できます。
+
+```{r}
+# ダウンロードしたcsvファイルのパスを与えて実行します
+read_jma_weather(system.file("dummy/dl_data.csv", package = "jmastats"))
 ```
 
 ### 台風資料
@@ -90,6 +101,14 @@ read_rsmc_besttrack(path = "https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp
 ```{r}
 read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |> 
   track_combine(group_vars = "storm_name")
+```
+
+### 気象庁防災情報XMLフォーマット
+
+```{r}
+read_kishou_feed("high", type = "regular")
+
+read_kishou_feed("low", "other")
 ```
 
 ### 潮汐観測資料

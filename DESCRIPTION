@@ -1,8 +1,8 @@
 Package: jmastats
 Version: 0.2.0
 Title: Download Weather Data from Japan Meteorological Agency Website
-Description: This package provides features that allow users to download 
-  weather data published by the Japan Meteorological Agency website 
+Description: Provides features that allow users to download 
+  weather data published by the Japan Meteorological Agency (JMA) website 
   (<https://www.jma.go.jp/jma/index.html>). The data includes information 
   dating back to 1976 and aligns with the categories available on the website. 
   Additionally, users can process the best track data of typhoons and easily 
@@ -10,7 +10,7 @@ Description: This package provides features that allow users to download
 Authors@R: c(person(given = "Shinya",
                                      family = "Uryu",
                                      email = "suika1127@gmail.com",
-                                     role  = c("aut", "cre"),
+                                     role  = c("aut", "cph", "cre"),
                                      comment = c(ORCID = "0000-0002-0493-6186")))
 Depends: 
     R (>= 4.1)
