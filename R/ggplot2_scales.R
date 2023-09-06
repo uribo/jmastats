@@ -7,10 +7,9 @@
 #' @name ggplot2-scales
 #' @rdname ggplot2-scales
 #' @examples
-#' library(dplyr)
+#' \donttest{
 #' d <-
 #' jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
-#' select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) |>
 #' parse_unit()
 #'
 #' library(ggplot2)
@@ -21,6 +20,7 @@
 #'   geom_bar(stat = "identity") +
 #'   scale_color_jma_absolute(type = "precipitation") +
 #'   scale_fill_jma_absolute(type = "precipitation")
+#' }
 #' @export
 #' @return gg scale object
 scale_color_jma_absolute <- function(type = "precipitation", ...) {
