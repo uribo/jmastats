@@ -1,7 +1,9 @@
 #' Collect JMA Stats Data
 #'
 #' @param item url
-#' @param block_no block number
+#' @param block_no Block number of the area to be observed. It is assumed that
+#' block_no is input as a string consisting of a 4- or 5-digit number. If a
+#' numeric value is specified, it is processed as a string.
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
@@ -183,8 +185,34 @@ slow_jma_collect <-
   quiet = FALSE)
 
 detect_target <- function(item, block_no, year, month, day) {
-  .blockid <- rlang::enquo(block_no)
-  jma_url(item, !!.blockid, year, month, day)
+  block_no <-
+    check_block_no(block_no)
+  jma_url(item, block_no, year, month, day)
+}
+
+check_block_no <- function(block_no) {
+  if (nchar(block_no) > 5) {
+    rlang::abort("block_no must be a string consisting of 4 or 5 digits.")
+  }
+  if (nchar(block_no) == 5L) {
+    if (stringr::str_detect(block_no, "^47")) {
+      if (!dplyr::between(as.numeric(block_no), 47401, 47991)) {
+        rlang::abort("The 5-digit block_no ranges from '47401' to '47991'.")
+      }
+    } else {
+      rlang::abort("The 5-digit block_no must start with '47'.")
+    }
+  } else if (!dplyr::between(as.numeric(block_no), 2, 1675)) {
+    rlang::abort("The 5-digit block_no ranges from '0002' to '1675'.")
+  } else if (!is.character(block_no)) {
+      rlang::warn(
+        "block_no is assumed to be given as a string.\nTreats the input block_no as a string.") # nolint
+      if (nchar(block_no) == 3L) {
+        block_no <-
+          stringr::str_pad(block_no, pad = "0", side = "left", width = 4)
+      }
+    }
+  block_no
 }
 
 tweak_df <- function(df, quiet) {
