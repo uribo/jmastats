@@ -167,8 +167,6 @@ jma_collect_raw <- function(item = NULL,
   } else {
     df <- df_raw
   }
-  # convert_variable_unit(df) |>
-  #   tibble::as_tibble()
   tibble::as_tibble(df)
 }
 
@@ -357,41 +355,6 @@ detect_station_info <- function(.blockid) {
     prec_no = pref,
     station_type = station_type
   )
-}
-
-convert_variable_unit <- function(.data) {
-  df <-
-    dplyr::mutate(
-      .data,
-      dplyr::across(
-        tidyselect::matches("\\(\u2103\\)$"),
-        .fns = ~ units::set_units(., value = "\u2103"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(hPa\\)$"),
-        ~ units::set_units(., value = "hPa"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(mm\\)$"),
-        ~ units::set_units(., value = "mm"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(cm\\)$"),
-        ~ units::set_units(., value = "cm"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(hour\\)$"),
-        ~ units::set_units(., value = "h"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(m/s\\)$"),
-        ~ units::set_units(., value = "m/s"))) |>
-    dplyr::mutate(
-      dplyr::across(
-        tidyselect::matches("\\(%\\)$"),
-        ~ units::set_units(., value = "%")))
-  df |>
-    purrr::set_names(stringr::str_remove_all(names(df), "\\(.+\\)"))
 }
 
 # see) https://www.data.jma.go.jp/obd/stats/data/mdrr/man/remark.html
