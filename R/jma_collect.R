@@ -1,14 +1,20 @@
-#' Collect JMA Stats Data
+#' Collect JMA Historical Weather Data
 #'
-#' @param item url
-#' @param block_no Block number of the area to be observed. It is assumed that
+#' @description
+#' Refer to the data available in the JMA Historical Weather Data Search.
+#' Executed by specifying the target location and date.
+#' Currently, not all types of data acquisition are supported.
+#' @param item Type of weather data to be acquired. Mainly specifies
+#' the interval between records (e.g. `daily` or `hourly`).
+#' See NOTE for details.
+#' @param block_no Block number of the location to be observed. It is assumed that
 #' block_no is input as a string consisting of a 4- or 5-digit number. If a
 #' numeric value is specified, it is processed as a string.
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
-#' @param cache use cash and save to cache
-#' @param pack Whether to packing common variables or not
+#' @param cache use cash and save to cache.  (`TRUE`, the default)
+#' @param pack Whether to packing common variables or not.  (`TRUE`, the default)
 #' @param quiet Whether to output information on variable and
 #' row combinations that were treated as missing values
 #' for some reason. (`TRUE`, the default)
@@ -20,14 +26,15 @@
 #' @importFrom xml2 read_html url_parse
 #' @note
 #' The parameter `item` chooses one from these:
-#' - annually:
-#' - monthly:
-#' - 3monthly:
-#' - 10daily:
-#' - mb5daily:
-#' - daily:
-#' - hourly:
-#' - rank:
+#' - annually: Annual value. Please specify a location by `block_no`.
+#' - monthly: Monthly value. Please specify location and year.
+#' - 3monthly: Value every 3 months. Please specify location and year.
+#' - 10daily: Seasonal value. Please specify location and year.
+#' - mb5daily: Semi-seasonal value. Please specify location and year.
+#' - daily: Daily value. Please specify location, year and month.
+#' - hourly: Hourly value. Please specify location, year, month and day.
+#' - rank: Values of the largest in the history of observations
+#' for each location.
 #' @examples
 #' \dontrun{
 #' jma_collect(item = "annually", "1284", year = 2017, month = 11)
@@ -123,17 +130,7 @@ jma_collect_raw <- function(item = NULL,
       df_raw[[4]][-c(1:2), ] |>
       purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
-  } else if (item == "monthly") {
-    df <-
-      df_raw[[6]][-c(1:2), ] |>
-      purrr::set_names(vars) |>
-      tweak_df(quiet = quiet)
-  } else if (item == "10daily") {
-    df <-
-      df_raw[[6]][-c(1:2), ] |>
-      purrr::set_names(vars) |>
-      tweak_df(quiet = quiet)
-  } else if (item == "mb5daily") {
+  } else if (item %in% c("monthly", "3monthly", "10daily", "mb5daily")) {
     df <-
       df_raw[[6]][-c(1:2), ] |>
       purrr::set_names(vars) |>
@@ -184,10 +181,10 @@ slow_jma_collect <-
   rate = purrr::rate_delay(pause = 7),
   quiet = FALSE)
 
-detect_target <- function(item, block_no, year, month, day) {
+detect_target <- function(item, block_no, ...) {
   block_no <-
     check_block_no(block_no)
-  jma_url(item, block_no, year, month, day)
+  jma_url(item, block_no, ...)
 }
 
 check_block_no <- function(block_no) {
@@ -273,7 +270,7 @@ tweak_df <- function(df, quiet) {
 }
 
 jma_url <- function(item = NULL,
-                    block_no, year, month, day) {
+                    block_no, year, month, day, ...) {
   .blockid <- rlang::enquo(block_no)
   selected_item <- item
   if (identical(selected_item, character(0))) {
@@ -282,39 +279,28 @@ jma_url <- function(item = NULL,
   if (selected_item == "hourly") {
     validate_date(year, month, day)
   }
-  if (selected_item %in% c("annually", "rank")) {
-    if (rlang::is_missing(year)) {
-      year <- ""
-      month <- ""
-      dummy_year <- 1
-      dummy_month <- 1
-    } else {
-      dummy_year <- year
-      dummy_month <- 1
-    }
-    if (rlang::is_missing(month)) {
-      month <- ""
-      dummy_month <- 1
-    } else {
-      dummy_month <- month
-    }
-    if (selected_item == "rank") {
-      if (rlang::is_missing(year)) {
-        year <- ""
-        dummy_year <- 1
-      } else {
-        dummy_year <- year
-      }
-    }
-  } else {
-    dummy_year <- year
-    dummy_month <- month
-  }
   if (rlang::is_missing(day)) {
     day <- ""
     dummy_day <- 1
   } else {
     dummy_day <- day
+  }
+  if (rlang::is_missing(month)) {
+    month <- ""
+    dummy_month <- 1
+  } else {
+    dummy_month <- month
+  }
+  if (selected_item %in% c("annually", "rank")) {
+    if (rlang::is_missing(year)) {
+      year <- ""
+      dummy_year <- 1
+    } else {
+      dummy_year <- year
+    }
+  } else {
+    dummy_year <- year
+    dummy_month <- 1
   }
   if (validate_date(dummy_year, dummy_month, dummy_day)) {
     station_info <-
@@ -622,6 +608,17 @@ name_sets <- function(item) {
         jma_vars$snow,
         jma_vars$cloud,
         jma_vars$condition),
+      "3monthly_s1" = c("month",
+                        jma_vars$atmosphere,
+                        jma_vars$precipitation,
+                        jma_vars$temperature,
+                        jma_vars$humid,
+                        jma_vars$wind,
+                        jma_vars$daylight,
+                        jma_vars$solar,
+                        jma_vars$snow,
+                        jma_vars$cloud,
+                        jma_vars$condition),
       "monthly_a1" = c("month",
                        jma_vars$precipitation,
                        jma_vars$temperature,

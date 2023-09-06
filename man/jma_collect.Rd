@@ -2,7 +2,7 @@
 % Please edit documentation in R/jma_collect.R
 \name{jma_collect}
 \alias{jma_collect}
-\title{Collect JMA Stats Data}
+\title{Collect JMA Historical Weather Data}
 \usage{
 jma_collect(
   item = NULL,
@@ -16,9 +16,11 @@ jma_collect(
 )
 }
 \arguments{
-\item{item}{url}
+\item{item}{Type of weather data to be acquired. Mainly specifies
+the interval between records (e.g. \code{daily} or \code{hourly}).
+See NOTE for details.}
 
-\item{block_no}{Block number of the area to be observed. It is assumed that
+\item{block_no}{Block number of the location to be observed. It is assumed that
 block_no is input as a string consisting of a 4- or 5-digit number. If a
 numeric value is specified, it is processed as a string.}
 
@@ -28,28 +30,31 @@ numeric value is specified, it is processed as a string.}
 
 \item{day}{select date (default \code{NULL})}
 
-\item{cache}{use cash and save to cache}
+\item{cache}{use cash and save to cache.  (\code{TRUE}, the default)}
 
-\item{pack}{Whether to packing common variables or not}
+\item{pack}{Whether to packing common variables or not.  (\code{TRUE}, the default)}
 
 \item{quiet}{Whether to output information on variable and
 row combinations that were treated as missing values
 for some reason. (\code{TRUE}, the default)}
 }
 \description{
-Collect JMA Stats Data
+Refer to the data available in the JMA Historical Weather Data Search.
+Executed by specifying the target location and date.
+Currently, not all types of data acquisition are supported.
 }
 \note{
 The parameter \code{item} chooses one from these:
 \itemize{
-\item annually:
-\item monthly:
-\item 3monthly:
-\item 10daily:
-\item mb5daily:
-\item daily:
-\item hourly:
-\item rank:
+\item annually: Annual value. Please specify a location by \code{block_no}.
+\item monthly: Monthly value. Please specify location and year.
+\item 3monthly: Value every 3 months. Please specify location and year.
+\item 10daily: Seasonal value. Please specify location and year.
+\item mb5daily: Semi-seasonal value. Please specify location and year.
+\item daily: Daily value. Please specify location, year and month.
+\item hourly: Hourly value. Please specify location, year, month and day.
+\item rank: Values of the largest in the history of observations
+for each location.
 }
 }
 \examples{
