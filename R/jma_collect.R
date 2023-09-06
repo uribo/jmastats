@@ -1,7 +1,9 @@
 #' Collect JMA Stats Data
 #'
 #' @param item url
-#' @param block_no block number
+#' @param block_no Block number of the area to be observed. It is assumed that
+#' block_no is input as a string consisting of a 4- or 5-digit number. If a
+#' numeric value is specified, it is processed as a string.
 #' @param year select year
 #' @param month select month
 #' @param day select date (default `NULL`)
