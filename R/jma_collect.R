@@ -15,7 +15,7 @@
 #' @importFrom readr type_convert
 #' @importFrom rvest html_table
 #' @importFrom stringr str_glue str_pad str_remove str_trim
-#' @importFrom xml2 read_html
+#' @importFrom xml2 read_html url_parse
 #' @note
 #' The parameter `item` chooses one from these:
 #' - annually:
