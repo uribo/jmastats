@@ -10,3 +10,4 @@
 ^inst/\.gitignore$
 ^inst/real$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$

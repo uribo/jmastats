@@ -10,6 +10,7 @@
 0 errors | 0 warnings | 3 note
 
 * This is a new release.
+* Remove `VignetteBuilder` filed in DESCRIPTION.
 * checking data for non-ASCII characters ... NOTE
   Note: found 16726 marked UTF-8 strings
 * checking CRAN incoming feasibility ... [18s] NOTE
@@ -21,8 +22,6 @@ Maintainer: 'Shinya Uryu <suika1127@gmail.com>'
    
    Possibly misspelled words in DESCRIPTION:
      JMA (5:62)
-   
-   Package has a VignetteBuilder field but no prebuilt vignette index.
 
 Found the following (possibly) invalid URLs:
      URL: https://xml.kishou.go.jp
