@@ -97,16 +97,18 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
     sf::st_point(c(coords$longitude,
                    coords$latitude)),
     crs = 4326)
-  stations[which(sf::st_is_within_distance(
-    coords,
-    stations,
-    dist = units::as_units(distance, value = unit),
-    sparse = FALSE)[1, ]), ] |>
-    dplyr::mutate(
-      distance = sf::st_distance(
-        geometry,
-        coords)[, 1]
-    ) |>
+  tgt_st <-
+    stations[which(sf::st_is_within_distance(
+      coords,
+      stations,
+      dist = units::as_units(distance, value = unit),
+      sparse = FALSE)[1, ]), ]
+  tgt_st$distance <-
+    sf::st_distance(
+      coords,
+      sf::st_transform(tgt_st$geometry, 4326),
+      by_element = FALSE)[1, ]
+  tgt_st |>
     dplyr::select(
       area,
       station_no,
@@ -139,6 +141,7 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
                                            stations,
                                            dist = units::as_units(distance, value = unit),
                                            sparse = FALSE)[1, ]), ] |>
+    sf::st_transform(crs = 4326) |>
     dplyr::mutate(distance = sf::st_distance(
       geometry,
       coords)[, 1]) |>
