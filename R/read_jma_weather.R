@@ -1,5 +1,8 @@
 #' Read the past weather
-#' @description Read the past weather data files downloaded from JMA.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Read the past weather data files downloaded from JMA.
 #' @param path The path to the downloaded file.
 #' @seealso <https://www.data.jma.go.jp/gmd/risk/obsdl/index.php>,
 #' <https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html>

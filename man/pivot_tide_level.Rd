@@ -13,7 +13,7 @@ pivot_tide_level(data)
 List to store two datasets containing hourly and tide level data.
 }
 \description{
-Convert and split tidal level data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \donttest{

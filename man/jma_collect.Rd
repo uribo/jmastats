@@ -42,6 +42,8 @@ for some reason. (\code{TRUE}, the default)}
 a \code{tbl} object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Refer to the data available in the JMA Historical Weather Data Search.
 Executed by specifying the target location and date.
 Currently, not all types of data acquisition are supported.

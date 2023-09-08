@@ -1,4 +1,7 @@
 #' Read Kishou Disaster Prevention Information Feed
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param frequency Release frequency. Select either high frequency ("high") or
 #' long term ("low")
 #' @param type Feed type. Specify the item to be retrieved as a string.

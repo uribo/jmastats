@@ -21,7 +21,7 @@ read_tide_level(path = NULL, .year, .month, .stn, raw = FALSE)
 a \code{tbl} object
 }
 \description{
-Read and parse tide level text data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 \donttest{

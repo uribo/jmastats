@@ -1,14 +1,15 @@
 #' Find out neighborhood stations
 #'
-#' @description Return the nearest [stations] information
-#' to the given coordinates.
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Return the nearest [stations] information to the given coordinates.
 #'
 #' @details
 #' * `nearest_station()`: Return single station data.
 #' * `pick_neighbor_stations()`: Pick-up neighbourhood stations.
 #' * `pick_neighbor_tide_stations()`: Pick-up neighbourhood tidal observation stations.
 #' Filter by distance from target point.
-#' @return sf
 #' @param longitude Longitude.
 #' @param latitude Latitude.
 #' @param geometry XY [sf::sf] object.

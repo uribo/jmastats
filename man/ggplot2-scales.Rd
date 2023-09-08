@@ -24,11 +24,9 @@ scale_fill_jma_relative(type = "amedas", ...)
 }
 \value{
 A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
-
-gg scale object
 }
 \description{
-Scales to use for ggplot2
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
 \donttest{

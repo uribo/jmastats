@@ -1,5 +1,8 @@
 #' Read and parse tide level text data
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param path URL or local file path to sea tide level file
 #' @param .year A.D. 1997 to present year.
 #' @param .month Month number. 1997 only, valid after March.

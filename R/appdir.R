@@ -1,6 +1,9 @@
 #' Remove all cache files
 #'
-#' @description Remove all package cache files.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Remove all package cache files.
 #' @importFrom utils askYesNo
 #' @examples
 #' if (interactive())

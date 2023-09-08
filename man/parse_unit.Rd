@@ -15,7 +15,7 @@ parse_unit(data, rename = TRUE)
 a \code{tbl} object
 }
 \description{
-Parse data variable units
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 jma_collect("hourly", "0010", 2018, 7, 30) |>

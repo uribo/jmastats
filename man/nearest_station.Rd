@@ -40,11 +40,12 @@ This value is passed to \link[units:units]{units::as_units}.}
 \item{year}{For tide level data. Restricted to the observation points in the target year.}
 }
 \value{
-sf
+an object of class \code{sf}.
 }
 \description{
-Return the nearest \link{stations} information
-to the given coordinates.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Return the nearest \link{stations} information to the given coordinates.
 }
 \details{
 \itemize{

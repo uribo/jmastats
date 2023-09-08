@@ -16,7 +16,7 @@ observed at each location.}
 a \code{tbl} object
 }
 \description{
-Read the csv of the earthquake database
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))

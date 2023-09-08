@@ -1,4 +1,8 @@
 #' Scales to use for ggplot2
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' @param type Display item
 #' @param ... Arguments to pass on to [ggplot2::scale_color_gradientn] or
 #' [ggplot2::scale_fill_gradientn]

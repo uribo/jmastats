@@ -30,6 +30,8 @@ in the user's computer or the URL.}
 a \code{tbl} object
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
 Tidy formatting best track data and combine each point to line.
 }
 \details{

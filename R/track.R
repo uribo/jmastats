@@ -1,6 +1,9 @@
 #' Read RSMC Tokyo-Typhoon Center's best track data
 #'
-#' @description Tidy formatting best track data and combine each point to line.
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Tidy formatting best track data and combine each point to line.
 #' @details
 #' * `read_rsmc_besttrack()`: Read single best track data into [sf][sf::st_sf]
 #' contains observation record as point.

@@ -17,7 +17,7 @@ See details for the items.}
 a \code{tbl} object
 }
 \description{
-Read Kishou Disaster Prevention Information Feed
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 The following items can be specified in the type argument.

@@ -1,5 +1,8 @@
 #' Convert and split tidal level data
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param data tidal level data
 #' @examples
 #' \donttest{

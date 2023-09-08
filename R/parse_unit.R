@@ -1,5 +1,8 @@
 #' Parse data variable units
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param data data
 #' @param rename *logical*
 #' @importFrom dplyr bind_cols select

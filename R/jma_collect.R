@@ -1,6 +1,8 @@
 #' Collect JMA Historical Weather Data
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Refer to the data available in the JMA Historical Weather Data Search.
 #' Executed by specifying the target location and date.
 #' Currently, not all types of data acquisition are supported.

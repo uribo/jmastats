@@ -1,4 +1,7 @@
 #' Read the csv of the earthquake database
+#'
+#' @description
+#' `r lifecycle::badge("stable")`
 #' @param path local file path to earthquake record file.
 #' @param show_metadata logical. If *FALSE*, returns only the values
 #' observed at each location.
