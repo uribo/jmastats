@@ -30,9 +30,13 @@ A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
 }
 \examples{
 \donttest{
+# d <-
+# jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
+# parse_unit()
 d <-
-jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
-parse_unit()
+data.frame(
+  date = as.Date(c(17410, 17411, 17412, 17413, 17414, 17415)),
+  precipitation_sum = units::set_units(c(3.5, 9.5, 0, 0, 0, 5), "mm"))
 
 library(ggplot2)
 library(units)

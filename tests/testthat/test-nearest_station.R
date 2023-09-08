@@ -70,6 +70,7 @@ test_that("multiplication works", {
 })
 
 test_that("failed", {
+  skip_if_not_installed("lwgeom")
   expect_message(
     nearest_station(longitude = 60, latitude = 30.4)
   )

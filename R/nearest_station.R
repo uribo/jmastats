@@ -44,6 +44,7 @@ NULL
   area <- distance <- NULL
 
 #' @rdname nearest_station
+#' @return an object of class `sf`.
 #' @export
 nearest_station <- function(longitude, latitude, geometry = NULL) {
   coords <-

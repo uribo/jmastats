@@ -9,8 +9,9 @@
 
 0 errors | 0 warnings | 3 note
 
-* This is a new release.
+* This is a new release (re-submit).
 * Remove `VignetteBuilder` filed in DESCRIPTION.
+* Removed functions and example handling of the user's home file space.
 * checking data for non-ASCII characters ... NOTE
   Note: found 16726 marked UTF-8 strings
 * checking CRAN incoming feasibility ... [18s] NOTE

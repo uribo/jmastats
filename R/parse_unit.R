@@ -11,8 +11,13 @@
 #' @importFrom tidyselect all_of where
 #' @importFrom units as_units
 #' @examples
-#' jma_collect("hourly", "0010", 2018, 7, 30) |>
-#'   parse_unit(rename = TRUE)
+#' # d <- jma_collect("hourly", "0010", 2018, 7, 30)
+#' d <-
+#' tibble::tibble(date = as.Date(c(17742, 17742, 17742, 17742, 17742, 17742)),
+#'                time = c(1, 2, 3, 4, 5, 6),
+#'                `precipitation(mm)` = c(0, 0, 0, 0, 0, 0),
+#'                `temperature(℃)` = c(22.4, 22.1, 21, 20.2, 20.4, 23.5))
+#' d |> parse_unit(rename = TRUE)
 #' @export
 #' @return a `tbl` object
 parse_unit <- function(data, rename = TRUE) {
