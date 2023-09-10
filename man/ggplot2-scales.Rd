@@ -29,9 +29,6 @@ A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-# d <-
-# jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
-# parse_unit()
 d <-
 data.frame(
   date = as.Date(c(17410, 17411, 17412, 17413, 17414, 17415), origin = "1970-01-01"),

@@ -12,10 +12,12 @@
 #' @examples
 #' # Read a local storage file (dummy data)
 #' read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+#' \donttest{
 #' # Request from URL
-#' # read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
+#' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
 #' # Request from parameters
-#' # read_tide_level(.year = 2020, .month = 2, .stn = "TK")
+#' read_tide_level(.year = 2020, .month = 2, .stn = "TK")
+#' }
 #' @export
 #' @return a `tbl` object
 read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {

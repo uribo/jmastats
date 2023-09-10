@@ -11,9 +11,6 @@
 #' @name ggplot2-scales
 #' @rdname ggplot2-scales
 #' @examples
-#' # d <-
-#' # jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
-#' # parse_unit()
 #' d <-
 #' data.frame(
 #'   date = as.Date(c(17410, 17411, 17412, 17413, 17414, 17415), origin = "1970-01-01"),

@@ -18,7 +18,7 @@ a \code{tbl} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
-# d <- jma_collect("hourly", "0010", 2018, 7, 30)
+# For data retrieved with jma_collect(), here is a minimal example.
 d <-
 tibble::tibble(date = as.Date(c(17742, 17742, 17742, 17742, 17742, 17742), origin = "1970-01-01"),
                time = c(1, 2, 3, 4, 5, 6),

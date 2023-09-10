@@ -13,6 +13,7 @@
 * Remove `VignetteBuilder` filed in DESCRIPTION.
 * Removed functions and example handling of the user's home file space.
 * Changed to execute all examples except those that take more than 5 seconds to get execution results due to http requests.
+* Code that will complete within 5 seconds is executed in example, and code that does not take less than 5 seconds is wrapped in `\donttest{}`.
 * checking data for non-ASCII characters ... NOTE
   Note: found 16726 marked UTF-8 strings
 * checking CRAN incoming feasibility ... [18s] NOTE
