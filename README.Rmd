@@ -113,11 +113,20 @@ read_kishou_feed("low", "other")
 
 ### 潮汐観測資料
 
-```{r}
-read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
 
+```{r}
+# URLを指定しての読み込み
+read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
+# URLを構成するパラメータを指定した読み込み
 read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 ```
+
+```{r}
+#| eval: true
+# ローカルに保存したファイルの読み込み（パスを指定）
+read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+```
+
 
 ### 震度データベース
 

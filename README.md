@@ -125,9 +125,34 @@ read_kishou_feed("low", "other")
 ### 潮汐観測資料
 
 ``` r
+# URLを指定しての読み込み
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
-
+# URLを構成するパラメータを指定した読み込み
 read_tide_level(.year = 2020, .month = 2, .stn = "TK")
+```
+
+``` r
+# ローカルに保存したファイルの読み込み（パスを指定）
+read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+#> New names:
+#> New names:
+#> New names:
+#> New names:
+#> • `hm` -> `hm...1`
+#> • `hm` -> `hm...2`
+#> • `hm` -> `hm...3`
+#> • `hm` -> `hm...4`
+#> # A tibble: 1 × 42
+#>   hry_00 hry_01 hry_02 hry_03 hry_04 hry_05 hry_06 hry_07 hry_08 hry_09 hry_10
+#>     [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]
+#> 1    128    127    122    115    107    102    101    106    117    132    146
+#> # ℹ 31 more variables: hry_11 [cm], hry_12 [cm], hry_13 [cm], hry_14 [cm],
+#> #   hry_15 [cm], hry_16 [cm], hry_17 [cm], hry_18 [cm], hry_19 [cm],
+#> #   hry_20 [cm], hry_21 [cm], hry_22 [cm], hry_23 [cm], date <date>, stn <chr>,
+#> #   low_tide_hm_obs1 <time>, low_tide_level_obs1 [cm],
+#> #   high_tide_hm_obs1 <time>, high_tide_level_obs1 [cm],
+#> #   low_tide_hm_obs2 <time>, low_tide_level_obs2 [cm],
+#> #   high_tide_hm_obs2 <time>, high_tide_level_obs2 [cm], …
 ```
 
 ### 震度データベース
