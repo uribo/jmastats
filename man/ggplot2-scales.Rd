@@ -29,7 +29,6 @@ A \code{ScaleContinuous} object that can be added to a \code{ggplot} object
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \examples{
-\donttest{
 # d <-
 # jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
 # parse_unit()
@@ -46,5 +45,4 @@ ggplot(d, aes(date, precipitation_sum,
   geom_bar(stat = "identity") +
   scale_color_jma_absolute(type = "precipitation") +
   scale_fill_jma_absolute(type = "precipitation")
-}
 }

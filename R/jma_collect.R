@@ -39,14 +39,15 @@
 #' for each location.
 #' @examples
 #' \donttest{
-#' jma_collect(item = "annually", "1284", year = 2017, month = 11)
-#' # daily
-#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11)
-#' jma_collect(item = "daily", "0422", year = 2017, month = 11)
-#' # hourly
-#' jma_collect("hourly", "0010", 2018, 7, 30)
-#' # ranking
-#' jma_collect("rank", block_no = "47646", year = 2020)
+#' # Annually
+#' jma_collect(item = "annually", "1284", year = 2017, month = 11, cache = FALSE)
+#' # Daily
+#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11, cache = FALSE)
+#' jma_collect(item = "daily", "0422", year = 2017, month = 11, cache = FALSE)
+#' # Hourly
+#' jma_collect("hourly", "0010", 2018, 7, 30, cache = FALSE)
+#' # Historical Ranking
+#' jma_collect("rank", block_no = "47646", year = 2020, cache = FALSE)
 #' }
 #' @export
 #' @return a `tbl` object

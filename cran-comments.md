@@ -12,6 +12,7 @@
 * This is a new release (re-submit).
 * Remove `VignetteBuilder` filed in DESCRIPTION.
 * Removed functions and example handling of the user's home file space.
+* Changed to execute all examples except those that take more than 5 seconds to get execution results due to http requests.
 * checking data for non-ASCII characters ... NOTE
   Note: found 16726 marked UTF-8 strings
 * checking CRAN incoming feasibility ... [18s] NOTE
