@@ -1,5 +1,8 @@
 #' Parse data variable units
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param data data
 #' @param rename *logical*
 #' @importFrom dplyr bind_cols select
@@ -7,7 +10,16 @@
 #' @importFrom stringr str_subset
 #' @importFrom tidyselect all_of where
 #' @importFrom units as_units
+#' @examples
+#' # For data retrieved with jma_collect(), here is a minimal example.
+#' d <-
+#' tibble::tibble(date = as.Date(c(17742, 17742, 17742, 17742, 17742, 17742), origin = "1970-01-01"),
+#'                time = c(1, 2, 3, 4, 5, 6),
+#'                `precipitation(mm)` = c(0, 0, 0, 0, 0, 0),
+#'                `temperature(℃)` = c(22.4, 22.1, 21, 20.2, 20.4, 23.5))
+#' d |> parse_unit(rename = TRUE)
 #' @export
+#' @return a `tbl` object
 parse_unit <- function(data, rename = TRUE) {
 
   original_vars <-

@@ -7,16 +7,22 @@
 <!-- badges: end -->
 
 jmastats
-は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイトで公開される気象、海洋等の各種データをR上で扱えるようにするパッケージです。
+は[気象庁](https://www.jma.go.jp/jma/index.html)のウェブサイトで公開される気象、地震、海洋等の各種データをR上で扱うためのパッケージです。
 
 ## インストール
 
-パッケージはCRANに登録されていません。次のコマンドを実行することでインストールが行われます。
+CRANからインストールが可能です。
+
+``` r
+install.packages("jmastats")
+```
+
+開発版を利用したい場合は次のコマンドを実行することでインストールが行われます。
 
 ``` r
 install.packages(
    "jmastats", 
-   repos = c(mm = "https://uribo.r-universe.dev", getOption("repos")))
+   repos = c(uribo = "https://uribo.r-universe.dev", getOption("repos")))
 ```
 
 ## 特徴
@@ -38,14 +44,25 @@ library(jmastats)
 と対象の年 `year` 月 `month` 日 `day`を必要に応じて与えて実行します。
 
 ``` r
+# データの種類: hourly (１時間ごとの値)
+# ブロック番号: 47646 （「つくば」）
+# 対象年月日: 2022年1月1日
 jma_collect(item = "hourly", block_no = 47646, year = 2022, month = 1, day = 1)
 ```
 
 `block_no` が不明の時は
-対象地点の緯度経度を元に`nearest_station()`で検索できます。
+対象地点の緯度経度を元に`nearest_station()`関数や後述の気象観測地点データから検索できます。
 
 ``` r
+# 任意の緯度経度座標から最寄りの観測所と座標との距離を出力
 nearest_station(longitude = 140.112, latitude = 36.083)
+```
+
+ユーザーが任意の地点、項目、期間等の組みあわせで出力可能な、`過去の気象データ`のcsvファイルを読み込む関数として`read_jma_weather()`関数が利用できます。
+
+``` r
+# ダウンロードしたcsvファイルのパスを与えて実行します
+read_jma_weather(system.file("dummy/dl_data.csv", package = "jmastats"))
 ```
 
 ### 台風資料
@@ -97,12 +114,45 @@ read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |
   track_combine(group_vars = "storm_name")
 ```
 
+### 気象庁防災情報XMLフォーマット
+
+``` r
+read_kishou_feed("high", type = "regular")
+
+read_kishou_feed("low", "other")
+```
+
 ### 潮汐観測資料
 
 ``` r
+# URLを指定しての読み込み
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
-
+# URLを構成するパラメータを指定した読み込み
 read_tide_level(.year = 2020, .month = 2, .stn = "TK")
+```
+
+``` r
+# ローカルに保存したファイルの読み込み（パスを指定）
+read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+#> New names:
+#> New names:
+#> New names:
+#> New names:
+#> • `hm` -> `hm...1`
+#> • `hm` -> `hm...2`
+#> • `hm` -> `hm...3`
+#> • `hm` -> `hm...4`
+#> # A tibble: 1 × 42
+#>   hry_00 hry_01 hry_02 hry_03 hry_04 hry_05 hry_06 hry_07 hry_08 hry_09 hry_10
+#>     [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]   [cm]
+#> 1    128    127    122    115    107    102    101    106    117    132    146
+#> # ℹ 31 more variables: hry_11 [cm], hry_12 [cm], hry_13 [cm], hry_14 [cm],
+#> #   hry_15 [cm], hry_16 [cm], hry_17 [cm], hry_18 [cm], hry_19 [cm],
+#> #   hry_20 [cm], hry_21 [cm], hry_22 [cm], hry_23 [cm], date <date>, stn <chr>,
+#> #   low_tide_hm_obs1 <time>, low_tide_level_obs1 [cm],
+#> #   high_tide_hm_obs1 <time>, high_tide_level_obs1 [cm],
+#> #   low_tide_hm_obs2 <time>, low_tide_level_obs2 [cm],
+#> #   high_tide_hm_obs2 <time>, high_tide_level_obs2 [cm], …
 ```
 
 ### 震度データベース
@@ -143,6 +193,14 @@ data("stations", package = "jmastats")
 | 官   | 地上気象観測装置   | 降水量、気温、風向、風速、日照時間（一部の観測所を除く）、積雪の深さ（一部の観測所を除く） |
 | 雨   | 有線ロボット気象計 | 降水量                                                                                     |
 | 雪   | 有線ロボット積雪計 | 積雪量                                                                                     |
+
+## 引用
+
+このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
+
+> Uryu S (2023). *jmastats: Download Weather Data from Japan
+> Meteorological Agency Website*. R package version 0.2.0,
+> <https://github.com/uribo/jmastats>.
 
 ## 関連するパッケージ
 

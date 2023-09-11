@@ -1,6 +1,9 @@
 #' Read RSMC Tokyo-Typhoon Center's best track data
 #'
-#' @description Tidy formatting best track data and combine each point to line.
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Tidy formatting best track data and combine each point to line.
 #' @details
 #' * `read_rsmc_besttrack()`: Read single best track data into [sf][sf::st_sf]
 #' contains observation record as point.
@@ -20,11 +23,15 @@
 #' @importFrom tibble as_tibble
 #' @importFrom tidyr extract
 #' @importFrom utils read.table
-#' @details See <https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm> for more details.
+#' @seealso <https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/RSMC_HP.htm>
 #' @rdname track
 #' @examples
 #' read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats"))
+#'
+#' read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |>
+#'   track_combine()
 #' @export
+#' @return a `tbl` object
 read_rsmc_besttrack <- function(path) {
 
   last_update <- international_number <- storm_name <-

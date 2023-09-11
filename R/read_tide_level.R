@@ -1,18 +1,25 @@
 #' Read and parse tide level text data
 #'
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' @param path URL or local file path to sea tide level file
 #' @param .year A.D. 1997 to present year.
 #' @param .month Month number. 1997 only, valid after March.
 #' @param .stn Station identification name in uppercase two-digit letters.
 #' @param raw If *TRUE*, return raw format data
-#' @seealso [https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html](https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html)
+#' @seealso <https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/readme.html>
 #' @examples
-#' \dontrun{
+#' # Read a local storage file (dummy data)
+#' read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+#' \donttest{
+#' # Request from URL
 #' read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
-#'
+#' # Request from parameters
 #' read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 #' }
 #' @export
+#' @return a `tbl` object
 read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
   if (is.null(path)) {
     path <-
@@ -43,7 +50,7 @@ read_tide_level <- function(path = NULL, .year, .month, .stn, raw = FALSE) {
 }
 
 request_tide_level_url <- function(.year, .month, .stn) {
-  jma_site <-
+  jma_site <- # nolint
     "https://www.data.jma.go.jp"
   year <-
     check_input_tidal_year(.year)

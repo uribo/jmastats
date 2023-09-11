@@ -1,9 +1,15 @@
 #' Read the past weather
-#' @description Read the past weather data files downloaded from JMA.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Read the past weather data files downloaded from JMA.
 #' @param path The path to the downloaded file.
-#' @seealso [https://www.data.jma.go.jp/gmd/risk/obsdl/index.php](https://www.data.jma.go.jp/gmd/risk/obsdl/index.php),
-#' [https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html](https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html)
+#' @seealso <https://www.data.jma.go.jp/gmd/risk/obsdl/index.php>,
+#' <https://www.data.jma.go.jp/gmd/risk/obsdl/top/help3.html>
+#' @examples
+#' read_jma_weather(system.file("dummy/dl_data.csv", package = "jmastats"))
 #' @export
+#' @return a `tbl` object
 read_jma_weather <- function(path) {
   var_st_names <-
     station_head_info(path)

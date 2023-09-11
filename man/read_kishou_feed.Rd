@@ -14,10 +14,10 @@ long term ("low")}
 See details for the items.}
 }
 \value{
-data.frame
+a \code{tbl} object
 }
 \description{
-Read Kishou Disaster Prevention Information Feed
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 }
 \details{
 The following items can be specified in the type argument.
@@ -29,11 +29,11 @@ The following items can be specified in the type argument.
 }
 }
 \examples{
-\dontrun{
+\donttest{
 read_kishou_feed("high", type = "regular")
 read_kishou_feed("low", "other")
 }
 }
 \seealso{
-\url{https://xml.kishou.go.jp/index.html}
+\url{https://xml.kishou.go.jp}
 }

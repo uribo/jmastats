@@ -1,14 +1,15 @@
 #' Find out neighborhood stations
 #'
-#' @description Return the nearest [stations] information
-#' to the given coordinates.
+#' @description
+#' `r lifecycle::badge("stable")`
+#'
+#' Return the nearest [stations] information to the given coordinates.
 #'
 #' @details
 #' * `nearest_station()`: Return single station data.
 #' * `pick_neighbor_stations()`: Pick-up neighbourhood stations.
 #' * `pick_neighbor_tide_stations()`: Pick-up neighbourhood tidal observation stations.
 #' Filter by distance from target point.
-#' @return sf
 #' @param longitude Longitude.
 #' @param latitude Latitude.
 #' @param geometry XY [sf::sf] object.
@@ -22,7 +23,6 @@
 #' @importFrom sf st_distance st_point st_set_geometry st_sfc
 #' @importFrom units as_units set_units
 #' @examples
-#' \dontrun{
 #' nearest_station(142.9313, 43.70417)
 #'
 #' pick_neighbor_stations(140.10, 36.08, 300000)
@@ -35,7 +35,6 @@
 #' pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
 #'                             year = 2020,
 #'                             distance = 100, .unit = "km")
-#' }
 #' @name nearest_station
 NULL
 
@@ -45,6 +44,7 @@ NULL
   area <- distance <- NULL
 
 #' @rdname nearest_station
+#' @return an object of class `sf`.
 #' @export
 nearest_station <- function(longitude, latitude, geometry = NULL) {
   coords <-
@@ -99,16 +99,18 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
     sf::st_point(c(coords$longitude,
                    coords$latitude)),
     crs = 4326)
-  stations[which(sf::st_is_within_distance(
-    coords,
-    stations,
-    dist = units::as_units(distance, value = unit),
-    sparse = FALSE)[1, ]), ] |>
-    dplyr::mutate(
-      distance = sf::st_distance(
-        geometry,
-        coords)[, 1]
-    ) |>
+  tgt_st <-
+    stations[which(sf::st_is_within_distance(
+      coords,
+      stations,
+      dist = units::as_units(distance, value = unit),
+      sparse = FALSE)[1, ]), ]
+  tgt_st$distance <-
+    sf::st_distance(
+      coords,
+      sf::st_transform(tgt_st$geometry, 4326),
+      by_element = FALSE)[1, ]
+  tgt_st |>
     dplyr::select(
       area,
       station_no,
@@ -141,6 +143,7 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
                                            stations,
                                            dist = units::as_units(distance, value = unit),
                                            sparse = FALSE)[1, ]), ] |>
+    sf::st_transform(crs = 4326) |>
     dplyr::mutate(distance = sf::st_distance(
       geometry,
       coords)[, 1]) |>

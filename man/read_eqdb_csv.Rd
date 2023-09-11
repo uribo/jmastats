@@ -12,8 +12,11 @@ read_eqdb_csv(path, show_metadata = TRUE)
 \item{show_metadata}{logical. If \emph{FALSE}, returns only the values
 observed at each location.}
 }
+\value{
+a \code{tbl} object
+}
 \description{
-Read the csv of the earthquake database
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
 read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))

@@ -1,4 +1,8 @@
 #' Scales to use for ggplot2
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' @param type Display item
 #' @param ... Arguments to pass on to [ggplot2::scale_color_gradientn] or
 #' [ggplot2::scale_fill_gradientn]
@@ -7,22 +11,19 @@
 #' @name ggplot2-scales
 #' @rdname ggplot2-scales
 #' @examples
-#' \dontrun{
-#' library(dplyr)
 #' d <-
-#' jma_collect("daily", block_no = "47646", year = 2017, month = 9, pack = FALSE) |>
-#' select(date, `precipitation_sum(mm)`, starts_with("temperature"), starts_with("sunshine")) |>
-#' parse_unit()
+#' data.frame(
+#'   date = as.Date(c(17410, 17411, 17412, 17413, 17414, 17415), origin = "1970-01-01"),
+#'   precipitation_sum = units::set_units(c(3.5, 9.5, 0, 0, 0, 5), "mm"))
 #'
 #' library(ggplot2)
 #' library(units)
-#' ggplot(d, aes(date, precipitation_sum_mm,
-#'           color = units::drop_units(precipitation_sum_mm),
-#'           fill = units::drop_units(precipitation_sum_mm))) +
+#' ggplot(d, aes(date, precipitation_sum,
+#'           color = drop_units(precipitation_sum),
+#'           fill = drop_units(precipitation_sum))) +
 #'   geom_bar(stat = "identity") +
 #'   scale_color_jma_absolute(type = "precipitation") +
 #'   scale_fill_jma_absolute(type = "precipitation")
-#' }
 #' @export
 scale_color_jma_absolute <- function(type = "precipitation", ...) {
 

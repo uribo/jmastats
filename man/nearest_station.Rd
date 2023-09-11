@@ -40,11 +40,12 @@ This value is passed to \link[units:units]{units::as_units}.}
 \item{year}{For tide level data. Restricted to the observation points in the target year.}
 }
 \value{
-sf
+an object of class \code{sf}.
 }
 \description{
-Return the nearest \link{stations} information
-to the given coordinates.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+
+Return the nearest \link{stations} information to the given coordinates.
 }
 \details{
 \itemize{
@@ -55,7 +56,6 @@ Filter by distance from target point.
 }
 }
 \examples{
-\dontrun{
 nearest_station(142.9313, 43.70417)
 
 pick_neighbor_stations(140.10, 36.08, 300000)
@@ -68,5 +68,4 @@ pick_neighbor_stations(geometry = sf::st_point(c(140.1833, 36.23333)),
 pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
                             year = 2020,
                             distance = 100, .unit = "km")
-}
 }

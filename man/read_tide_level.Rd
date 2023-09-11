@@ -17,13 +17,19 @@ read_tide_level(path = NULL, .year, .month, .stn, raw = FALSE)
 
 \item{raw}{If \emph{TRUE}, return raw format data}
 }
+\value{
+a \code{tbl} object
+}
 \description{
-Read and parse tide level text data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
-\dontrun{
+# Read a local storage file (dummy data)
+read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
+\donttest{
+# Request from URL
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
-
+# Request from parameters
 read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 }
 }

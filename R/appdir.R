@@ -1,9 +1,18 @@
-#' Remove cache files
+#' Remove all cache files
 #'
-#' @description Remove all package cache files.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Remove all package cache files.
+#' @importFrom utils askYesNo
+#' @examples
+#' if (interactive())
+#'   reset_cache()
 #' @rdname reset_cache
 #' @export
+#' @return None
 reset_cache <- function() {
+if (utils::askYesNo("Delete all cache files. Is it OK?"))
   unlink(rappdirs::user_cache_dir("jmastats"),
          recursive = TRUE)
 }
@@ -22,10 +31,8 @@ pick_out_cache <- function(item = NULL,
 }
 
 search_cache_file <- function(item, station_type, param) {
-  cache_dir <- rappdirs::user_cache_dir("jmastats")
-  if (!file.exists(cache_dir)) {
-    dir.create(cache_dir, recursive = TRUE)
-  }
+  cache_dir <-
+    rappdirs::user_cache_dir("jmastats")
   file.path(
       cache_dir,
       paste0(item, "_",

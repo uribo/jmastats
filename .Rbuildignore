@@ -1,8 +1,5 @@
-^\.env$
 ^jmastats\.Rproj$
 ^\.Rproj\.user$
-^Dockerfile$
-^docker-compose\.yml$
 ^data-raw$
 ^LICENSE\.md$
 ^\.DS_Store$
@@ -12,3 +9,5 @@
 ^\.github$
 ^inst/\.gitignore$
 ^inst/real$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

@@ -1,6 +1,8 @@
 #' Collect JMA Historical Weather Data
 #'
 #' @description
+#' `r lifecycle::badge("stable")`
+#'
 #' Refer to the data available in the JMA Historical Weather Data Search.
 #' Executed by specifying the target location and date.
 #' Currently, not all types of data acquisition are supported.
@@ -36,17 +38,19 @@
 #' - rank: Values of the largest in the history of observations
 #' for each location.
 #' @examples
-#' \dontrun{
-#' jma_collect(item = "annually", "1284", year = 2017, month = 11)
-#' # daily
-#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11)
-#' jma_collect(item = "daily", "0422", year = 2017, month = 11)
-#' # hourly
-#' jma_collect("hourly", "0010", 2018, 7, 30)
-#' # ranking
-#' jma_collect("rank", block_no = "47646", year = 2020)
+#' \donttest{
+#' # Annually
+#' jma_collect(item = "annually", "1284", year = 2017, month = 11, cache = FALSE)
+#' # Daily
+#' jma_collect(item = "daily", block_no = "0010", year = 2017, month = 11, cache = FALSE)
+#' jma_collect(item = "daily", "0422", year = 2017, month = 11, cache = FALSE)
+#' # Hourly
+#' jma_collect("hourly", "0010", 2018, 7, 30, cache = FALSE)
+#' # Historical Ranking
+#' jma_collect("rank", block_no = "47646", year = 2020, cache = FALSE)
 #' }
 #' @export
+#' @return a `tbl` object
 jma_collect <- function(item = NULL,
                         block_no, year, month, day,
                         cache = TRUE, pack = TRUE, quiet = FALSE) {
@@ -107,8 +111,7 @@ pack_df <- function(df, unpack = FALSE) {
   }
 }
 
-jma_collect_raw <- function(item = NULL,
-                        block_no, year, month, day, quiet) {
+jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
 
   target <-
     detect_target(item, block_no, year, month, day)
@@ -360,8 +363,7 @@ detect_station_info <- function(.blockid) {
                                                intToUtf8(c(32701, 30000)),
                                                intToUtf8(c(38745, 23713, 31354, 28207)),
                                                intToUtf8(c(26494, 23665, 21335, 21513, 30000)),
-                                               intToUtf8(c(36196, 27743))
-  ),
+                                               intToUtf8(c(36196, 27743))),
   # Special pattern
   "a",
   station_type)
@@ -419,9 +421,8 @@ note_vars <- function(var) {
 }
 
 note_message <- function(var) {
-  res <-
-    note_vars(var) |>
-    purrr::keep(~ length(.x) > 0)
+  note_vars(var) |>
+    purrr::keep(\(x) length(x) > 0)
 }
 
 jma_vars <- list(atmosphere = paste0("atmosphere_",

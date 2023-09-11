@@ -9,8 +9,16 @@ read_jma_weather(path)
 \arguments{
 \item{path}{The path to the downloaded file.}
 }
+\value{
+a \code{tbl} object
+}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Read the past weather data files downloaded from JMA.
+}
+\examples{
+read_jma_weather(system.file("dummy/dl_data.csv", package = "jmastats"))
 }
 \seealso{
 \url{https://www.data.jma.go.jp/gmd/risk/obsdl/index.php},

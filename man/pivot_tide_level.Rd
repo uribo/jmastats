@@ -10,16 +10,14 @@ pivot_tide_level(data)
 \item{data}{tidal level data}
 }
 \value{
-List to store two datasets. hourly observation data and tide.
+List to store two datasets containing hourly and tide level data.
 }
 \description{
-Convert and split tidal level data
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
 }
 \examples{
-\dontrun{
-read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt") |>
+read_tide_level(system.file("dummy/tide.txt", package = "jmastats")) |>
   pivot_tide_level()
-}
 }
 \seealso{
 \code{\link[=read_tide_level]{read_tide_level()}}

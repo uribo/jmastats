@@ -1,4 +1,7 @@
 #' Read Kishou Disaster Prevention Information Feed
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
 #' @param frequency Release frequency. Select either high frequency ("high") or
 #' long term ("low")
 #' @param type Feed type. Specify the item to be retrieved as a string.
@@ -8,13 +11,13 @@
 #' - extra: It will be announced at any time.
 #' - eqvol: Earthquakes and Volcanoes.
 #' - other: Other informations.
-#' @seealso [https://xml.kishou.go.jp/index.html](https://xml.kishou.go.jp/index.html)
+#' @seealso <https://xml.kishou.go.jp>
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' read_kishou_feed("high", type = "regular")
 #' read_kishou_feed("low", "other")
 #' }
-#' @return data.frame
+#' @return a `tbl` object
 #' @export
 read_kishou_feed <- function(frequency, type) {
   x <-

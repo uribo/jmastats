@@ -11,6 +11,18 @@ parse_unit(data, rename = TRUE)
 
 \item{rename}{\emph{logical}}
 }
+\value{
+a \code{tbl} object
+}
 \description{
-Parse data variable units
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#stable}{\figure{lifecycle-stable.svg}{options: alt='[Stable]'}}}{\strong{[Stable]}}
+}
+\examples{
+# For data retrieved with jma_collect(), here is a minimal example.
+d <-
+tibble::tibble(date = as.Date(c(17742, 17742, 17742, 17742, 17742, 17742), origin = "1970-01-01"),
+               time = c(1, 2, 3, 4, 5, 6),
+               `precipitation(mm)` = c(0, 0, 0, 0, 0, 0),
+               `temperature(℃)` = c(22.4, 22.1, 21, 20.2, 20.4, 23.5))
+d |> parse_unit(rename = TRUE)
 }

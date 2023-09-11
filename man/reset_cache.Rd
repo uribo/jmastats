@@ -2,10 +2,19 @@
 % Please edit documentation in R/appdir.R
 \name{reset_cache}
 \alias{reset_cache}
-\title{Remove cache files}
+\title{Remove all cache files}
 \usage{
 reset_cache()
 }
+\value{
+None
+}
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Remove all package cache files.
+}
+\examples{
+if (interactive())
+  reset_cache()
 }
