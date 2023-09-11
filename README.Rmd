@@ -162,9 +162,19 @@ data("stations", package = "jmastats")
 
 このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
 
-> Uryu S (2023). _jmastats: Download Weather Data from Japan
-  Meteorological Agency Website_. R package version 0.2.0,
-  <https://github.com/uribo/jmastats>.
+```{r}
+#| eval: true
+#| echo: false
+#| results: 'asis'
+print(citation("jmastats"), bibtex = FALSE)
+```
+
+```{r}
+#| eval: true
+#| echo: false
+#| comment: ""
+toBibtex(citation("jmastats"))
+```
 
 
 ## 関連するパッケージ
