@@ -4,6 +4,12 @@
 # jmastats <img src="man/figures/logo.png" align="right" width="120px" />
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/jmastats)](https://CRAN.R-project.org/package=jmastats)
+[![CRANlogs
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/jmastats)](https://cran.r-project.org/package=jmastats)
+[![DOI](https://zenodo.org/badge/515892382.svg)](https://zenodo.org/badge/latestdoi/515892382)
 <!-- badges: end -->
 
 jmastats
