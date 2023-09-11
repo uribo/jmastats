@@ -1,3 +1,5 @@
+# jmastats (development version)
+
 # jmastats 0.2.0
 
 * Initial release for CRAN.
