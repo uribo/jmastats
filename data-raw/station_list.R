@@ -1,6 +1,6 @@
 #####################################
 # Stations list
-# Last Update: 2023-07-27 (適用日：2023年3月23日)
+# Last Update: 2023-09-12 (適用日：2023年8月24日)
 # 1. 地上気象観測地点,地域気象観測所
 # 2. 潮位観測地点
 # 3. 震度観測点
@@ -19,7 +19,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 地上気象観測地点 https://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  if (!file.exists(here::here("data-raw/ame_master_20221122.csv"))) {
+  if (!file.exists(here::here("data-raw/ame_master_20230824.csv"))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
     #   html_elements(css = "#contents_area2 > div > font > table") |>
@@ -37,7 +37,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   }
   df_amedas_master <-
     read.csv(
-      here::here("data-raw/ame_master_20230323.csv"),
+      here::here("data-raw/ame_master_20230824.csv"),
       fileEncoding = "cp932",
       stringsAsFactors = FALSE) %>% # magrittr
     assertr::verify(dim(.) == c(1316, 17)) |>
@@ -124,15 +124,13 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
            station = stringr::str_remove(station, "（.+）")) |>
     dplyr::rename(station_name = station)
 
-  # 現在も観測が行われているものに制限される
-  # 例) ピヤシリ山 (block_no=0007)は除外
-
   # https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no=50&block_no=&year=&month=&day=&view=
   df_stations |>
     filter(station_name == "三倉") |>
     ensurer::ensure(nrow(.) == 2L) # 2地点でOK
   df_amedas_master |>
-    filter(station_name == "高知")
+    filter(station_name == "高知") |>
+    ensurer::ensure(nrow(.) == 2L) # 2地点でOK
 
   stations <-
     df_amedas_master |>
@@ -146,15 +144,17 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
       dplyr::across(.cols = c(area, station_type, station_name,
                               address, observation_begin, note1, note2,
                               katakana),
-                    .fns = ~ stringi::stri_conv(.x, to = "UTF8"),
+                    .fns =  \(x) stringi::stri_conv(x, to = "UTF8"),
                     .names = "{.col}")) %>%
     tibble::new_tibble(nrow = nrow(.), class = "sf") %>%
-    verify(nrow(.) == 1323L)
+    assertr::verify(nrow(.) == 1323L)
 
-  df_amedas_master |>
-    filter(station_name == "高知")
-  stations |>
-    filter(station_name %in% c("高知", "えびの高原"))
+  # 現在も観測が行われているものに制限される
+  # 例) ピヤシリ山 (block_no=0007)は除外
+  # df_stations |> filter(station_name == "ピヤシリ山")
+  # df_amedas_master |> filter(station_name == "ピヤシリ山")
+  # stations |> filter(station_name == "ピヤシリ山")
+
   stations |>
     readr::write_rds("data-raw/amedas_raw.rds")
 } else {
@@ -168,6 +168,7 @@ ne_jpn <-
   arrange(iso_3166_2) |>
   select(iso_3166_2) |>
   mutate(pref_code = stringr::str_remove(iso_3166_2, "JP-"),
+         geometry,
          .keep = "none")
 
 stations <-
@@ -309,18 +310,40 @@ prefecture_code <- c(`13061` = "01",
                      `91151` = "47",
                      `94036` = "47",
                      `94121` = "47",
-                     `94116` = "47")
+                     `94116` = "47") |>
+  ensurer::ensure(length(.) == 134L)
 
-# stations %>%
-#   filter(is.na(pref_code)) %>%
-#   nrow()
-#
-# length(prefecture_code)
-#
-# stations %>%
-#   filter(station_no == 94116) %>%
+pref_code_missing <-
+  stations |>
+  filter(is.na(pref_code)) |>
+  ensurer::ensure(nrow(.) == 96L) |>
+  pull(station_no)
+# NAの例
+# stations |>
+#   filter(station_no == 94116) |>
 #   select(area, station_name, pref_code)
-#
+
+pref_code_missing[!pref_code_missing %in% names(prefecture_code)] |>
+  ensurer::ensure(length(.) == 0L)
+
+pref_code_missing[pref_code_missing %in% names(prefecture_code)]
+
+# 変更によって重複がないか確認
+# stations |>
+#   filter(station_no %in% names(prefecture_code)) |>
+#   filter(!is.na(pref_code)) |>
+#   select(area, station_no, station_name, pref_code) |>
+#   st_drop_geometry() |>
+#   left_join(
+#     tibble::tibble(
+#       station_no = as.integer(names(prefecture_code)),
+#       pref_code_mod = prefecture_code
+#     ),
+#     by = join_by(station_no),
+#     relationship = "many-to-many") |>
+#   distinct(station_no, station_name, pref_code, .keep_all = TRUE) |>
+#   count(station_no, station_name, sort = TRUE)
+
 # stations |>
 #   filter(!is.na(pref_code)) |>
 #   filter(station_no %in% names(prefecture_code)) |>
@@ -360,7 +383,7 @@ stations <-
 
 usethis::use_data(stations, overwrite = TRUE)
 
-# 2. 潮位観測 ---------------------------------------------------------------------
+# 2. 潮位観測（2023-01-01） ---------------------------------------------------------------------
 # ref) https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php
 # https://www.jma.go.jp/jp/choi/list1.html
 library(parzer)
@@ -395,7 +418,7 @@ tide_station <-
   purrr::set_names(c("year", "id", "stn", "station_name",
                      "address", "latitude", "longitude", "type")) |>
   mutate(across(c(longitude, latitude),
-                .fns = list(~ stringr::str_replace_all(.,
+                .fns = list(\(x) stringr::str_replace_all(x,
                                                        c("\u309c" = "\u00b0"))),
                 .names = "{.col}")) |>
   mutate(longitude = parzer::parse_lon(longitude),
@@ -406,7 +429,7 @@ tide_station <-
 usethis::use_data(tide_station, overwrite = TRUE)
 
 
-# 3. 震度観測点 ----------------------------------------------------------------
+# 3. 震度観測点 (2023年7月13日) ----------------------------------------------------------------
 x <-
   rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x |>
@@ -426,7 +449,7 @@ earthquake_station <-
                     .fns = as.character))
   ) |>
   purrr::list_rbind(names_to = "prefecture") %>% # magrittr
-  verify(dim(.) == c(1119, 10)) |>
+  assertr::verify(dim(.) == c(1119, 10)) |>
   readr::type_convert(col_types = "ccccididcc") |>
   purrr::set_names(c("prefecture", "area", "station_name", "address",
                      "lat_do", "lat_fun",
@@ -442,7 +465,7 @@ earthquake_station <-
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) |>
   sf::st_transform(crs = 4326) |>
   select(!c(ends_with("_do"), ends_with("_fun"))) %>% # magrittr
-  verify(dim(.) == c(1119, 7)) |>
+  assertr::verify(dim(.) == c(1119, 7)) |>
   filter(is.na(observation_end)) |>
   ensurer::ensure(nrow(.) == 671L)
 

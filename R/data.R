@@ -2,7 +2,7 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's Stations list
 #'
-#' @description This data corresponds to the March 23, 2023 update.
+#' @description This data corresponds to the October 24, 2023 update.
 #' @format A data frame with 1323 rows 14 variables:
 #' \itemize{
 #'   \item{area}
