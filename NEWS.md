@@ -1,5 +1,9 @@
 # jmastats (development version)
 
+## Datasets
+
+* Various datasets handled by the package have been updated to the latest version in September 2023.
+
 # jmastats 0.2.0
 
 * Initial release for CRAN.

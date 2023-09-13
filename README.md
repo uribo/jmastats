@@ -184,7 +184,10 @@ read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
 
 ### データセット
 
-**気象観測地点**
+#### 気象観測地点
+
+気象データを取得するための`block_no`はここからも調べることができます。
+観測地点の配置された標高や観測種目のほか、観測地点の位置情報が含まれます。
 
 ``` r
 data("stations", package = "jmastats")
@@ -200,22 +203,43 @@ data("stations", package = "jmastats")
 | 雨   | 有線ロボット気象計 | 降水量                                                                                     |
 | 雪   | 有線ロボット積雪計 | 積雪量                                                                                     |
 
+#### 潮位観測地点
+
+潮位観測を行う地点についてのデータです。
+stn変数の情報をもとにして、`read_tide_level()`での潮位観測記録の取得が行えます。
+
+``` r
+data("tide_station", package = "jmastats")
+```
+
+#### 震度観測点
+
+地震・津波を観測するためのポイントを記録したデータです。震度観測点は気象庁のほかに各地方公共団体や国立研究開発法人防災科学技術研究所の観測地点が設置されていますが、このデータには気象庁が管理する地点だけが含まれます。
+
+``` r
+data("earthquake_station", package = "jmastats")
+```
+
 ## 引用
 
 このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
 
+    #> Warning in citation("jmastats"): could not determine year for 'jmastats' from
+    #> package DESCRIPTION file
+
 To cite package ‘jmastats’ in publications use:
 
-Uryu S (2023). *jmastats: Download Weather Data from Japan
-Meteorological Agency Website*. R package version 0.2.0,
-<https://CRAN.R-project.org/package=jmastats>.
+Uryu S (????). *jmastats: Download Weather Data from Japan
+Meteorological Agency Website*. R package version 0.2.0.9000,
+<https://github.com/uribo/jmastats>.
 
+    Warning in citation("jmastats"): could not determine year for 'jmastats' from
+    package DESCRIPTION file
     @Manual{,
       title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
       author = {Shinya Uryu},
-      year = {2023},
-      note = {R package version 0.2.0},
-      url = {https://CRAN.R-project.org/package=jmastats},
+      note = {R package version 0.2.0.9000},
+      url = {https://github.com/uribo/jmastats},
     }
 
 ## 関連するパッケージ
