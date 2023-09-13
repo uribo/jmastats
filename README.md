@@ -224,22 +224,18 @@ data("earthquake_station", package = "jmastats")
 
 このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
 
-    #> Warning in citation("jmastats"): could not determine year for 'jmastats' from
-    #> package DESCRIPTION file
+    Uryu S (2023). _jmastats: Download Weather Data from Japan Meteorological
+    Agency Website_. R package version 0.2.0,
+    <https://CRAN.R-project.org/package=jmastats>.
 
-To cite package ‘jmastats’ in publications use:
+または
 
-Uryu S (????). *jmastats: Download Weather Data from Japan
-Meteorological Agency Website*. R package version 0.2.0.9000,
-<https://github.com/uribo/jmastats>.
-
-    Warning in citation("jmastats"): could not determine year for 'jmastats' from
-    package DESCRIPTION file
     @Manual{,
       title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
       author = {Shinya Uryu},
-      note = {R package version 0.2.0.9000},
-      url = {https://github.com/uribo/jmastats},
+      year = {2023},
+      note = {R package version 0.2.0},
+      url = {https://CRAN.R-project.org/package=jmastats},
     }
 
 ## 関連するパッケージ
