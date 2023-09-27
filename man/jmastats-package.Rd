@@ -13,6 +13,7 @@ Provides features that allow users to download weather data published by the Jap
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://uribo.github.io/jmastats/}
   \item \url{https://github.com/uribo/jmastats}
   \item Report bugs at \url{https://github.com/uribo/jmastats/issues}
 }

@@ -16,7 +16,7 @@ Depends:
     R (>= 4.1)
 License: MIT + file LICENSE
 BugReports: https://github.com/uribo/jmastats/issues
-URL: https://github.com/uribo/jmastats
+URL: https://uribo.github.io/jmastats/, https://github.com/uribo/jmastats
 Imports: 
     cli (>= 3.4.0),
     crayon (>= 1.3.4),
