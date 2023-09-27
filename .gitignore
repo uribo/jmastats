@@ -9,3 +9,4 @@ data-raw/*.csv
 *.xlsx
 *.zip
 inst/besttrack/
+docs
