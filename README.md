@@ -163,7 +163,7 @@ read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
 
 ### 震度データベース
 
-[震度データベース検索](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)よりダウンロードしたcscvファイルを読み込む関数として`read_eqdb_csv()`があります。ダミーデータを読み込む例を示します。
+[震度データベース検索](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)よりダウンロードしたcsvファイルを読み込む関数として`read_eqdb_csv()`があります。ダミーデータを読み込む例を示します。
 
 ``` r
 read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
