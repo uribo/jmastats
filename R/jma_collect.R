@@ -153,7 +153,15 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
   } else if (item == "rank") {
     value <- period <- NULL
     df <-
-      df_raw[[3]]
+      df_raw |>
+      purrr::keep(function(x) nrow(x) > 1)
+    if (length(df) == 1L) {
+      df <-
+        df[[1]]
+    } else {
+      df <-
+        df[[length(df)]]
+    }
     df <-
       df |>
       tidyr::pivot_longer(cols = -c(1, ncol(df)),

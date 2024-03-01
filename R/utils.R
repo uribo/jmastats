@@ -131,7 +131,7 @@ split_period_char <- function(x) {
                             intToUtf8(24180),
                             "))"),
                      simplify = TRUE) |>
-    purrr::discard(~ stringr::str_length(.x) == 0)
+    purrr::discard(function(x) stringr::str_length(x) == 0)
 }
 
 glue_split_period_char <- function(x, collapse = "_") {
