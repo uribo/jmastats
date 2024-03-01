@@ -50,7 +50,7 @@ test_that("check stations statement", {
 test_that("tidal station", {
   expect_equal(
     dim(tide_station),
-    c(1879, 7)
+    c(1949, 7)
   )
 })
 

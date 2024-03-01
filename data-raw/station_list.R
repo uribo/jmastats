@@ -1,9 +1,9 @@
 #####################################
 # Stations list
-# Last Update: 2023-09-12 (適用日：2023年8月24日)
-# 1. 地上気象観測地点,地域気象観測所
-# 2. 潮位観測地点
-# 3. 震度観測点
+# Last Update: 2024-03-02
+# 1. 地上気象観測地点,地域気象観測所 (適用日：2024年1月25日)
+# 2. 潮位観測地点（2024-01-01）
+# 3. 震度観測点 (2024年1月10日)
 #####################################
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
@@ -19,7 +19,8 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 地上気象観測地点 https://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  if (!file.exists(here::here("data-raw/ame_master_20230824.csv"))) {
+  ame_master <- "ame_master_20240125.csv"
+  if (!file.exists(here::here(stringr::str_glue("data-raw/{ame_master}")))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
     #   html_elements(css = "#contents_area2 > div > font > table") |>
@@ -37,7 +38,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   }
   df_amedas_master <-
     read.csv(
-      here::here("data-raw/ame_master_20230824.csv"),
+      here::here(stringr::str_glue("data-raw/{ame_master}")),
       fileEncoding = "cp932",
       stringsAsFactors = FALSE) %>% # magrittr
     assertr::verify(dim(.) == c(1316, 17)) |>
@@ -112,13 +113,13 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     purrr::map(
       read_block_no) |>
     purrr::list_rbind() %>% # magrittr
-    assertr::verify(dim(.) == c(1676, 3))
+    assertr::verify(dim(.) == c(1677, 3))
   df_stations <-
     df_stations_raw |>
     dplyr::left_join(df_prec_no,
                      by = dplyr::join_by(prec_no)) |>
     dplyr::mutate(area = stringr::str_remove(area, "地方")) %>% # magrittr
-    assertr::verify(dim(.) == c(1676, 4)) |>
+    assertr::verify(dim(.) == c(1677, 4)) |>
     dplyr::mutate(area = stringr::str_remove(area, "(都|府|県)$"),
            # area = dplyr::if_else(station == "竜王山", "徳島", area),
            station = stringr::str_remove(station, "（.+）")) |>
@@ -383,11 +384,10 @@ stations <-
 
 usethis::use_data(stations, overwrite = TRUE)
 
-# 2. 潮位観測（2023-01-01） ---------------------------------------------------------------------
+# 2. 潮位観測 ---------------------------------------------------------------------
 # ref) https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php
 # https://www.jma.go.jp/jp/choi/list1.html
 library(parzer)
-library(httr)
 
 years <-
   seq.int(1997, lubridate::year(lubridate::now()))
@@ -424,17 +424,17 @@ tide_station <-
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) |>
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>% # magrittr
-  assertr::verify(dim(.) == c(1879, 7))
+  assertr::verify(dim(.) == c(1949, 7))
 
 usethis::use_data(tide_station, overwrite = TRUE)
 
 
-# 3. 震度観測点 (2023年7月13日) ----------------------------------------------------------------
+# 3. 震度観測点 ----------------------------------------------------------------
 x <-
   rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x |>
   rvest::html_element(css = "#main > h1") |>
-  rvest::html_text() # 令和5年7月13日現在
+  rvest::html_text() # 令和6年1月10日現在
 
 earthquake_station <-
   x |>
@@ -449,7 +449,7 @@ earthquake_station <-
                     .fns = as.character))
   ) |>
   purrr::list_rbind(names_to = "prefecture") %>% # magrittr
-  assertr::verify(dim(.) == c(1119, 10)) |>
+  assertr::verify(dim(.) == c(1123, 10)) |>
   readr::type_convert(col_types = "ccccididcc") |>
   purrr::set_names(c("prefecture", "area", "station_name", "address",
                      "lat_do", "lat_fun",
@@ -465,7 +465,7 @@ earthquake_station <-
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) |>
   sf::st_transform(crs = 4326) |>
   select(!c(ends_with("_do"), ends_with("_fun"))) %>% # magrittr
-  assertr::verify(dim(.) == c(1119, 7)) |>
+  assertr::verify(dim(.) == c(1123, 7)) |>
   filter(is.na(observation_end)) |>
   ensurer::ensure(nrow(.) == 671L)
 
