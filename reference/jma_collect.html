@@ -230,13 +230,6 @@ for each location.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall(cm)` = <span style="color: #00BB00;">col_double()</span>,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_depth(cm)` = <span style="color: #00BB00;">col_double()</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `wind_max_speed_direction(m/s)` = <span style="color: #BB0000;">col_character()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `wind_max_instantaneous_direction(m/s)` = <span style="color: #BB0000;">col_character()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `wind_direction_frequency(m/s)` = <span style="color: #BB0000;">col_character()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 30 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    date       precipitation$`sum(mm)` $`max_1hour(mm)` temperature$`average(℃)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -293,11 +286,6 @@ for each location.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall(cm)` = <span style="color: #BBBB00;">col_logical()</span>,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_depth(cm)` = <span style="color: #BBBB00;">col_logical()</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`type_convert()` only converts columns of type 'character'.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> - `df` has no columns of type 'character'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 30 × 7</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    date       precipitation$`sum(mm)` $`max_1hour(mm)` temperature$`average(℃)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>                   </span>
@@ -340,11 +328,6 @@ for each location.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall_moment(cm)` = <span style="color: #BBBB00;">col_logical()</span>,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall_period(cm)` = <span style="color: #BBBB00;">col_logical()</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   wind_direction = <span style="color: #BB0000;">col_character()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 24 × 12</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    date        time `precipitation(mm)` `temperature(℃)` `dew_point(℃)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>         </span>
@@ -366,13 +349,29 @@ for each location.</p></li>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"rank"</span>, block_no <span class="op">=</span> <span class="st">"47646"</span>, year <span class="op">=</span> <span class="fl">2020</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/rank_s.php?prec_no=40&amp;block_no=47646&amp;year=2020&amp;month=&amp;day=&amp;view=</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::mutate(purrr::set_names(tidyr::extract(tidyr::pivot_longer(df,     cols = -c(1, ncol(df)), names_to = "rank"), col = value,     into = c("value", "date"), regex = "(.+)\\((.+)\\)"), name_sets(selected_item)),     period = glue_split_period_char(period, collapse = intToUtf8(c(12363L,         12425L))), rank = stringr::str_extract(rank, "[0-9]{1,}")):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `period = glue_split_period_char(...)`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Failed to evaluate glue component {x[1]}</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error in `purrr::discard()`:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In index: 1.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `.p()` must return a single `TRUE` or `FALSE`, not `NA`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   period = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   rank = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   value = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   date = <span style="color: #BB0000;">col_character()</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 370 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    element             period            rank value date      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 日最低海面気圧(hPa) 1921/1から1921/1     1 965.3 1922/8/24 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 日最低海面気圧(hPa) 1921/1から1921/1     2 966.6 2002/10/1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 日最低海面気圧(hPa) 1921/1から1921/1     3 968.9 2017/10/23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 日最低海面気圧(hPa) 1921/1から1921/1     4 969.0 1928/10/8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 日最低海面気圧(hPa) 1921/1から1921/1     5 969.3 1932/11/15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 日最低海面気圧(hPa) 1921/1から1921/1     6 970.0 2019/10/12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 日最低海面気圧(hPa) 1921/1から1921/1     7 970.2 1943/10/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 日最低海面気圧(hPa) 1921/1から1921/1     8 970.5 1936/10/3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 日最低海面気圧(hPa) 1921/1から1921/1     9 971.2 1998/9/16 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 日最低海面気圧(hPa) 1921/1から1921/1    10 972.7 1994/2/21 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 360 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
