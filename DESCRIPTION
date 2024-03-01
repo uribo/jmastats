@@ -1,5 +1,5 @@
 Package: jmastats
-Version: 0.2.0.9000
+Version: 0.2.1
 Title: Download Weather Data from Japan Meteorological Agency Website
 Description: Provides features that allow users to download 
   weather data published by the Japan Meteorological Agency (JMA) website 
