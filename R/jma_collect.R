@@ -244,8 +244,7 @@ tweak_df <- function(df, quiet) {
     tweak_df(quiet = quiet) |>
     dplyr::mutate(date = as.Date(paste(year,
                                        stringr::str_pad(month, width = 2, pad = "0"),
-                                       stringr::str_pad(date, width = 2, pad = "0"), sep = "-"))) |>
-    readr::type_convert()
+                                       stringr::str_pad(date, width = 2, pad = "0"), sep = "-")))
 }
 
 .jma_collect_hourly <- function(df, vars, year, month, day, quiet) {
@@ -255,8 +254,7 @@ tweak_df <- function(df, quiet) {
     tweak_df(quiet = quiet)
   df |>
     dplyr::mutate(date = lubridate::make_date(year, month, day)) |>
-    dplyr::select(date, dplyr::everything()) |>
-    readr::type_convert()
+    dplyr::select(date, dplyr::everything())
 }
 
 .jma_collect_10min <- function(df, vars, station_type, quiet) {
