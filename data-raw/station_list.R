@@ -1,9 +1,9 @@
 #####################################
 # Stations list
-# Last Update: 2024-03-02 (適用日：2024年1月25日)
-# 1. 地上気象観測地点,地域気象観測所
-# 2. 潮位観測地点
-# 3. 震度観測点
+# Last Update: 2024-03-02
+# 1. 地上気象観測地点,地域気象観測所 (適用日：2024年1月25日)
+# 2. 潮位観測地点（2024-01-01）
+# 3. 震度観測点 (2024年1月10日)
 #####################################
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
@@ -384,7 +384,7 @@ stations <-
 
 usethis::use_data(stations, overwrite = TRUE)
 
-# 2. 潮位観測（2024-01-01） ---------------------------------------------------------------------
+# 2. 潮位観測 ---------------------------------------------------------------------
 # ref) https://www.data.jma.go.jp/gmd/kaiyou/db/tide/suisan/station.php
 # https://www.jma.go.jp/jp/choi/list1.html
 library(parzer)
@@ -429,7 +429,7 @@ tide_station <-
 usethis::use_data(tide_station, overwrite = TRUE)
 
 
-# 3. 震度観測点 (2024年1月10日) ----------------------------------------------------------------
+# 3. 震度観測点 ----------------------------------------------------------------
 x <-
   rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x |>

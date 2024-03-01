@@ -2,7 +2,7 @@
 
 ## Datasets
 
-* Various datasets handled by the package have been updated to the latest version in September 2023.
+* Various datasets handled by the package have been updated to the latest version in March 2024.
 
 # jmastats 0.2.0
 
