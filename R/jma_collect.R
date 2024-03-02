@@ -128,40 +128,32 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
     paste0(item, "_", target$station_type)
   vars <- name_sets(selected_item)
 
+  df <-
+    df_raw |>
+    discard_ignore_df()
+
   if (item == "annually") {
     df <-
-      df_raw[[4]][-c(1:2), ] |>
-      purrr::set_names(vars) |>
-      tweak_df(quiet = quiet)
+      .jma_collect_annually(df, vars, quiet)
   } else if (item %in% c("monthly", "3monthly", "10daily", "mb5daily")) {
     df <-
-      df_raw[[6]][-c(1:2), ] |>
+      df[-c(1:2), ] |>
       purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
   } else if (item == "daily") {
     df <-
-      .jma_collect_daily(df_raw, vars,
+      .jma_collect_daily(df, vars,
                          year, month, date = day,
                          target$station_type,
                          quiet)
   } else if (item == "hourly") {
     df <-
-      .jma_collect_hourly(df_raw, vars, year, month, day, quiet)
+      .jma_collect_hourly(df, vars, year, month, day, quiet)
   } else if (item == "10min") {
     df <-
-      .jma_collect_10min(df_raw, vars, target$station_type, quiet)
+      .jma_collect_10min(df, vars, target$station_type, quiet)
   } else if (item == "rank") {
     value <- period <- NULL
-    df <-
-      df_raw |>
-      purrr::keep(function(x) nrow(x) > 1)
-    if (length(df) == 1L) {
-      df <-
-        df[[1]]
-    } else {
-      df <-
-        df[[length(df)]]
-    }
     df <-
       df |>
       tidyr::pivot_longer(cols = -c(1, ncol(df)),
@@ -174,8 +166,6 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
-  } else {
-    df <- df_raw
   }
   tibble::as_tibble(df)
 }
@@ -236,16 +226,22 @@ tweak_df <- function(df, quiet) {
     readr::type_convert()
 }
 
+.jma_collect_annually <- function(df, vars, quiet) {
+  df[-c(1:2), ] |>
+    purrr::set_names(vars) |>
+    tweak_df(quiet = quiet)
+}
+
 .jma_collect_daily <- function(df, vars,
                                year, month, date,
                                station_type,
                                quiet) {
   if (station_type == "a1") {
     df <-
-      df[[6]][-c(1:2), ]
+      df[-c(1:2), ]
   } else if (station_type == "s1") {
     df <-
-      df[[6]][-c(1:3), ]
+      df[-c(1:3), ]
   }
   df |>
     purrr::set_names(vars) |>
@@ -257,7 +253,7 @@ tweak_df <- function(df, quiet) {
 
 .jma_collect_hourly <- function(df, vars, year, month, day, quiet) {
   df <-
-    df[[5]][-c(1), ] |>
+    df[-c(1), ] |>
     purrr::set_names(vars) |>
     tweak_df(quiet = quiet)
   df |>
@@ -268,10 +264,10 @@ tweak_df <- function(df, quiet) {
 .jma_collect_10min <- function(df, vars, station_type, quiet) {
   if (station_type == "a1") {
     df <-
-      df[[5]][-c(1:2), ]
+      df[-c(1:2), ]
   } else if (station_type == "s1") {
     df <-
-      df[[5]][-1, ]
+      df[-1, ]
   }
   df |>
     purrr::set_names(vars) |>
@@ -664,4 +660,12 @@ name_sets <- function(item) {
                        jma_vars$condition),
     "rank_s" = c("element", "period", "rank", "value", "date"),
     "rank_a" = c("element", "period", "rank", "value", "date"))
+}
+
+discard_ignore_df <- function(x) {
+  x <-
+    x |>
+    purrr::keep(function(x) nrow(x) > 1)
+  x |>
+    purrr::pluck(length(x))
 }
