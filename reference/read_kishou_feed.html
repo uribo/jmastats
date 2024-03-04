@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">jmastats</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,20 +88,20 @@ See details for the items.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"high"</span>, type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 495 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 528 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    title                        id      updated             author content link </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 府県天気予報（Ｒ１）         https:… 2024-03-04 <span style="color: #949494;">01:46:16</span> 鹿児…  【鹿児… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 警報級の可能性（明日まで）   https:… 2024-03-04 <span style="color: #949494;">01:46:16</span> 鹿児…  【鹿児… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 府県週間天気予報             https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 盛岡…  【岩手… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 福井…  【福井… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 府県週間天気予報             https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 仙台…  【宮城… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 仙台…  【宮城… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 山形…  【山形… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 福島…  【福島… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 新潟…  【新潟… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:45:34</span> 富山…  【富山… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 485 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 大雨危険度通知               https:… 2024-03-04 <span style="color: #949494;">01:49:44</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 府県天気概況                 https:… 2024-03-04 <span style="color: #949494;">01:47:26</span> 鹿児…  【天気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 沖縄…  【沖縄… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 府県週間天気予報             https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 福岡…  【福岡… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 南大…  【大東… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 宮古…  【宮古… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 鹿児…  【鹿児… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 松山…  【愛媛… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 長崎…  【長崎… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 警報級の可能性（明後日以降） https:… 2024-03-04 <span style="color: #949494;">01:47:16</span> 宮崎…  【宮崎… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 518 more rows</span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"other"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 580 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    title                  id            updated             author content link </span>
