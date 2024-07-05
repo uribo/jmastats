@@ -28,7 +28,7 @@ A data frame with 1323 rows 14 variables:
 stations
 }
 \description{
-This data corresponds to the January 25, 2024 update.
+This data corresponds to the April 1, 2024 update.
 }
 \examples{
 head(stations)

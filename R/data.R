@@ -2,7 +2,7 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's Stations list
 #'
-#' @description This data corresponds to the January 25, 2024 update.
+#' @description This data corresponds to the April 1, 2024 update.
 #' @format A data frame with 1323 rows 14 variables:
 #' \itemize{
 #'   \item{area}
@@ -37,7 +37,7 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's earthquake observe stations
 #'
-#' @description This data corresponds to the January 10, 2024 update.
+#' @description This data corresponds to the March 14, 2024 update.
 #' @format A simple feature data frame with 671 rows  7 variables
 #' @examples
 #' head(earthquake_station)
