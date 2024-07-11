@@ -277,7 +277,11 @@ tweak_df <- function(df, quiet) {
 jma_url <- function(item = NULL,
                     block_no, year, month, day, ...) {
   .blockid <- rlang::enquo(block_no)
-  selected_item <- item
+  selected_item <-
+    rlang::arg_match(item,
+                     c("annually", "monthly", "3monthly",
+                       "10daily", "mb5daily", "daily",
+                       "hourly", "10min", "rank"))
   if (identical(selected_item, character(0))) {
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
