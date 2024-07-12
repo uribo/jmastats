@@ -1,69 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://uribo.github.io/jmastats/404.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/earthquake_station.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/ggplot2-scales.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/jma_collect.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/jmastats-package.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/nearest_station.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/parse_unit.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/pivot_tide_level.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/read_eqdb_csv.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/read_jma_weather.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/read_kishou_feed.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/read_tide_level.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/reset_cache.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/stations.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/tide_station.html</loc>
-  </url>
-  <url>
-    <loc>https://uribo.github.io/jmastats/reference/track.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://uribo.github.io/jmastats/404.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/LICENSE-text.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/LICENSE.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/authors.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/index.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/news/index.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/earthquake_station.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/ggplot2-scales.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/index.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/jma_collect.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/jmastats-package.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/nearest_station.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/parse_unit.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/pivot_tide_level.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/read_eqdb_csv.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/read_jma_weather.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/read_kishou_feed.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/read_tide_level.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/reset_cache.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/stations.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/tide_station.html</loc></url>
+<url><loc>https://uribo.github.io/jmastats/reference/track.html</loc></url>
 </urlset>
+
