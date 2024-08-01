@@ -1,6 +1,6 @@
 #####################################
 # Stations list
-# Last Update: 2024-07-05
+# Last Update: 2024-08-01
 # 1. 地上気象観測地点,地域気象観測所 (適用日：2024年4月1日)
 # 2. 潮位観測地点（2024-01-01）
 # 3. 震度観測点 (2024-03-14)
@@ -47,10 +47,8 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     dplyr::mutate(
       `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
       `カタカナ名` = stringi::stri_trans_general(`ｶﾀｶﾅ名`, id = "nfkc"),
-      longitude = as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 1, 3)) +
-        as.numeric(substr(paste0(`経度.度.`, `経度.分.`), 4, 6)) / 60,
-      latitude = as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 1, 2)) +
-        as.numeric(substr(paste0(`緯度.度.`, `緯度.分.`), 3, 5)) / 60
+      longitude = as.numeric(`経度.度.`) + (as.numeric(`経度.分.`) / 60),
+      latitude = as.numeric(`緯度.度.`) + (as.numeric(`緯度.分.`) / 60)
     ) |>
     dplyr::select(seq_len(4), 7, 12, seq.int(15, 20)) |>
     # "都府県振興局", "観測所番号", "種類", "観測所名",
