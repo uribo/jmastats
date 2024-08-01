@@ -1,4 +1,4 @@
-# jmastats (development version)
+# jmastats 0.2.2
 
 ## Datasets
 
