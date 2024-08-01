@@ -75,35 +75,35 @@ See details for the items.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"high"</span>, type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 653 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    title                         id     updated             author content link </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> アジア太平洋地上実況図        https… 2024-07-12 <span style="color: #949494;">08:34:54</span> 気象庁 【アジ… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 大雨危険度通知                https… 2024-07-12 <span style="color: #949494;">08:27:42</span> 気象庁 【大雨… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 大雨危険度通知                https… 2024-07-12 <span style="color: #949494;">08:17:39</span> 気象庁 【大雨… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地上実況図                    https… 2024-07-12 <span style="color: #949494;">08:07:50</span> 気象庁 【地上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 大雨危険度通知                https… 2024-07-12 <span style="color: #949494;">08:07:41</span> 気象庁 【大雨… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 大雨危険度通知                https… 2024-07-12 <span style="color: #949494;">07:57:41</span> 気象庁 【大雨… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 大雨危険度通知                https… 2024-07-12 <span style="color: #949494;">07:47:41</span> 気象庁 【大雨… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地上４８時間予想図            https… 2024-07-12 <span style="color: #949494;">07:46:11</span> 気象庁 【地上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> アジア太平洋海上悪天４８時間… https… 2024-07-12 <span style="color: #949494;">07:46:11</span> 気象庁 【アジ… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 府県週間天気予報              https… 2024-07-12 <span style="color: #949494;">07:45:23</span> 富山…  【富山… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 643 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 238 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    title          id                    updated             author content link </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">01:07:37</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:57:41</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:47:36</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:37:37</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:27:39</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:17:43</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 大雨危険度通知 https://www.data.jma… 2024-08-01 <span style="color: #949494;">00:07:39</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 大雨危険度通知 https://www.data.jma… 2024-07-31 <span style="color: #949494;">23:57:37</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 大雨危険度通知 https://www.data.jma… 2024-07-31 <span style="color: #949494;">23:47:35</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 大雨危険度通知 https://www.data.jma… 2024-07-31 <span style="color: #949494;">23:37:34</span> 気象庁 【大雨… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 228 more rows</span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"other"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 517 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 516 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    title                  id            updated             author content link </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 福岡…  【長崎… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 鹿児…  【鹿児… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 札幌…  【札幌… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 札幌…  【函館… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 仙台…  【仙台… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 気象庁 【東京… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 名古…  【名古… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 新潟…  【新潟… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 大阪…  【舞鶴… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上警報（Ｈ２８） https://www.… 2024-07-12 <span style="color: #949494;">08:34:39</span> 高松…  【神戸… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 507 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 鹿児…  【鹿児… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 沖縄…  【沖縄… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 札幌…  【札幌… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 札幌…  【函館… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 仙台…  【仙台… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 気象庁 【東京… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 新潟…  【新潟… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 名古…  【名古… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 大阪…  【舞鶴… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上予報（Ｈ２８） https://www.… 2024-07-31 <span style="color: #949494;">21:08:47</span> 高松…  【神戸… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 506 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
