@@ -4,6 +4,10 @@
 
 * Various datasets handled by the package have been updated to the latest version in July 2024.
 
+## Fixes
+
+* The coordinates and prefecture code of the station dataset have been corrected.
+
 # jmastats 0.2.1
 
 ## Datasets
