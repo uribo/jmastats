@@ -190,8 +190,8 @@ print(citation("jmastats"), bibtex = FALSE)
 ```
 
 ```
-Uryu S (2023). _jmastats: Download Weather Data from Japan Meteorological
-Agency Website_. R package version 0.2.0,
+Uryu S (2024). _jmastats: Download Weather Data from Japan Meteorological
+Agency Website_. R package version 0.2.1,
 <https://CRAN.R-project.org/package=jmastats>.
 ```
 
@@ -208,8 +208,8 @@ toBibtex(citation("jmastats"))
 @Manual{,
   title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
   author = {Shinya Uryu},
-  year = {2023},
-  note = {R package version 0.2.0},
+  year = {2024},
+  note = {R package version 0.2.1},
   url = {https://CRAN.R-project.org/package=jmastats},
 }
 ```
