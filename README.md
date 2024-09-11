@@ -234,7 +234,7 @@ data("earthquake_station", package = "jmastats")
       title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
       author = {Shinya Uryu},
       year = {2024},
-      note = {R package version 0.2.1},
+      note = {R package version 0.2.2},
       url = {https://CRAN.R-project.org/package=jmastats},
     }
 
