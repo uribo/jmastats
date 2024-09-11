@@ -38,6 +38,7 @@
 #' - rank: Values of the largest in the history of observations.
 #' - nml_ym: Climatological normals for each year and month.
 #' - nml_3m: Climatological normals for each 3 months.
+#' - nml_10d: Climatological normals for each season (almost 10 days).
 #' for each location.
 #' @examples
 #' \donttest{
@@ -170,15 +171,24 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
-  } else if (item %in% c("nml_ym", "nml_3m")) {
-    nml_meta <-
-      list(years = df[[2]][df[[2]] |>
-                             stringr::str_which(intToUtf8(65374))],
-           records = df[[2]][df[[2]] |>
-                               stringr::str_which(intToUtf8(65374))+1])
+  } else if (item %in% c("nml_ym", "nml_3m", "nml_10d")) {
+    if (item %in% c("nml_ym", "nml_3m")) {
+      nml_meta <-
+        list(years = df[[2]][df[[2]] |>
+                               stringr::str_which(intToUtf8(65374))],
+             records = df[[2]][df[[2]] |>
+                                 stringr::str_which(intToUtf8(65374))+1])
+    } else if (item %in% c("nml_10d")) {
+      nml_meta <-
+        list(years = df[[3]][df[[3]] |>
+                               stringr::str_which(intToUtf8(65374))],
+             records = df[[3]][df[[3]] |>
+                                 stringr::str_which(intToUtf8(65374))+1])
+    }
     nml_meta$years <-
       nml_meta$years |>
-      stringr::str_split(intToUtf8(65374), simplify = TRUE)
+      stringr::str_split(intToUtf8(65374), simplify = TRUE) |>
+      stringr::str_squish()
     cat(
       cli::col_br_blue(
         paste("\nThe record is based on the statistical period from",
@@ -809,7 +819,25 @@ name_sets <- function(item) {
                             "geq_35.0"),
                           "(\u2103)"),
                    jma_vars$daylight,
-                   jma_vars$snow[c(1, 3)])
+                   jma_vars$snow[c(1, 3)]),
+    "nml_10d_s" = c("elements",
+                    "elements2",
+                    jma_vars$atmosphere[2],
+                    stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                    jma_vars$temperature[c(1, 4, 5)],
+                    paste0("relative_humidity", "(%)"),
+                    jma_vars$wind[1],
+                    jma_vars$daylight,
+                    jma_vars$solar,
+                    jma_vars$snow[c(1, 3)],
+                    stringr::str_remove(jma_vars$cloud, "_mean")),
+    "nml_10d_a" = c("elements",
+                    "elements2",
+                    stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                    jma_vars$temperature[c(1, 4, 5)],
+                    jma_vars$wind[1],
+                    jma_vars$daylight,
+                    jma_vars$snow[c(1, 3)]),
     )
 }
 
