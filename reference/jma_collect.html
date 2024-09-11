@@ -114,7 +114,12 @@ for some reason. (<code>TRUE</code>, the default)</p></dd>
 <li><p>mb5daily: Semi-seasonal value. Please specify location and year.</p></li>
 <li><p>daily: Daily value. Please specify location, year and month.</p></li>
 <li><p>hourly: Hourly value. Please specify location, year, month and day.</p></li>
-<li><p>rank: Values of the largest in the history of observations
+<li><p>rank: Values of the largest in the history of observations.</p></li>
+<li><p>nml_ym: Climatological normals for each year and month.</p></li>
+<li><p>nml_3m: Climatological normals for each 3 months.</p></li>
+<li><p>nml_10d: Climatological normals for each season (almost 10 days).</p></li>
+<li><p>nml_mb5d: Climatological normals for each semi-season (almost 5 days).</p></li>
+<li><p>nml_daily: Daily climatological normals for specific month.
 for each location.</p></li>
 </ul></div>
 
@@ -123,7 +128,7 @@ for each location.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># Annually</span></span></span>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span>item <span class="op">=</span> <span class="st">"annually"</span>, <span class="st">"1284"</span>, year <span class="op">=</span> <span class="fl">2017</span>, month <span class="op">=</span> <span class="fl">11</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/annually_a.php?prec_no=11&amp;block_no=1284&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 32, 42 at precipitation_sum(mm)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/annually_a.php?prec_no=11&amp;block_no=1284&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 32, 42 at precipitation_sum(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 32, 42, 43 at precipitation_max_per_day(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 18, 21, 29, 32, 42 at precipitation_max_1hour(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 42 at precipitation_max_10minutes(mm)</span></span>
@@ -177,7 +182,7 @@ for each location.</p></li>
 <span class="r-in"><span><span class="co"># Daily</span></span></span>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span>item <span class="op">=</span> <span class="st">"daily"</span>, block_no <span class="op">=</span> <span class="st">"0010"</span>, year <span class="op">=</span> <span class="fl">2017</span>, month <span class="op">=</span> <span class="fl">11</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=12&amp;block_no=0010&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 7 at precipitation_sum(mm)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/daily_a1.php?prec_no=12&amp;block_no=0010&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 7 at precipitation_sum(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 7 at precipitation_max_1hour(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 7 at precipitation_max_10minutes(mm)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 7, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 30 at temperature_average(℃)</span></span>
@@ -236,7 +241,7 @@ for each location.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   wind &lt;tibble[,6]&gt;, sunshine &lt;tibble[,1]&gt;, snow &lt;tibble[,2]&gt;</span></span>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span>item <span class="op">=</span> <span class="st">"daily"</span>, <span class="st">"0422"</span>, year <span class="op">=</span> <span class="fl">2017</span>, month <span class="op">=</span> <span class="fl">11</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/daily_a1.php?prec_no=48&amp;block_no=0422&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 at temperature_average(℃)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/daily_a1.php?prec_no=48&amp;block_no=0422&amp;year=2017&amp;month=11&amp;day=&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 at temperature_average(℃)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 at temperature_max(℃)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 at temperature_min(℃)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 at humidity_average(%)</span></span>
@@ -293,7 +298,7 @@ for each location.</p></li>
 <span class="r-in"><span><span class="co"># Hourly</span></span></span>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"hourly"</span>, <span class="st">"0010"</span>, <span class="fl">2018</span>, <span class="fl">7</span>, <span class="fl">30</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/hourly_a1.php?prec_no=12&amp;block_no=0010&amp;year=2018&amp;month=7&amp;day=30&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 at dew_point(℃)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/hourly_a1.php?prec_no=12&amp;block_no=0010&amp;year=2018&amp;month=7&amp;day=30&amp;view=</span><span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 at dew_point(℃)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 at vapor(hPa)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 at humidity(%)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 20, 21, 22, 23, 24 at daylight_(h)</span></span>
@@ -335,7 +340,7 @@ for each location.</p></li>
 <span class="r-in"><span><span class="co"># Historical Ranking</span></span></span>
 <span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"rank"</span>, block_no <span class="op">=</span> <span class="st">"47646"</span>, year <span class="op">=</span> <span class="fl">2020</span>, cache <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/obd/stats/etrn/view/rank_s.php?prec_no=40&amp;block_no=47646&amp;year=2020&amp;month=&amp;day=&amp;view=</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/rank_s.php?prec_no=40&amp;block_no=47646&amp;year=2020&amp;month=&amp;day=&amp;view=</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
@@ -359,6 +364,168 @@ for each location.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 日最低海面気圧(hPa) 1921/1から1921/1     9 971.2 1998/9/16 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 日最低海面気圧(hPa) 1921/1から1921/1    10 972.7 1994/2/21 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 360 more rows</span></span>
+<span class="r-in"><span><span class="co"># Climatological normals</span></span></span>
+<span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"nml_ym"</span>, block_no <span class="op">=</span> <span class="st">"47646"</span>, cache <span class="op">=</span> <span class="cn">FALSE</span>, pack <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=40&amp;block_no=47646&amp;year=&amp;month=&amp;view=</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">The record is based on the statistical period from 1991 to 2020 (30 years of data).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 12 at temperature_min(℃)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 5, 6, 7, 8, 9, 10 at snow_fall(cm)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 5, 6, 7, 8, 9, 10 at snow_max_fall_day(cm)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 4, 5, 6, 7, 8, 9, 10 at snow_depth(cm)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   .default = col_double(),</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   wind_most_frequent_direction = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall(cm)` = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_max_fall_day(cm)` = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_depth(cm)` = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   cloud_covering_mean = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   condition_snow_days = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   condition_fog_days = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   condition_thunder_days = <span style="color: #BB0000;">col_character()</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use `spec()` for the full column specifications.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 13 × 20</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    element `atmosphere_land(hPa)` atmosphere_surface(hP…¹ precipitation_sum(mm…²</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1月                      <span style="text-decoration: underline;">1</span>012.                   <span style="text-decoration: underline;">1</span>016.                   50.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 2月                      <span style="text-decoration: underline;">1</span>013.                   <span style="text-decoration: underline;">1</span>016.                   47.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 3月                      <span style="text-decoration: underline;">1</span>012.                   <span style="text-decoration: underline;">1</span>015.                   95.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 4月                      <span style="text-decoration: underline;">1</span>011.                   <span style="text-decoration: underline;">1</span>014                   110. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 5月                      <span style="text-decoration: underline;">1</span>009.                   <span style="text-decoration: underline;">1</span>012                   130. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 6月                      <span style="text-decoration: underline;">1</span>006                    <span style="text-decoration: underline;">1</span>009.                  132. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 7月                      <span style="text-decoration: underline;">1</span>006.                   <span style="text-decoration: underline;">1</span>009.                  135. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 8月                      <span style="text-decoration: underline;">1</span>007.                   <span style="text-decoration: underline;">1</span>010.                  118. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 9月                      <span style="text-decoration: underline;">1</span>010                    <span style="text-decoration: underline;">1</span>013.                  188. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 10月                     <span style="text-decoration: underline;">1</span>014.                   <span style="text-decoration: underline;">1</span>017.                  194. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 11月                     <span style="text-decoration: underline;">1</span>015.                   <span style="text-decoration: underline;">1</span>018.                   79.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 12月                     <span style="text-decoration: underline;">1</span>014.                   <span style="text-decoration: underline;">1</span>017                    48.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> 年                       <span style="text-decoration: underline;">1</span>011.                   <span style="text-decoration: underline;">1</span>014.                 <span style="text-decoration: underline;">1</span>326  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​`atmosphere_surface(hPa)`, ²​`precipitation_sum(mm)`</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 16 more variables: `temperature_average(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `temperature_max(℃)` &lt;dbl&gt;, `temperature_min(℃)` &lt;dbl&gt;, `vapor(hPa)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `relative_humidity(%)` &lt;dbl&gt;, `wind_average_speed(m/s)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   wind_most_frequent_direction &lt;chr&gt;, `daylight_(h)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `solar_irradiance_average(MJ/m^2)` &lt;dbl&gt;, `snow_fall(cm)` &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `snow_max_fall_day(cm)` &lt;chr&gt;, `snow_depth(cm)` &lt;chr&gt;, …</span></span>
+<span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"nml_3m"</span>, <span class="st">"47646"</span>, cache <span class="op">=</span> <span class="cn">FALSE</span>, pack <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_3m.php?prec_no=40&amp;block_no=47646&amp;year=&amp;month=&amp;view=</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">The record is based on the statistical period from 1991 to 2020 (30 years of data).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `precipitation(mm)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_average(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_min_num_days_lt_0.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_min_num_days_geq_35.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max_num_days_lt_0.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max_num_days_geq_25.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max_num_days_geq_30.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max_num_days_geq_35.0(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `daylight_(h)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall(cm)` = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_depth(cm)` = <span style="color: #BB0000;">col_character()</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 12 × 12</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    element    `precipitation(mm)` temperature_average(℃…¹ temperature_min_num_…²</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 11月～1月                 184.                     6.3                   48.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 12月～2月                 147.                     4.2                   65.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1月～3月                  193.                     5                     57.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2月～4月                  252.                     8.2                   32.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 3月～5月                  335                     12.7                   12  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 4月～6月                  371.                    17                      1.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 5月～7月                  396.                    20.9                    0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 6月～8月                  385.                    23.8                    0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 7月～9月                  440.                    24.3                    0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 8月～10月                 499.                    21.6                    0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> 9月～11月                 460.                    16.5                    3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> 10月～12月                321.                    10.8                   22  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated names: ¹​`temperature_average(℃)`,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   ²​`temperature_min_num_days_lt_0.0(℃)`</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 8 more variables: `temperature_min_num_days_geq_35.0(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `temperature_max_num_days_lt_0.0(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `temperature_max_num_days_geq_25.0(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `temperature_max_num_days_geq_30.0(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `temperature_max_num_days_geq_35.0(℃)` &lt;dbl&gt;, `daylight_(h)` &lt;dbl&gt;, …</span></span>
+<span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"nml_10d"</span>, <span class="st">"0228"</span>, cache <span class="op">=</span> <span class="cn">FALSE</span>, pack <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/nml_amd_10d.php?prec_no=33&amp;block_no=0228&amp;year=&amp;month=&amp;view=</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">The record is based on the statistical period from 1991 to 2020 (30 years of data).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element2 = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `precipitation(mm)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_average(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_min(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `wind_average_speed(m/s)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `daylight_(h)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_fall(cm)` = <span style="color: #BBBB00;">col_logical()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `snow_depth(cm)` = <span style="color: #BBBB00;">col_logical()</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 36 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    element `precipitation(mm)` `temperature_average(℃)` `temperature_max(℃)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1月上旬                19.4                     -<span style="color: #BB0000;">1.5</span>                  2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1月中旬                12.3                     -<span style="color: #BB0000;">2.4</span>                  1.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1月下旬                14.8                     -<span style="color: #BB0000;">2.3</span>                  2  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 2月上旬                12                       -<span style="color: #BB0000;">2.1</span>                  2.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 2月中旬                16.7                     -<span style="color: #BB0000;">1.4</span>                  3.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 2月下旬                11.1                     -<span style="color: #BB0000;">0.3</span>                  4.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 3月上旬                26.9                      0.8                  5.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 3月中旬                22.5                      2.3                  7.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 3月下旬                27.6                      3.7                  9.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 4月上旬                24.2                      6.3                 12.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 5 more variables: `temperature_min(℃)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `wind_average_speed(m/s)` &lt;dbl&gt;, `daylight_(h)` &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   `snow_fall(cm)` &lt;lgl&gt;, `snow_depth(cm)` &lt;lgl&gt;</span></span>
+<span class="r-in"><span><span class="fu">jma_collect</span><span class="op">(</span><span class="st">"nml_mb5d"</span>, <span class="st">"0228"</span>, cache <span class="op">=</span> <span class="cn">FALSE</span>, pack <span class="op">=</span> <span class="cn">FALSE</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrying in 7 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">Data from:</span> <span style="color: #00BBBB;">https://www.data.jma.go.jp/stats/etrn/view/nml_amd_mb5d.php?prec_no=33&amp;block_no=0228&amp;year=&amp;month=&amp;view=</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #5555FF;">The record is based on the statistical period from 1991 to 2020 (30 years of data).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 72, 73 at temperature_average(℃)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Treated as missing: lines 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 66, 67, 68, 69, 70, 71, 72, 73 at temperature_min(℃)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element2 = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   element3 = <span style="color: #BB0000;">col_character()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `precipitation(mm)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_average(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_max(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `temperature_min(℃)` = <span style="color: #00BB00;">col_double()</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `daylight_(h)` = <span style="color: #00BB00;">col_double()</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 73 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    element       `precipitation(mm)` temperature_average(…¹ `temperature_max(℃)`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 1月第1半旬1…                  9.8                   -<span style="color: #BB0000;">1.4</span>                  2.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 1月第2半旬6…                  8.6                   -<span style="color: #BB0000;">1.8</span>                  2.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 1月第3半旬11…                 7.4                   -<span style="color: #BB0000;">2.2</span>                  2  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 1月第4半旬16…                 6.6                   -<span style="color: #BB0000;">2.3</span>                  2  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 1月第5半旬21…                 6.5                   -<span style="color: #BB0000;">2.3</span>                  2.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 1月第6半旬26…                 7.8                   -<span style="color: #BB0000;">2.3</span>                  2.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 2月第1半旬1…                  6.5                   -<span style="color: #BB0000;">2.2</span>                  2.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 2月第2半旬6…                  6.6                   -<span style="color: #BB0000;">1.9</span>                  2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 2月第3半旬11…                 7.6                   -<span style="color: #BB0000;">1.5</span>                  2.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2月第4半旬16…                 8                     -<span style="color: #BB0000;">1.1</span>                  3.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 63 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ abbreviated name: ¹​`temperature_average(℃)`</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: `temperature_min(℃)` &lt;dbl&gt;, `daylight_(h)` &lt;dbl&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
