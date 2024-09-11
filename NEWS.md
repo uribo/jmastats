@@ -1,5 +1,9 @@
 # jmastats (development version)
 
+## Datasets 
+
+* Earth quake station dataset handled by the package have been updated to the latest version in September 2024.
+
 # jmastats 0.2.2
 
 ## Datasets

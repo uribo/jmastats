@@ -37,7 +37,7 @@ globalVariables(c("stations", "tide_station", "earthquake_station"))
 
 #' Japan Meteorological Agency's earthquake observe stations
 #'
-#' @description This data corresponds to the March 14, 2024 update.
+#' @description This data corresponds to the July 18, 2024 update.
 #' @format A simple feature data frame with 671 rows  7 variables
 #' @examples
 #' head(earthquake_station)

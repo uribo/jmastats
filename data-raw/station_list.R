@@ -5,6 +5,7 @@
 # 2. 潮位観測地点（2024-01-01）
 # 3. 震度観測点 (2024-03-14)
 #####################################
+# remotes::install_github("uribo/kuniezu")
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
 library(rnaturalearth) # for reverse geocoding
@@ -12,6 +13,7 @@ library(assertr)
 library(polite)
 library(rvest)
 library(ensurer)
+library(pointblank)
 
 if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 1. 地上気象観測地点 -------------------------------------------------------------
@@ -41,8 +43,9 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     read.csv(
       here::here(stringr::str_glue("data-raw/{ame_master}")),
       fileEncoding = "cp932",
-      stringsAsFactors = FALSE) %>% # magrittr
-    assertr::verify(dim(.) == c(1316, 17)) |>
+      stringsAsFactors = FALSE) |>
+    pointblank::row_count_match(1316L) |>
+    pointblank::col_count_match(17L) |>
     tibble::as_tibble() |>
     dplyr::mutate(
       `都府県振興局` = stringi::stri_trans_general(`都府県振興局`, id = "nfkc"),
@@ -99,8 +102,9 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
       prec_no = purrr::map_chr(., "href") |>
         stringr::str_extract("prec_no=[0-9]{2}") |>
         stringr::str_remove("prec_no=")) |>
-    dplyr::select(!1) %>% # magrittr
-    assertr::verify(dim(.) == c(61, 2))
+    dplyr::select(!1) |>
+    pointblank::row_count_match(61L) |>
+    pointblank::col_count_match(2L)
 
   # 1.3 Merge ---------------------------------------------------------------
   # ~ 2 mins.
@@ -111,14 +115,16 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     ensurer::ensure(length(.) == 61L) |>
     purrr::map(
       read_block_no) |>
-    purrr::list_rbind() %>% # magrittr
-    assertr::verify(dim(.) == c(1677, 3))
+    purrr::list_rbind() |>
+    pointblank::row_count_match(1677L) |>
+    pointblank::col_count_match(3L)
   df_stations <-
     df_stations_raw |>
     dplyr::left_join(df_prec_no,
                      by = dplyr::join_by(prec_no)) |>
-    dplyr::mutate(area = stringr::str_remove(area, "地方")) %>% # magrittr
-    assertr::verify(dim(.) == c(1677, 4)) |>
+    dplyr::mutate(area = stringr::str_remove(area, "地方")) |>
+    pointblank::row_count_match(1677L) |>
+    pointblank::col_count_match(4L) |>
     dplyr::mutate(area = stringr::str_remove(area, "(都|府|県)$"),
            # area = dplyr::if_else(station == "竜王山", "徳島", area),
            station = stringr::str_remove(station, "（.+）")) |>
@@ -127,10 +133,10 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no=50&block_no=&year=&month=&day=&view=
   df_stations |>
     filter(station_name == "三倉", area == "静岡") |>
-    ensurer::ensure(nrow(.) == 2L) # 2地点でOK
+    pointblank::row_count_match(2L) # 2地点でOK
   df_amedas_master |>
     filter(station_name == "高知", area == "高知") |>
-    ensurer::ensure(nrow(.) == 2L) # 2地点でOK
+    pointblank::row_count_match(2L) # 2地点でOK
 
   stations <-
     df_amedas_master |>
@@ -138,7 +144,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
               by = dplyr::join_by(station_name, area),
               multiple = "all",
               relationship = "many-to-many") |>
-    ensurer::ensure(nrow(.) == 1323L) |>
+    pointblank::row_count_match(1323L) |>
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>%
     dplyr::mutate(
       dplyr::across(.cols = c(area, station_type, station_name,
@@ -146,8 +152,8 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
                               katakana),
                     .fns =  \(x) stringi::stri_conv(x, to = "UTF8"),
                     .names = "{.col}")) %>%
-    tibble::new_tibble(nrow = nrow(.), class = "sf") %>%
-    assertr::verify(nrow(.) == 1323L)
+    tibble::new_tibble(nrow = nrow(.), class = "sf") |>
+    pointblank::row_count_match(1323L)
 
   # 現在も観測が行われているものに制限される
   # 例) ピヤシリ山 (block_no=0007)は除外
@@ -175,8 +181,9 @@ ne_jpn <-
 
 stations <-
   stations |>
-  st_join(ne_jpn) %>% # magrittr
-  assertr::verify(dim(.) == c(1323, 14L))
+  st_join(ne_jpn) |>
+  pointblank::row_count_match(1323L) |>
+  pointblank::col_count_match(14L)
 
 # 1.4 Manual fix ------------------------------------------------------------
 prefecture_code <- c(`11001` = "01",
@@ -369,7 +376,7 @@ prefecture_code <- c(`11001` = "01",
 pref_code_missing <-
   stations |>
   filter(is.na(pref_code)) |>
-  ensurer::ensure(nrow(.) == 66L) |>
+  pointblank::row_count_match(66L) |>
   pull(station_no)
 # NAの例
 # stations |>
@@ -397,7 +404,7 @@ stations |>
   distinct(station_no, station_name, pref_code, .keep_all = TRUE) |>
   count(station_no, station_name, sort = TRUE) |>
   filter(n > 1) |>
-  ensurer::ensure(nrow(.) == 0L)
+  pointblank::row_count_match(0L)
 
 # stations |>
 #   filter(!is.na(pref_code)) |>
@@ -424,8 +431,8 @@ stations |>
 
 stations |>
   st_drop_geometry() |>
-  filter(is.na(pref_code)) %>% # magrittr
-  assertr::verify(nrow(.) == 0L)
+  filter(is.na(pref_code)) |>
+  pointblank::row_count_match(0L)
 
 stations <-
   stations |>
@@ -444,8 +451,9 @@ stations <-
          prec_no,
          block_no,
          pref_code,
-         geometry) %>% # magrittr
-  assertr::verify(dim(.) == c(1323, 14))
+         geometry) |>
+  pointblank::row_count_match(1323L) |>
+  pointblank::col_count_match(14L)
 
 usethis::use_data(stations, overwrite = TRUE)
 
@@ -490,18 +498,18 @@ tide_station <-
                 .names = "{.col}")) |>
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) |>
-  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) %>% # magrittr
-  assertr::verify(dim(.) == c(1949, 7))
+  sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
+  pointblank::row_count_match(1949L) |>
+  pointblank::col_count_match(7L)
 
 usethis::use_data(tide_station, overwrite = TRUE)
-
 
 # 3. 震度観測点 ----------------------------------------------------------------
 x <-
   rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x |>
   rvest::html_element(css = "#main > h1") |>
-  rvest::html_text() # 令和6年3月14日現在
+  rvest::html_text() # 令和6年7月18日現在
 
 earthquake_station <-
   x |>
@@ -515,8 +523,9 @@ earthquake_station <-
              across(.cols = everything(),
                     .fns = as.character))
   ) |>
-  purrr::list_rbind(names_to = "prefecture") %>% # magrittr
-  assertr::verify(dim(.) == c(1125, 10)) |>
+  purrr::list_rbind(names_to = "prefecture") |>
+  pointblank::row_count_match(1125L) |>
+  pointblank::col_count_match(10L) |>
   readr::type_convert(col_types = "ccccididcc") |>
   purrr::set_names(c("prefecture", "area", "station_name", "address",
                      "lat_do", "lat_fun",
@@ -531,10 +540,11 @@ earthquake_station <-
                                     ~ as.character(kuniezu::parse_lat_dohunbyo(paste0("北緯", ..5, "度", ..6, "秒"))))) |>
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) |>
   sf::st_transform(crs = 4326) |>
-  select(!c(ends_with("_do"), ends_with("_fun"))) %>% # magrittr
-  assertr::verify(dim(.) == c(1125, 7)) |>
+  select(!c(ends_with("_do"), ends_with("_fun"))) |>
+  pointblank::row_count_match(1125L) |>
+  pointblank::col_count_match(7L) |>
   filter(is.na(observation_end)) |>
-  ensurer::ensure(nrow(.) == 671L)
+  pointblank::row_count_match(671L)
 
 usethis::use_data(earthquake_station, overwrite = TRUE)
 
