@@ -20,7 +20,7 @@ test_that("input arguments validation", {
   )
 })
 
-test_that("multiplication works", {
+test_that("urls", {
   x <-
     jma_url(item = "daily",
             block_no = "0422",
@@ -44,6 +44,20 @@ test_that("multiplication works", {
     list(
       url = "https://www.data.jma.go.jp/stats/etrn/view/annually_a.php?prec_no=12&block_no=0010&year=2017&month=12&day=&view=", # nolint
       station_type = "a")
+  )
+  x <-
+    jma_url("nml_ym",
+            "47895")
+  expect_equal(
+    x[[1]],
+    "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=71&block_no=47895&year=&month=&view="
+  )
+  x <-
+    jma_url("nml_10d",
+            "1555")
+  expect_equal(
+    x[[1]],
+    "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_10d.php?prec_no=51&block_no=1555&year=&month=&view="
   )
 })
 

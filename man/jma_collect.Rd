@@ -78,7 +78,10 @@ jma_collect(item = "daily", "0422", year = 2017, month = 11, cache = FALSE)
 jma_collect("hourly", "0010", 2018, 7, 30, cache = FALSE)
 # Historical Ranking
 jma_collect("rank", block_no = "47646", year = 2020, cache = FALSE)
-}
 # Climatological normals
 jma_collect("nml_ym", block_no = "47646", cache = FALSE, pack = FALSE)
+jma_collect("nml_3m", "47646", cache = FALSE, pack = FALSE, quiet = TRUE)
+jma_collect("nml_10d", "0228", cache = FALSE, pack = FALSE, quiet = TRUE)
+jma_collect("nml_mb5d", "0228", cache = FALSE, pack = FALSE, quiet = FALSE)
+}
 }
