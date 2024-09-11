@@ -40,6 +40,7 @@
 #' - nml_3m: Climatological normals for each 3 months.
 #' - nml_10d: Climatological normals for each season (almost 10 days).
 #' - nml_mb5d: Climatological normals for each semi-season (almost 5 days).
+#' - nml_daily: Daily climatological normals for specific month.
 #' for each location.
 #' @examples
 #' \donttest{
@@ -172,8 +173,8 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
-  } else if (item %in% c("nml_ym", "nml_3m", "nml_10d", "nml_mb5d")) {
-    if (item %in% c("nml_ym", "nml_3m")) {
+  } else if (item %in% c("nml_ym", "nml_3m", "nml_10d", "nml_mb5d", "nml_daily")) {
+    if (item %in% c("nml_ym", "nml_3m", "nml_daily")) {
       nml_meta <-
         list(years = df[[2]][df[[2]] |>
                                stringr::str_which(intToUtf8(65374))],
@@ -210,6 +211,13 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                       stringr::str_which(intToUtf8(c(36039, 26009, 24180, 25968))))), ] |>
       purrr::set_names(vars) |>
       tweak_df(quiet = quiet)
+    if (item == "nml_daily") {
+      df <-
+        df |>
+        dplyr::mutate(elements = paste0(month,
+                                        intToUtf8(26376),
+                                        elements))
+    }
   }
   tibble::as_tibble(df)
 }
@@ -326,7 +334,7 @@ jma_url <- function(item = NULL,
                      c("annually", "monthly", "3monthly",
                        "10daily", "mb5daily", "daily",
                        "hourly", "10min", "rank",
-                       paste("nml", c("ym", "3m", "10d", "mb5d"),
+                       paste("nml", c("ym", "3m", "10d", "mb5d", "daily"),
                              sep = "_")))
   if (identical(selected_item, character(0))) {
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
@@ -371,24 +379,44 @@ jma_url <- function(item = NULL,
       } else {
         dummy_year <- year
       }
+    } else if (selected_item == "nml_daily") {
+        year <- ""
+        dummy_year <- 2024
+        day <- ""
+        dummy_day <- 1
+        dummy_month <- month
     } else {
       dummy_year <- year
       dummy_month <- 1
     }
     if (validate_date(dummy_year, dummy_month, dummy_day)) {
-      if (!selected_item %in% c("annually", "rank")) {
+      if (!selected_item %in% c("annually", "rank", "nml_daily")) {
         station_info$station_type <-
           paste0(station_info$station_type, "1")
       }
-      list(
-        url = as.character(stringr::str_glue(
-          "https://www.data.jma.go.jp/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
-          blockid = rlang::eval_tidy(.blockid),
-          station_type = station_info$station_type,
-          prec_no = station_info$prec_no
-        )),
-        station_type = station_info$station_type
-      )
+      if (selected_item == "nml_daily") {
+        list(
+          url = as.character(stringr::str_glue(
+            "https://www.data.jma.go.jp/stats/etrn/view/{selected_item}.php?prec_no={prec_no}&block_no={blockid}&year=&month={month}&day=&view=",
+            blockid = rlang::eval_tidy(.blockid),
+            selected_item = dplyr::if_else(station_info$station_type == "a",
+                                           "nml_amd_d",
+                                           "nml_sfc_d"),
+            prec_no = station_info$prec_no
+          )),
+          station_type = station_info$station_type
+        )
+      } else {
+        list(
+          url = as.character(stringr::str_glue(
+            "https://www.data.jma.go.jp/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+            blockid = rlang::eval_tidy(.blockid),
+            station_type = station_info$station_type,
+            prec_no = station_info$prec_no
+          )),
+          station_type = station_info$station_type
+        )
+      }
     }
   }
 }
@@ -855,7 +883,19 @@ name_sets <- function(item) {
                             c("", 2, 3)),
                      stringr::str_remove(jma_vars$precipitation[1], "_sum"),
                      jma_vars$temperature[c(1, 4, 5)],
-                     jma_vars$daylight)
+                     jma_vars$daylight),
+    "nml_daily_s" = c("elements",
+                      stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                      jma_vars$temperature[c(1, 4, 5)],
+                      jma_vars$daylight,
+                      jma_vars$solar,
+                      jma_vars$cloud,
+                      jma_vars$snow[c(1, 3)]),
+    "nml_daily_a" = c("elements",
+                      stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                      jma_vars$temperature[c(1, 4, 5)],
+                      jma_vars$daylight,
+                      jma_vars$snow[c(1, 3)])
     )
 }
 
