@@ -37,6 +37,7 @@
 #' - hourly: Hourly value. Please specify location, year, month and day.
 #' - rank: Values of the largest in the history of observations.
 #' - nml_ym: Climatological normals for each year and month.
+#' - nml_3m: Climatological normals for each 3 months.
 #' for each location.
 #' @examples
 #' \donttest{
@@ -169,16 +170,12 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
-  } else if (item == "nml_ym") {
-    if (target$station_type == "s") {
-      nml_meta <-
-        list(years = df[[3, 2]],
-             records = df[[4, 2]])
-    } else if (target$station_type == "a") {
-      nml_meta <-
-        list(years = df[[1, 2]],
-             records = df[[2, 2]])
-    }
+  } else if (item %in% c("nml_ym", "nml_3m")) {
+    nml_meta <-
+      list(years = df[[2]][df[[2]] |>
+                             stringr::str_which(intToUtf8(65374))],
+           records = df[[2]][df[[2]] |>
+                               stringr::str_which(intToUtf8(65374))+1])
     nml_meta$years <-
       nml_meta$years |>
       stringr::str_split(intToUtf8(65374), simplify = TRUE)
@@ -190,7 +187,7 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
               nml_meta$years[2],
               paste0("(",
                      nml_meta$records,
-                     " years of data)."))))
+                     " years of data).\n"))))
     df <-
       df[-c(seq.int(df[[1]] |>
                       stringr::str_which(intToUtf8(c(36039, 26009, 24180, 25968))))), ] |>
@@ -782,8 +779,38 @@ name_sets <- function(item) {
                        jma_vars$temperature[c(1, 4, 5)],
                        jma_vars$wind[1],
                        jma_vars$daylight,
-                       jma_vars$snow[c(1, 3)]
-    ))
+                       jma_vars$snow[c(1, 3)]),
+    "nml_3m_s" = c("element",
+                   stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                   jma_vars$temperature[1],
+                   paste0("temperature_",
+                          c(rep("min_num_days_", 2),
+                            rep("max_num_days_", 4)),
+                          c("lt_0.0",
+                            "geq_35.0",
+                            "lt_0.0",
+                            "geq_25.0",
+                            "geq_30.0",
+                            "geq_35.0"),
+                          "(\u2103)"),
+                   jma_vars$daylight,
+                   jma_vars$snow[c(1, 3)]),
+    "nml_3m_a" = c("element",
+                   stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                   jma_vars$temperature[1],
+                   paste0("temperature_",
+                          c(rep("min_num_days_", 2),
+                            rep("max_num_days_", 4)),
+                          c("lt_0.0",
+                            "geq_35.0",
+                            "lt_0.0",
+                            "geq_25.0",
+                            "geq_30.0",
+                            "geq_35.0"),
+                          "(\u2103)"),
+                   jma_vars$daylight,
+                   jma_vars$snow[c(1, 3)])
+    )
 }
 
 discard_ignore_df <- function(x) {
