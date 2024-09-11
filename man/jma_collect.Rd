@@ -58,7 +58,8 @@ The parameter \code{item} chooses one from these:
 \item mb5daily: Semi-seasonal value. Please specify location and year.
 \item daily: Daily value. Please specify location, year and month.
 \item hourly: Hourly value. Please specify location, year, month and day.
-\item rank: Values of the largest in the history of observations
+\item rank: Values of the largest in the history of observations.
+\item nml_ym: Climatological normals for each year and month.
 for each location.
 }
 }

@@ -35,7 +35,8 @@
 #' - mb5daily: Semi-seasonal value. Please specify location and year.
 #' - daily: Daily value. Please specify location, year and month.
 #' - hourly: Hourly value. Please specify location, year, month and day.
-#' - rank: Values of the largest in the history of observations
+#' - rank: Values of the largest in the history of observations.
+#' - nml_ym: Climatological normals for each year and month.
 #' for each location.
 #' @examples
 #' \donttest{
@@ -49,6 +50,8 @@
 #' # Historical Ranking
 #' jma_collect("rank", block_no = "47646", year = 2020, cache = FALSE)
 #' }
+#' # Climatological normals
+#' jma_collect("nml_ym", block_no = "47646", cache = FALSE, pack = FALSE)
 #' @export
 #' @return a `tbl` object
 jma_collect <- function(item = NULL,
@@ -166,6 +169,33 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
+  } else if (item == "nml_ym") {
+    if (target$station_type == "s") {
+      nml_meta <-
+        list(years = df[[3, 2]],
+             records = df[[4, 2]])
+    } else if (target$station_type == "a") {
+      nml_meta <-
+        list(years = df[[1, 2]],
+             records = df[[2, 2]])
+    }
+    nml_meta$years <-
+      nml_meta$years |>
+      stringr::str_split(intToUtf8(65374), simplify = TRUE)
+    cat(
+      cli::col_br_blue(
+        paste("\nThe record is based on the statistical period from",
+              nml_meta$years[1],
+              "to",
+              nml_meta$years[2],
+              paste0("(",
+                     nml_meta$records,
+                     " years of data)."))))
+    df <-
+      df[-c(seq.int(df[[1]] |>
+                      stringr::str_which(intToUtf8(c(36039, 26009, 24180, 25968))))), ] |>
+      purrr::set_names(vars) |>
+      tweak_df(quiet = quiet)
   }
   tibble::as_tibble(df)
 }
@@ -281,52 +311,71 @@ jma_url <- function(item = NULL,
     rlang::arg_match(item,
                      c("annually", "monthly", "3monthly",
                        "10daily", "mb5daily", "daily",
-                       "hourly", "10min", "rank"))
+                       "hourly", "10min", "rank",
+                       paste("nml", c("ym", "3m", "10d", "mb5d"),
+                             sep = "_")))
   if (identical(selected_item, character(0))) {
     rlang::abort(intToUtf8(c(12371, 12398, 20013, 12363, 12425, 36984, 25246)))
   }
-  if (selected_item == "hourly") {
-    validate_date(year, month, day)
-  }
-  if (rlang::is_missing(day)) {
-    day <- ""
-    dummy_day <- 1
-  } else {
-    dummy_day <- day
-  }
-  if (rlang::is_missing(month)) {
-    month <- ""
-    dummy_month <- 1
-  } else {
-    dummy_month <- month
-  }
-  if (selected_item %in% c("annually", "rank")) {
-    if (rlang::is_missing(year)) {
-      year <- ""
-      dummy_year <- 1
-    } else {
-      dummy_year <- year
-    }
-  } else {
-    dummy_year <- year
-    dummy_month <- 1
-  }
-  if (validate_date(dummy_year, dummy_month, dummy_day)) {
-    station_info <-
-      detect_station_info(.blockid)
-    if (!selected_item %in% c("annually", "rank")) {
-      station_info$station_type <-
-        paste0(station_info$station_type, "1")
-    }
+  station_info <-
+    detect_station_info(.blockid)
+  if (selected_item %in% c(paste("nml", c("ym", "3m", "10d", "mb5d"),
+                                 sep = "_"))) {
     list(
       url = as.character(stringr::str_glue(
-        "https://www.data.jma.go.jp/obd/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+        "https://www.data.jma.go.jp/stats/etrn/view/{selected_item}.php?prec_no={prec_no}&block_no={blockid}&year=&month=&view=",
+        selected_item = stringr::str_replace(selected_item,
+                                             "_",
+                                             dplyr::if_else(station_info$station_type == "a",
+                                                            "_amd_",
+                                                            "_sfc_")),
         blockid = rlang::eval_tidy(.blockid),
-        station_type = station_info$station_type,
         prec_no = station_info$prec_no
       )),
       station_type = station_info$station_type
     )
+  } else {
+    if (selected_item == "hourly") {
+      validate_date(year, month, day)
+    }
+    if (rlang::is_missing(day)) {
+      day <- ""
+      dummy_day <- 1
+    } else {
+      dummy_day <- day
+    }
+    if (rlang::is_missing(month)) {
+      month <- ""
+      dummy_month <- 1
+    } else {
+      dummy_month <- month
+    }
+    if (selected_item %in% c("annually", "rank")) {
+      if (rlang::is_missing(year)) {
+        year <- ""
+        dummy_year <- 1
+      } else {
+        dummy_year <- year
+      }
+    } else {
+      dummy_year <- year
+      dummy_month <- 1
+    }
+    if (validate_date(dummy_year, dummy_month, dummy_day)) {
+      if (!selected_item %in% c("annually", "rank")) {
+        station_info$station_type <-
+          paste0(station_info$station_type, "1")
+      }
+      list(
+        url = as.character(stringr::str_glue(
+          "https://www.data.jma.go.jp/stats/etrn/view/{selected_item}_{station_type}.php?prec_no={prec_no}&block_no={blockid}&year={year}&month={month}&day={day}&view=",
+          blockid = rlang::eval_tidy(.blockid),
+          station_type = station_info$station_type,
+          prec_no = station_info$prec_no
+        )),
+        station_type = station_info$station_type
+      )
+    }
   }
 }
 
@@ -430,7 +479,7 @@ detect_station_info <- function(.blockid) {
   )
 }
 
-# see) https://www.data.jma.go.jp/obd/stats/data/mdrr/man/remark.html
+# see) https://www.data.jma.go.jp/stats//data/mdrr/man/remark.html
 convert_error <- function(.data, quiet) {
   if (!quiet) {
     msg <-
@@ -714,7 +763,27 @@ name_sets <- function(item) {
                        jma_vars$cloud,
                        jma_vars$condition),
     "rank_s" = c("element", "period", "rank", "value", "date"),
-    "rank_a" = c("element", "period", "rank", "value", "date"))
+    "rank_a" = c("element", "period", "rank", "value", "date"),
+    "nml_ym_s" = c("element",
+                       jma_vars$atmosphere,
+                       jma_vars$precipitation[1],
+                       jma_vars$temperature[c(1, 4, 5)],
+                       paste0("vapor", "(hPa)"),
+                       paste0("relative_humidity", "(%)"),
+                       jma_vars$wind[1],
+                       "wind_most_frequent_direction",
+                       jma_vars$daylight,
+                       jma_vars$solar,
+                       jma_vars$snow,
+                       jma_vars$cloud,
+                       jma_vars$condition),
+    "nml_ym_a" = c("element",
+                       jma_vars$precipitation[1],
+                       jma_vars$temperature[c(1, 4, 5)],
+                       jma_vars$wind[1],
+                       jma_vars$daylight,
+                       jma_vars$snow[c(1, 3)]
+    ))
 }
 
 discard_ignore_df <- function(x) {
