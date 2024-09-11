@@ -19,7 +19,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 1. 地上気象観測地点 -------------------------------------------------------------
   # # 1.1. zip archives ---------------------------------------------------------
   # Ref) https://www.data.jma.go.jp/developer/index.html
-  # 地上気象観測地点 https://www.data.jma.go.jp/obd/stats/data/mdrr/chiten/sindex2.html
+  # 地上気象観測地点 https://www.data.jma.go.jp/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
   ame_master <- "ame_master_20240401.csv"
@@ -76,7 +76,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   read_block_no <- function(prec_no) {
     url <-
       polite::bow(stringr::str_glue(
-      "https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no={prec_no}&block_no=&year=&month=&day=&view="))
+      "https://www.data.jma.go.jp/stats/etrn/select/prefecture.php?prec_no={prec_no}&block_no=&year=&month=&day=&view="))
     polite::scrape(url) |>
       rvest::html_elements(css = "#ncontents2 > map > area") |>
       rvest::html_attrs() %>% # magrittr
@@ -94,7 +94,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   }
 
   df_prec_no <-
-    xml2::read_html("https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture00.php?prec_no=&block_no=&year=&month=&day=&view=") |>
+    xml2::read_html("https://www.data.jma.go.jp/stats/etrn/select/prefecture00.php?prec_no=&block_no=&year=&month=&day=&view=") |>
     rvest::html_elements(css = "#main > map > area") |>
     rvest::html_attrs() %>% # magrittr
     tibble::tibble(
@@ -130,7 +130,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
            station = stringr::str_remove(station, "（.+）")) |>
     dplyr::rename(station_name = station)
 
-  # https://www.data.jma.go.jp/obd/stats/etrn/select/prefecture.php?prec_no=50&block_no=&year=&month=&day=&view=
+  # https://www.data.jma.go.jp/stats/etrn/select/prefecture.php?prec_no=50&block_no=&year=&month=&day=&view=
   df_stations |>
     filter(station_name == "三倉", area == "静岡") |>
     pointblank::row_count_match(2L) # 2地点でOK
