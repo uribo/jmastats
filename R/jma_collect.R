@@ -39,6 +39,7 @@
 #' - nml_ym: Climatological normals for each year and month.
 #' - nml_3m: Climatological normals for each 3 months.
 #' - nml_10d: Climatological normals for each season (almost 10 days).
+#' - nml_mb5d: Climatological normals for each semi-season (almost 5 days).
 #' for each location.
 #' @examples
 #' \donttest{
@@ -171,18 +172,24 @@ jma_collect_raw <- function(item = NULL, block_no, year, month, day, quiet) {
                                                     collapse = intToUtf8(c(12363L, 12425L))),
                     rank = stringr::str_extract(rank, "[0-9]{1,}")) |>
       readr::type_convert()
-  } else if (item %in% c("nml_ym", "nml_3m", "nml_10d")) {
+  } else if (item %in% c("nml_ym", "nml_3m", "nml_10d", "nml_mb5d")) {
     if (item %in% c("nml_ym", "nml_3m")) {
       nml_meta <-
         list(years = df[[2]][df[[2]] |>
                                stringr::str_which(intToUtf8(65374))],
              records = df[[2]][df[[2]] |>
                                  stringr::str_which(intToUtf8(65374))+1])
-    } else if (item %in% c("nml_10d")) {
+    } else if (item == "nml_10d") {
       nml_meta <-
         list(years = df[[3]][df[[3]] |>
                                stringr::str_which(intToUtf8(65374))],
              records = df[[3]][df[[3]] |>
+                                 stringr::str_which(intToUtf8(65374))+1])
+    } else if (item == "nml_mb5d") {
+      nml_meta <-
+        list(years = df[[4]][df[[4]] |>
+                               stringr::str_which(intToUtf8(65374))],
+             records = df[[4]][df[[4]] |>
                                  stringr::str_which(intToUtf8(65374))+1])
     }
     nml_meta$years <-
@@ -838,6 +845,17 @@ name_sets <- function(item) {
                     jma_vars$wind[1],
                     jma_vars$daylight,
                     jma_vars$snow[c(1, 3)]),
+    "nml_mb5d_s" = c(paste0("elements",
+                            c("", 2, 3)),
+                     stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                     jma_vars$temperature[c(1, 4, 5)],
+                     jma_vars$daylight,
+                     jma_vars$solar),
+    "nml_mb5d_a" = c(paste0("elements",
+                            c("", 2, 3)),
+                     stringr::str_remove(jma_vars$precipitation[1], "_sum"),
+                     jma_vars$temperature[c(1, 4, 5)],
+                     jma_vars$daylight)
     )
 }
 
