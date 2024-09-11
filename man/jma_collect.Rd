@@ -58,7 +58,12 @@ The parameter \code{item} chooses one from these:
 \item mb5daily: Semi-seasonal value. Please specify location and year.
 \item daily: Daily value. Please specify location, year and month.
 \item hourly: Hourly value. Please specify location, year, month and day.
-\item rank: Values of the largest in the history of observations
+\item rank: Values of the largest in the history of observations.
+\item nml_ym: Climatological normals for each year and month.
+\item nml_3m: Climatological normals for each 3 months.
+\item nml_10d: Climatological normals for each season (almost 10 days).
+\item nml_mb5d: Climatological normals for each semi-season (almost 5 days).
+\item nml_daily: Daily climatological normals for specific month.
 for each location.
 }
 }
@@ -73,5 +78,10 @@ jma_collect(item = "daily", "0422", year = 2017, month = 11, cache = FALSE)
 jma_collect("hourly", "0010", 2018, 7, 30, cache = FALSE)
 # Historical Ranking
 jma_collect("rank", block_no = "47646", year = 2020, cache = FALSE)
+# Climatological normals
+jma_collect("nml_ym", block_no = "47646", cache = FALSE, pack = FALSE)
+jma_collect("nml_3m", "47646", cache = FALSE, pack = FALSE, quiet = TRUE)
+jma_collect("nml_10d", "0228", cache = FALSE, pack = FALSE, quiet = TRUE)
+jma_collect("nml_mb5d", "0228", cache = FALSE, pack = FALSE, quiet = FALSE)
 }
 }
