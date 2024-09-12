@@ -71,7 +71,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     # csv上では「オホーツク」だが「網走・北見・紋別」
     dplyr::mutate(area = dplyr::recode(area,
                                        `オホーツク` = "網走・北見・紋別")) |>
-    ensurer::ensure(ncol(.) == 12L)
+    pointblank::col_count_match(12L)
   # 1.2. scraping  ---------------------------------------------------------------
   read_block_no <- function(prec_no) {
     url <-
@@ -126,13 +126,16 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     pointblank::row_count_match(1677L) |>
     pointblank::col_count_match(4L) |>
     dplyr::mutate(area = stringr::str_remove(area, "(都|府|県)$"),
-           # area = dplyr::if_else(station == "竜王山", "徳島", area),
+                  area = dplyr::if_else(station == "竜王山", "徳島", area),
            station = stringr::str_remove(station, "（.+）")) |>
     dplyr::rename(station_name = station)
 
   # https://www.data.jma.go.jp/stats/etrn/select/prefecture.php?prec_no=50&block_no=&year=&month=&day=&view=
   df_stations |>
     filter(station_name == "三倉", area == "静岡") |>
+    pointblank::row_count_match(2L) # 2地点でOK
+  df_stations |>
+    filter(station_name == "新島", area == "東京") |>
     pointblank::row_count_match(2L) # 2地点でOK
   df_amedas_master |>
     filter(station_name == "高知", area == "高知") |>
@@ -160,6 +163,10 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # df_stations |> filter(station_name == "ピヤシリ山")
   # df_amedas_master |> filter(station_name == "ピヤシリ山")
   # stations |> filter(station_name == "ピヤシリ山")
+
+  stations |>
+    filter(is.na(block_no)) |>
+    pointblank::row_count_match(0L)
 
   stations |>
     readr::write_rds("data-raw/amedas_raw.rds")
