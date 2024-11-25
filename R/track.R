@@ -153,7 +153,7 @@ read_rsmc_besttrack <- function(path) {
     dplyr::mutate(
       datetime = lubridate::ymd_h(
         paste0(
-          dplyr::if_else(as.numeric(stringr::str_sub(datetime, 1, 2)) <= 19,
+          dplyr::if_else(dplyr::between(as.numeric(stringr::str_sub(datetime, 1, 2)), 0, 49),
                          "20",
                          "19"),
           datetime), tz = "UTC"),
