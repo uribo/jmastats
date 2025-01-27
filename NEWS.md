@@ -4,9 +4,9 @@
 
 * Retrieve climatological normals based on past data using `jma_collect()` (#20).
 
-## Datasets 
+## Datasets
 
-* Earth quake station dataset handled by the package have been updated to the latest version in September 2024.
+* Various datasets handled by the package have been updated to the latest version in January 2025.
 
 # jmastats 0.2.2
 

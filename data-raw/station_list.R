@@ -1,11 +1,11 @@
 #####################################
 # Stations list
-# Last Update: 2024-08-01
-# 1. 地上気象観測地点,地域気象観測所 (適用日：2024年4月1日)
-# 2. 潮位観測地点（2024-01-01）
-# 3. 震度観測点 (2024-03-14)
+# Last Update: 2025-01-28
+# 1. 地上気象観測地点,地域気象観測所 (適用日：2024年12月18日)
+# 2. 潮位観測地点（2025-01-01）
+# 3. 震度観測点 (2024-11-21)
 #####################################
-# remotes::install_github("uribo/kuniezu")
+# pak::pkg_install("uribo/kuniezu")
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
 library(rnaturalearth) # for reverse geocoding
@@ -22,7 +22,7 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
   # 地上気象観測地点 https://www.data.jma.go.jp/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  ame_master <- "ame_master_20240401.csv"
+  ame_master <- "ame_master_20241218.csv"
   if (!file.exists(here::here(stringr::str_glue("data-raw/{ame_master}")))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
@@ -343,6 +343,7 @@ prefecture_code <- c(`11001` = "01",
                      `86216` = "43",
                      `87412` = "45",
                      `87492` = "45",
+                     `88837` = "46",
                      `88836` = "46",
                      `88551` = "46",
                      `88612` = "46",
@@ -378,7 +379,7 @@ prefecture_code <- c(`11001` = "01",
                      `94036` = "47",
                      `94121` = "47",
                      `94116` = "47") |>
-  ensurer::ensure(length(.) == 185L)
+  ensurer::ensure(length(.) == 186L)
 
 pref_code_missing <-
   stations |>
@@ -506,8 +507,17 @@ tide_station <-
   mutate(longitude = parzer::parse_lon(longitude),
          latitude = parzer::parse_lat(latitude)) |>
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
-  pointblank::row_count_match(1949L) |>
+  pointblank::row_count_match(2019L) |>
   pointblank::col_count_match(7L)
+
+tide_station |>
+  dplyr::filter(year == 2025) |>
+  pointblank::row_count_match(70L)
+
+tide_station |>
+  st_drop_geometry() |>
+  count(year) |>
+  pointblank::row_count_match(29L)
 
 usethis::use_data(tide_station, overwrite = TRUE)
 
@@ -516,7 +526,7 @@ x <-
   rvest::read_html("https://www.data.jma.go.jp/eqev/data/kyoshin/jma-shindo.html")
 x |>
   rvest::html_element(css = "#main > h1") |>
-  rvest::html_text() # 令和6年7月18日現在
+  rvest::html_text() # 令和6年11月21日現在
 
 earthquake_station <-
   x |>
@@ -531,7 +541,7 @@ earthquake_station <-
                     .fns = as.character))
   ) |>
   purrr::list_rbind(names_to = "prefecture") |>
-  pointblank::row_count_match(1125L) |>
+  pointblank::row_count_match(1127L) |>
   pointblank::col_count_match(10L) |>
   readr::type_convert(col_types = "ccccididcc") |>
   purrr::set_names(c("prefecture", "area", "station_name", "address",
@@ -548,7 +558,7 @@ earthquake_station <-
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) |>
   sf::st_transform(crs = 4326) |>
   select(!c(ends_with("_do"), ends_with("_fun"))) |>
-  pointblank::row_count_match(1125L) |>
+  pointblank::row_count_match(1127L) |>
   pointblank::col_count_match(7L) |>
   filter(is.na(observation_end)) |>
   pointblank::row_count_match(671L)
