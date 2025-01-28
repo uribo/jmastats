@@ -1,6 +1,6 @@
 ## Test environments
 
-* macOS Sonoma (14.5) install, R 4.4.1 (local)
+* macOS Sequoia (15.2) install, R 4.4.2 (local)
 * win-builder (devel and release)
 
 ## R CMD check results
