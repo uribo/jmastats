@@ -75,35 +75,35 @@ See details for the items.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"high"</span>, type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 253 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    title          id                    updated             author content link </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:47:24</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:37:25</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:27:23</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:17:24</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 府県天気概況   https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:15:16</span> 宮崎地方気… 【天気概況】… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:07:24</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地上実況図     https://www.data.jma… 2025-01-27 <span style="color: #949494;">23:04:53</span> 気象庁 【地上実況図… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">22:57:23</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 大雨危険度通知 https://www.data.jma… 2025-01-27 <span style="color: #949494;">22:47:24</span> 気象庁 【大雨危険度… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 府県天気概況   https://www.data.jma… 2025-01-27 <span style="color: #949494;">22:39:35</span> 松山地方気… 【天気概況】… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 243 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 541 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    title                      id        updated             author content link </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">04:37:23</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 府県天気予報（Ｒ１）       https://… 2025-01-28 <span style="color: #949494;">04:32:19</span> 静岡地方気… 【静岡県府県… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 警報級の可能性（明日まで） https://… 2025-01-28 <span style="color: #949494;">04:30:00</span> 静岡地方気… 【静岡県警報… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">04:27:24</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">04:17:24</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">04:07:24</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">03:57:23</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">03:47:24</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">03:37:24</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 大雨危険度通知             https://… 2025-01-28 <span style="color: #949494;">03:27:23</span> 気象庁 【大雨危険度… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 531 more rows</span></span>
 <span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"other"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 518 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 523 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    title                  id            updated             author content link </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:06</span> 鹿児島地方… 【鹿児島海上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:06</span> 沖縄気象台… 【沖縄海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:05</span> 大阪管区気… 【舞鶴海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:05</span> 福岡管区気… 【長崎海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:05</span> 福岡管区気… 【福岡海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:04</span> 高松地方気… 【神戸海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:04</span> 名古屋地方… 【名古屋海上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:03</span> 仙台管区気… 【仙台海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:03</span> 気象庁 【東京海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上予報（Ｈ２８） https://www.… 2025-01-27 <span style="color: #949494;">21:10:03</span> 新潟地方気… 【新潟海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 508 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:07</span> 沖縄気象台… 【沖縄海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:07</span> 鹿児島地方… 【鹿児島海上… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:06</span> 福岡管区気… 【長崎海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:06</span> 福岡管区気… 【福岡海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:05</span> 名古屋地方… 【名古屋海上… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:05</span> 高松地方気… 【神戸海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:05</span> 大阪管区気… 【舞鶴海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:04</span> 気象庁 【東京海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:04</span> 新潟地方気… 【新潟海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上警報（Ｈ２８） https://www.… 2025-01-28 <span style="color: #949494;">02:35:03</span> 札幌管区気… 【函館海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 513 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
