@@ -30,28 +30,24 @@ read_kishou_feed <- function(frequency, type) {
     stringr::str_which("entry") |>
     range()
   df <-
-    seq.int(min(x_entry_index),
-            max(x_entry_index)) |>
+    seq.int(min(x_entry_index), max(x_entry_index)) |>
     purrr::map(
-      ~ parse_kishou_xml(x, .x)) |>
+      ~ parse_kishou_xml(x, .x)
+    ) |>
     purrr::list_rbind()
   df
 }
 
 create_feed_url <- function(frequency, type) {
   freq <-
-    rlang::arg_match(frequency,
-                     c("high",
-                       "low"))
+    rlang::arg_match(frequency, c("high", "low"))
   freq <-
     dplyr::if_else(freq == "low", "_l", "")
   type <-
-    rlang::arg_match(type,
-                     c("regular",
-                       "extra",
-                       "eqvol",
-                       "other"))
-  stringr::str_glue("https://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml")
+    rlang::arg_match(type, c("regular", "extra", "eqvol", "other"))
+  stringr::str_glue(
+    "https://www.data.jma.go.jp/developer/xml/feed/{type}{freq}.xml"
+  )
 }
 
 parse_kishou_xml <- function(x, index) {
@@ -61,23 +57,30 @@ parse_kishou_xml <- function(x, index) {
   xxx <-
     xx |>
     purrr::discard(
-      ~ xml2::xml_name(.x) == "link")
+      ~ xml2::xml_name(.x) == "link"
+    )
   xxx |>
     xml2::xml_text() |>
-    purrr::set_names(xxx |>
-                       xml2::xml_name()) |>
+    purrr::set_names(
+      xxx |>
+        xml2::xml_name()
+    ) |>
     as.list() |>
     purrr::flatten_df() |>
-    purrr::update_list(link = xx |>
-                         purrr::keep(~ xml2::xml_name(.x) == "link") |>
-                         xml2::xml_attr("href")) |>
+    purrr::update_list(
+      link = xx |>
+        purrr::keep(~ xml2::xml_name(.x) == "link") |>
+        xml2::xml_attr("href")
+    ) |>
     dplyr::mutate(id = stringr::str_remove_all(id, "urn:uuid:")) |>
     readr::type_convert(
       col_types = readr::cols(
-        title   = readr::col_character(),
-        id      = readr::col_character(),
+        title = readr::col_character(),
+        id = readr::col_character(),
         updated = readr::col_datetime(format = ""),
-        author  = readr::col_character(),
+        author = readr::col_character(),
         content = readr::col_character(),
-        link    = readr::col_character()))
+        link = readr::col_character()
+      )
+    )
 }

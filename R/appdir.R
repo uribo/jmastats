@@ -12,13 +12,12 @@
 #' @export
 #' @return None
 reset_cache <- function() {
-if (utils::askYesNo("Delete all cache files. Is it OK?"))
-  unlink(rappdirs::user_cache_dir("jmastats"),
-         recursive = TRUE)
+  if (utils::askYesNo("Delete all cache files. Is it OK?")) {
+    unlink(rappdirs::user_cache_dir("jmastats"), recursive = TRUE)
+  }
 }
 
-pick_out_cache <- function(item = NULL,
-                           block_no, year, month, day) {
+pick_out_cache <- function(item = NULL, block_no, year, month, day) {
   target <-
     detect_target(item, block_no, year, month, day)
   param <-
@@ -34,10 +33,14 @@ search_cache_file <- function(item, station_type, param) {
   cache_dir <-
     rappdirs::user_cache_dir("jmastats")
   file.path(
-      cache_dir,
-      paste0(item, "_",
-             station_type,
-             "&",
-             stringr::str_remove(param, "&view="),
-             ".rds"))
+    cache_dir,
+    paste0(
+      item,
+      "_",
+      station_type,
+      "&",
+      stringr::str_remove(param, "&view="),
+      ".rds"
+    )
+  )
 }

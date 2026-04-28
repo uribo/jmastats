@@ -1,7 +1,6 @@
 context("test-palette.R")
 
 test_that("Regular works", {
-
   res <-
     jma_pal(palette = "absolute")
   expect_is(res, "character")
@@ -24,13 +23,10 @@ test_that("Regular works", {
     c("colors", "amedas", "forecast")
   )
   expect_length(unlist(res), 52L)
-
 })
 
 test_that("Failed Patterns", {
-
   expect_error(
     jma_pal(palette = "soutai")
   )
-
 })

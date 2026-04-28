@@ -40,8 +40,8 @@ NULL
 
 . <- m <- station_no <-
   address <- id <- stn <- type <-
-  block_no <- geometry <- station_name <-
-  area <- distance <- NULL
+    block_no <- geometry <- station_name <-
+      area <- distance <- NULL
 
 #' @rdname nearest_station
 #' @return an object of class `sf`.
@@ -49,67 +49,97 @@ NULL
 nearest_station <- function(longitude, latitude, geometry = NULL) {
   coords <-
     check_input_coords(longitude, latitude, geometry)
-  res <- pick_neighbor_stations(coords$longitude,
-                                coords$latitude,
-                                distance = 10,
-                                .unit = "km")
-  if (nrow(res) == 0)
-    res <- pick_neighbor_stations(coords$longitude,
-                                  coords$latitude,
-                                  distance = 100,
-                                  .unit = "km")
-  if (nrow(res) == 0)
-    res <- pick_neighbor_stations(coords$longitude,
-                                  coords$latitude,
-                                  distance = 500,
-                                  .unit = "km")
-  if (nrow(res) == 0)
-    res <- pick_neighbor_stations(coords$longitude,
-                                  coords$latitude,
-                                  distance = 1000,
-                                  .unit = "km")
-  if (nrow(res) == 0)
-    res <- pick_neighbor_stations(coords$longitude,
-                                  coords$latitude,
-                                  distance = 3200,
-                                  .unit = "km")
-  if (nrow(res) == 0)
-    rlang::inform("Check input coordinates.\nThe distance to stations is too far.")
+  res <- pick_neighbor_stations(
+    coords$longitude,
+    coords$latitude,
+    distance = 10,
+    .unit = "km"
+  )
+  if (nrow(res) == 0) {
+    res <- pick_neighbor_stations(
+      coords$longitude,
+      coords$latitude,
+      distance = 100,
+      .unit = "km"
+    )
+  }
+  if (nrow(res) == 0) {
+    res <- pick_neighbor_stations(
+      coords$longitude,
+      coords$latitude,
+      distance = 500,
+      .unit = "km"
+    )
+  }
+  if (nrow(res) == 0) {
+    res <- pick_neighbor_stations(
+      coords$longitude,
+      coords$latitude,
+      distance = 1000,
+      .unit = "km"
+    )
+  }
+  if (nrow(res) == 0) {
+    res <- pick_neighbor_stations(
+      coords$longitude,
+      coords$latitude,
+      distance = 3200,
+      .unit = "km"
+    )
+  }
+  if (nrow(res) == 0) {
+    rlang::inform(
+      "Check input coordinates.\nThe distance to stations is too far."
+    )
+  }
 
-  if (nrow(res) > 0)
+  if (nrow(res) > 0) {
     res |>
-    dplyr::top_n(1, dplyr::desc(distance)) |>
-    dplyr::distinct(station_no, .keep_all = TRUE) |>
-    dplyr::select(area,
-                  station_no,
-                  station_name,
-                  block_no,
-                  distance,
-                  geometry)
+      dplyr::top_n(1, dplyr::desc(distance)) |>
+      dplyr::distinct(station_no, .keep_all = TRUE) |>
+      dplyr::select(
+        area,
+        station_no,
+        station_name,
+        block_no,
+        distance,
+        geometry
+      )
+  }
 }
 
 #' @rdname nearest_station
 #' @export
-pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m", geometry = NULL) {
+pick_neighbor_stations <- function(
+  longitude,
+  latitude,
+  distance = 1,
+  .unit = "m",
+  geometry = NULL
+) {
   unit <- rlang::quo_name(.unit)
   coords <-
     check_input_coords(longitude, latitude, geometry)
   coords <-
     sf::st_sfc(
-    sf::st_point(c(coords$longitude,
-                   coords$latitude)),
-    crs = 4326)
+      sf::st_point(c(coords$longitude, coords$latitude)),
+      crs = 4326
+    )
   tgt_st <-
-    stations[which(sf::st_is_within_distance(
-      coords,
-      stations,
-      dist = units::as_units(distance, value = unit),
-      sparse = FALSE)[1, ]), ]
+    stations[
+      which(sf::st_is_within_distance(
+        coords,
+        stations,
+        dist = units::as_units(distance, value = unit),
+        sparse = FALSE
+      )[1, ]),
+    ]
   tgt_st$distance <-
     sf::st_distance(
       coords,
       sf::st_transform(tgt_st$geometry, 4326),
-      by_element = FALSE)[1, ]
+      by_element = FALSE
+    )[1, ]
   tgt_st |>
     dplyr::select(
       area,
@@ -117,14 +147,21 @@ pick_neighbor_stations <- function(longitude, latitude, distance = 1, .unit = "m
       station_name,
       block_no,
       distance,
-      geometry) |>
+      geometry
+    ) |>
     dplyr::arrange(distance)
 }
 
 #' @rdname nearest_station
 #' @export
-pick_neighbor_tide_stations <- function(year, longitude, latitude,
-                                        distance = 100, .unit = "km", geometry = NULL) {
+pick_neighbor_tide_stations <- function(
+  year,
+  longitude,
+  latitude,
+  distance = 100,
+  .unit = "km",
+  geometry = NULL
+) {
   unit <- rlang::quo_name(.unit)
   year <-
     check_input_tidal_year(year)
@@ -135,18 +172,23 @@ pick_neighbor_tide_stations <- function(year, longitude, latitude,
   coords <-
     check_input_coords(longitude, latitude, geometry)
   coords <-
-    st_sfc(st_point(c(coords$longitude,
-                    coords$latitude)),
-         crs = 4326)
+    st_sfc(st_point(c(coords$longitude, coords$latitude)), crs = 4326)
 
-  stations[which(sf::st_is_within_distance(coords,
-                                           stations,
-                                           dist = units::as_units(distance, value = unit),
-                                           sparse = FALSE)[1, ]), ] |>
+  stations[
+    which(sf::st_is_within_distance(
+      coords,
+      stations,
+      dist = units::as_units(distance, value = unit),
+      sparse = FALSE
+    )[1, ]),
+  ] |>
     sf::st_transform(crs = 4326) |>
-    dplyr::mutate(distance = sf::st_distance(
-      geometry,
-      coords)[, 1]) |>
+    dplyr::mutate(
+      distance = sf::st_distance(
+        geometry,
+        coords
+      )[, 1]
+    ) |>
     dplyr::select(
       year,
       id,

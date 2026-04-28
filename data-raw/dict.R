@@ -50,9 +50,11 @@ d2 <-
   select(area, station_name)
 
 d2 %>%
-  dplyr::anti_join(d %>%
-                     select(4, 5),
-                   by = c("station_name" = "日本語")) %>%
+  dplyr::anti_join(
+    d %>%
+      select(4, 5),
+    by = c("station_name" = "日本語")
+  ) %>%
   verify(nrow(.) == 3L)
 
 d2 %>%

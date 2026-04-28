@@ -33,10 +33,9 @@
 #' @export
 #' @return a `tbl` object
 read_rsmc_besttrack <- function(path) {
-
   last_update <- international_number <- storm_name <-
-  `central_pressure(hPa)` <- `maximum_sustained_wind_speed(knot)` <-
-    datetime <- latitude <- longitude <- NULL
+    `central_pressure(hPa)` <- `maximum_sustained_wind_speed(knot)` <-
+      datetime <- latitude <- longitude <- NULL
   v8 <- v10 <- NULL
 
   lines <- readr::read_lines(path)
@@ -51,24 +50,29 @@ read_rsmc_besttrack <- function(path) {
           stringr::str_subset(".+")
         if (length(parse_x) == 7L) {
           parse_x <-
-            c(parse_x[1:4],
+            c(
+              parse_x[1:4],
               NA_character_,
               parse_x[5:6],
               NA_character_,
-              parse_x[7])
+              parse_x[7]
+            )
         } else if (length(parse_x) == 8L) {
           parse_x <-
-            c(parse_x[1:4],
-              NA_character_,
-              parse_x[5:8])
+            c(parse_x[1:4], NA_character_, parse_x[5:8])
         }
         parse_x |>
-          purrr::set_names(c("indicator_66666",
-                      "international_number", "nrow",
-                      "tropical_cyclone_number",
-                      "international_number_copy",
-                      "flag_last_data_line",
-                      "DTM", "storm_name", "last_update"))
+          purrr::set_names(c(
+            "indicator_66666",
+            "international_number",
+            "nrow",
+            "tropical_cyclone_number",
+            "international_number_copy",
+            "flag_last_data_line",
+            "DTM",
+            "storm_name",
+            "last_update"
+          ))
       }
     ) |>
     dplyr::bind_rows() |>
@@ -76,10 +80,13 @@ read_rsmc_besttrack <- function(path) {
     readr::type_convert(col_types = "dcdcccdcc") |>
     dplyr::mutate(last_update = lubridate::ymd(last_update))
 
-  if (df_header |>
+  if (
+    df_header |>
       dplyr::pull(international_number) |>
       stringr::str_sub(1, 2) |>
-      dplyr::n_distinct() == 1) {
+      dplyr::n_distinct() ==
+      1
+  ) {
     df_header <-
       df_header |>
       dplyr::arrange(international_number) |>
@@ -90,17 +97,25 @@ read_rsmc_besttrack <- function(path) {
       dplyr::mutate(storm_name = forcats::fct_inorder(storm_name))
   }
   data_common_vars <-
-    c("datetime", "indicator_002", "grade",
-      "latitude", "longitude",
+    c(
+      "datetime",
+      "indicator_002",
+      "grade",
+      "latitude",
+      "longitude",
       "central_pressure(hPa)",
-      "maximum_sustained_wind_speed(knot)")
+      "maximum_sustained_wind_speed(knot)"
+    )
   data_typhoon_vars <-
-    paste0(c("_direction_of_the_longest_radius_of_",
-             "_the_longest_radius_of_",
-             "_the_shortest_radius_of_"),
-           rep(c("50kt_winds_or_greater",
-                 "30kt_winds_or_greater"), each = 3),
-           c("", "(nm)", "(nm)"))
+    paste0(
+      c(
+        "_direction_of_the_longest_radius_of_",
+        "_the_longest_radius_of_",
+        "_the_shortest_radius_of_"
+      ),
+      rep(c("50kt_winds_or_greater", "30kt_winds_or_greater"), each = 3),
+      c("", "(nm)", "(nm)")
+    )
   xx <-
     lines[stringr::str_detect(lines, "^66666", negate = TRUE)]
   df_record <-
@@ -129,21 +144,26 @@ read_rsmc_besttrack <- function(path) {
             t() |>
             tibble::as_tibble(.name_repair = "minimal") |>
             purrr::set_names(paste0("v", seq.int(length(parse_x)))) |>
-            tidyr::extract(v8,
-                           into = c("H", "I"),
-                           regex = "([0-9]{1})([0-9]{4})") |>
-            tidyr::extract(v10,
-                           into = c("K", "L"),
-                           regex = "([0-9]{1})([0-9]{4})")
+            tidyr::extract(
+              v8,
+              into = c("H", "I"),
+              regex = "([0-9]{1})([0-9]{4})"
+            ) |>
+            tidyr::extract(
+              v10,
+              into = c("K", "L"),
+              regex = "([0-9]{1})([0-9]{4})"
+            )
           if (length(parse_x) == 11L) {
             tmp_d |>
-              purrr::set_names(c(data_common_vars,
-                                 data_typhoon_vars))
+              purrr::set_names(c(data_common_vars, data_typhoon_vars))
           } else if (length(parse_x) == 12L) {
             tmp_d |>
-              purrr::set_names(c(data_common_vars,
-                                 data_typhoon_vars,
-                                 "indicator_of_landfall_or_passage"))
+              purrr::set_names(c(
+                data_common_vars,
+                data_typhoon_vars,
+                "indicator_of_landfall_or_passage"
+              ))
           }
         }
       },
@@ -153,21 +173,27 @@ read_rsmc_besttrack <- function(path) {
     dplyr::mutate(
       datetime = lubridate::ymd_h(
         paste0(
-          dplyr::if_else(dplyr::between(as.numeric(stringr::str_sub(datetime, 1, 2)), 0, 49),
-                         "20",
-                         "19"),
-          datetime), tz = "UTC"),
+          dplyr::if_else(
+            dplyr::between(as.numeric(stringr::str_sub(datetime, 1, 2)), 0, 49),
+            "20",
+            "19"
+          ),
+          datetime
+        ),
+        tz = "UTC"
+      ),
       latitude = as.numeric(latitude) / 10,
       longitude = as.numeric(longitude) / 10,
-      international_number = rep(df_header$international_number,
-                                 df_header$nrow)) |>
+      international_number = rep(df_header$international_number, df_header$nrow)
+    ) |>
     dplyr::mutate(
-      dplyr::across(c(`central_pressure(hPa)`,
-                      `maximum_sustained_wind_speed(knot)`),
-                    as.numeric)) |>
+      dplyr::across(
+        c(`central_pressure(hPa)`, `maximum_sustained_wind_speed(knot)`),
+        as.numeric
+      )
+    ) |>
     sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
-    dplyr::left_join(df_header,
-                     by = dplyr::join_by(international_number)) |>
+    dplyr::left_join(df_header, by = dplyr::join_by(international_number)) |>
     dplyr::arrange(datetime)
 
   df_record
@@ -179,20 +205,27 @@ read_rsmc_besttrack <- function(path) {
 #' @param keep_vars Keep variables.
 #' @param geometry geometry column name (default `geometry`).
 #' @export
-track_combine <- function(data, group_vars = c("international_number", "storm_name"),
-                          keep_vars = NULL, geometry = geometry) {
+track_combine <- function(
+  data,
+  group_vars = c("international_number", "storm_name"),
+  keep_vars = NULL,
+  geometry = geometry
+) {
   aa <- bb <- NULL
   data |>
     dplyr::select(group_vars, keep_vars, geometry) |>
-    dplyr::group_by(!!! rlang::syms(group_vars)) |>
-    dplyr::mutate(aa  = sf::st_as_text(geometry),
-                  bb = dplyr::lead(sf::st_as_text(geometry))) |>
+    dplyr::group_by(!!!rlang::syms(group_vars)) |>
+    dplyr::mutate(
+      aa = sf::st_as_text(geometry),
+      bb = dplyr::lead(sf::st_as_text(geometry))
+    ) |>
     dplyr::ungroup() |>
     dplyr::filter(!is.na(bb)) |>
     dplyr::rowwise() |>
-    dplyr::mutate(geometry = sf::st_union(sf::st_as_sfc(aa),
-                                          sf::st_as_sfc(bb)) |>
-                    sf::st_cast("LINESTRING")) |>
+    dplyr::mutate(
+      geometry = sf::st_union(sf::st_as_sfc(aa), sf::st_as_sfc(bb)) |>
+        sf::st_cast("LINESTRING")
+    ) |>
     dplyr::ungroup() |>
     dplyr::select(!c(aa, bb)) |>
     sf::st_sf(crs = 4326)

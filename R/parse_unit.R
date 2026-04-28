@@ -21,7 +21,6 @@
 #' @export
 #' @return a `tbl` object
 parse_unit <- function(data, rename = TRUE) {
-
   original_vars <-
     names(data)
   candidate_vars <-
@@ -42,17 +41,20 @@ parse_unit <- function(data, rename = TRUE) {
     purrr::keep(function(x) !is.na(x))
 
   df_drop <-
-    data[, c(which(is.na(var_units)),
-             which(!names(data) %in% names(data_candidate)))]
+    data[, c(
+      which(is.na(var_units)),
+      which(!names(data) %in% names(data_candidate))
+    )]
 
   df_units <-
     purrr::map2_dfc(
       seq.int(ncol(data_candidate)),
       var_units,
-      function(x, y) units::as_units(as.numeric(data_candidate[[x]]),
-                                     value = y)
+      function(x, y) units::as_units(as.numeric(data_candidate[[x]]), value = y)
     ) |>
-    purrr::set_names(names(data_candidate)[!names(data_candidate) %in% names(df_drop)])
+    purrr::set_names(names(data_candidate)[
+      !names(data_candidate) %in% names(df_drop)
+    ])
 
   df_res <-
     dplyr::bind_cols(df_drop, df_units) |>
@@ -61,9 +63,11 @@ parse_unit <- function(data, rename = TRUE) {
   if (rename == TRUE) {
     df_res <-
       df_res |>
-      purrr::set_names(colnames(df_res) |>
-                         stringr::str_remove("\\(.+\\)") |>
-                         stringr::str_remove("_$"))
+      purrr::set_names(
+        colnames(df_res) |>
+          stringr::str_remove("\\(.+\\)") |>
+          stringr::str_remove("_$")
+      )
   }
 
   return(df_res)

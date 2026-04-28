@@ -22,9 +22,14 @@ hour <- tide_value <- tide_level <- time <- count <- datetime <- NULL
 tide_drop_units <- function(data) {
   data |>
     dplyr::mutate(
-      dplyr::across(c(tidyselect::num_range("hry_", range = seq.int(0, 23), width = 2),
-                      tidyselect::contains("tide_level")),
-                    units::drop_units))
+      dplyr::across(
+        c(
+          tidyselect::num_range("hry_", range = seq.int(0, 23), width = 2),
+          tidyselect::contains("tide_level")
+        ),
+        units::drop_units
+      )
+    )
 }
 
 pivot_tide_hourly <- function(data) {
@@ -36,10 +41,10 @@ pivot_tide_hourly <- function(data) {
       values_to = "tide_value",
       names_prefix = "hry_"
     ) |>
-    dplyr::mutate(datetime = lubridate::as_datetime(paste(date,
-                                                      paste0(hour,
-                                                             ":00:00"))),
-              tide_value = units::set_units(tide_value, "cm")) |>
+    dplyr::mutate(
+      datetime = lubridate::as_datetime(paste(date, paste0(hour, ":00:00"))),
+      tide_value = units::set_units(tide_value, "cm")
+    ) |>
     dplyr::select(datetime, stn, tide_value)
 }
 
@@ -50,20 +55,25 @@ pivot_tide_tide <- function(data) {
   dplyr::left_join(
     d |>
       dplyr::select(!tidyselect::starts_with("hry")) |>
-      tidyr::pivot_longer(tidyselect::contains("tide_hm"),
-                          names_to = c("tide_level", "count"),
-                          names_pattern = "(.*)_tide_hm_obs([0-9])",
-                          values_to = "time",
-                          names_prefix = "_tide_hm_obs") |>
+      tidyr::pivot_longer(
+        tidyselect::contains("tide_hm"),
+        names_to = c("tide_level", "count"),
+        names_pattern = "(.*)_tide_hm_obs([0-9])",
+        values_to = "time",
+        names_prefix = "_tide_hm_obs"
+      ) |>
       dplyr::select(date, stn, tide_level, count, time),
     d |>
       dplyr::select(!tidyselect::starts_with("hry")) |>
-      tidyr::pivot_longer(tidyselect::contains("tide_level"),
-                          names_to = c("tide_level", "count"),
-                          names_pattern = "(.*)_tide_level_obs([0-9])",
-                          values_to = "tide_value") |>
+      tidyr::pivot_longer(
+        tidyselect::contains("tide_level"),
+        names_to = c("tide_level", "count"),
+        names_pattern = "(.*)_tide_level_obs([0-9])",
+        values_to = "tide_value"
+      ) |>
       dplyr::select(date, stn, tide_level, count, tide_value) |>
       dplyr::mutate(tide_value = units::set_units(tide_value, "cm")),
-    by = c("date", "stn", "tide_level", "count")) |>
+    by = c("date", "stn", "tide_level", "count")
+  ) |>
     dplyr::filter(!is.na(time))
 }

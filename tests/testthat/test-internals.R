@@ -2,9 +2,11 @@ context("test-internals.R")
 
 test_that("failed patterns", {
   expect_false(
-    suppressMessages(validate_date(2017, 12, -1)))
+    suppressMessages(validate_date(2017, 12, -1))
+  )
   expect_false(
-    suppressMessages(validate_date(-2018, 1, 1)))
+    suppressMessages(validate_date(-2018, 1, 1))
+  )
   expect_false(
     suppressMessages(validate_date(2017, 13, 1))
   )
@@ -22,39 +24,33 @@ test_that("input arguments validation", {
 
 test_that("urls", {
   x <-
-    jma_url(item = "daily",
-            block_no = "0422",
-            year = 2017,
-            month = 6)
+    jma_url(item = "daily", block_no = "0422", year = 2017, month = 6)
   expect_is(x, "list")
   expect_named(x, c("url", "station_type"))
   expect_equal(
     x,
     list(
       url = "https://www.data.jma.go.jp/stats/etrn/view/daily_a1.php?prec_no=48&block_no=0422&year=2017&month=6&day=&view=", # nolint
-      station_type = "a1")
+      station_type = "a1"
+    )
   )
   x <-
-    jma_url("annually",
-            "0010",
-            2017,
-            12)
+    jma_url("annually", "0010", 2017, 12)
   expect_equal(
     x,
     list(
       url = "https://www.data.jma.go.jp/stats/etrn/view/annually_a.php?prec_no=12&block_no=0010&year=2017&month=12&day=&view=", # nolint
-      station_type = "a")
+      station_type = "a"
+    )
   )
   x <-
-    jma_url("nml_ym",
-            "47895")
+    jma_url("nml_ym", "47895")
   expect_equal(
     x[[1]],
     "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=71&block_no=47895&year=&month=&view="
   )
   x <-
-    jma_url("nml_10d",
-            "1555")
+    jma_url("nml_10d", "1555")
   expect_equal(
     x[[1]],
     "https://www.data.jma.go.jp/stats/etrn/view/nml_amd_10d.php?prec_no=51&block_no=1555&year=&month=&view="
@@ -62,7 +58,6 @@ test_that("urls", {
 })
 
 test_that("Set coords", {
-
   res <-
     check_input_coords(longitude = 140.10, latitude = 36.08, geometry = NULL)
   expect_is(res, "list")
@@ -70,10 +65,14 @@ test_that("Set coords", {
 
   expect_equivalent(
     check_input_coords(geometry = st_point(c(140.10, 36.08))),
-    check_input_coords(longitude = 140.10, latitude = 36.08, geometry = NULL))
-
-  expect_message(
-    check_input_coords(longitude = 123.00, latitude = 32.0, geometry = st_point(c(140.10, 36.08)))
+    check_input_coords(longitude = 140.10, latitude = 36.08, geometry = NULL)
   )
 
+  expect_message(
+    check_input_coords(
+      longitude = 123.00,
+      latitude = 32.0,
+      geometry = st_point(c(140.10, 36.08))
+    )
+  )
 })
