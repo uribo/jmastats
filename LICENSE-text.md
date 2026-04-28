@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2022-2024
+    COPYRIGHT HOLDER: jmastats authors
