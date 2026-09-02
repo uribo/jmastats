@@ -8,12 +8,14 @@ jmastats
 CRANからインストールが可能です。
 
 ``` r
+
 install.packages("jmastats")
 ```
 
 開発版を利用したい場合は次のコマンドを実行することでインストールが行われます。
 
 ``` r
+
 install.packages(
    "jmastats", 
    repos = c(uribo = "https://uribo.r-universe.dev", getOption("repos")))
@@ -29,6 +31,7 @@ install.packages(
 ## 使い方
 
 ``` r
+
 library(jmastats)
 ```
 
@@ -38,6 +41,7 @@ library(jmastats)
 と対象の年 `year` 月 `month` 日 `day`を必要に応じて与えて実行します。
 
 ``` r
+
 # データの種類: hourly (１時間ごとの値)
 # ブロック番号: 47646 （「つくば」）
 # 対象年月日: 2022年1月1日
@@ -48,6 +52,7 @@ jma_collect(item = "hourly", block_no = 47646, year = 2022, month = 1, day = 1)
 対象地点の緯度経度を元に[`nearest_station()`](https://uribo.github.io/jmastats/reference/nearest_station.md)関数や後述の気象観測地点データから検索できます。
 
 ``` r
+
 # 任意の緯度経度座標から最寄りの観測所と座標との距離を出力
 nearest_station(longitude = 140.112, latitude = 36.083)
 ```
@@ -55,6 +60,7 @@ nearest_station(longitude = 140.112, latitude = 36.083)
 ユーザーが任意の地点、項目、期間等の組みあわせで出力可能な、`過去の気象データ`のcsvファイルを読み込む関数として[`read_jma_weather()`](https://uribo.github.io/jmastats/reference/read_jma_weather.md)関数が利用できます。
 
 ``` r
+
 # ダウンロードしたcsvファイルのパスを与えて実行します
 read_jma_weather(system.file("dummy/dl_data.csv", package = "jmastats"))
 ```
@@ -67,6 +73,7 @@ Tokyo](https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/trackarchives
 [`read_rsmc_besttrack()`](https://uribo.github.io/jmastats/reference/track.md)関数でベストトラックのファイルが置かれたパスを指定します。
 
 ``` r
+
 read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |> 
   dplyr::glimpse()
 #> Rows: 2
@@ -98,12 +105,14 @@ read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |
 URLを直接指定した読み込みも可能です。
 
 ``` r
+
 read_rsmc_besttrack(path = "https://www.jma.go.jp/jma/jma-eng/jma-center/rsmc-hp-pub-eg/Besttracks/bst2023.txt")
 ```
 
 [`read_rsmc_besttrack()`](https://uribo.github.io/jmastats/reference/track.md)関数の返り値は台風の経路を記録したポイントデータ(sf)となっています。[`track_combine()`](https://uribo.github.io/jmastats/reference/track.md)関数では、[`read_rsmc_besttrack()`](https://uribo.github.io/jmastats/reference/track.md)関数で読み込んだベストトラックのデータについて、台風ごとの経路をラインデータとしてまとめます。
 
 ``` r
+
 read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |> 
   track_combine(group_vars = "storm_name")
 ```
@@ -111,6 +120,7 @@ read_rsmc_besttrack(path = system.file("dummy/bst.txt", package = "jmastats")) |
 ### 気象庁防災情報XMLフォーマット
 
 ``` r
+
 read_kishou_feed("high", type = "regular")
 
 read_kishou_feed("low", "other")
@@ -119,6 +129,7 @@ read_kishou_feed("low", "other")
 ### 潮汐観測資料
 
 ``` r
+
 # URLを指定しての読み込み
 read_tide_level("https://www.data.jma.go.jp/gmd/kaiyou/data/db/tide/suisan/txt/2020/TK.txt")
 # URLを構成するパラメータを指定した読み込み
@@ -126,6 +137,7 @@ read_tide_level(.year = 2020, .month = 2, .stn = "TK")
 ```
 
 ``` r
+
 # ローカルに保存したファイルの読み込み（パスを指定）
 read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
 #> New names:
@@ -154,6 +166,7 @@ read_tide_level(system.file("dummy/tide.txt", package = "jmastats"))
 [震度データベース検索](https://www.data.jma.go.jp/svd/eqdb/data/shindo/index.html)よりダウンロードしたcsvファイルを読み込む関数として[`read_eqdb_csv()`](https://uribo.github.io/jmastats/reference/read_eqdb_csv.md)があります。ダミーデータを読み込む例を示します。
 
 ``` r
+
 read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
 #> 地震の概要
 #> ✖ 発生日時: 2023-01-01 00:00:00
@@ -178,18 +191,19 @@ read_eqdb_csv(system.file("dummy/eqdb.csv", package = "jmastats"))
 観測地点の配置された標高や観測種目のほか、観測地点の位置情報が含まれます。
 
 ``` r
+
 data("stations", package = "jmastats")
 ```
 
 `station_type` により観測種目が異なります。
 
-| 略字 | 観測装置の種類     | 観測種目                                                                                   |
-|------|:-------------------|:-------------------------------------------------------------------------------------------|
-| 四   | 有線ロボット気象計 | 降水量、気温、風向、風速、日照時間                                                         |
-| 三   | 有線ロボット気象計 | 降水量、気温、風向、風速                                                                   |
-| 官   | 地上気象観測装置   | 降水量、気温、風向、風速、日照時間（一部の観測所を除く）、積雪の深さ（一部の観測所を除く） |
-| 雨   | 有線ロボット気象計 | 降水量                                                                                     |
-| 雪   | 有線ロボット積雪計 | 積雪量                                                                                     |
+| 略字 | 観測装置の種類 | 観測種目 |
+|----|:---|:---|
+| 四 | 有線ロボット気象計 | 降水量、気温、風向、風速、日照時間 |
+| 三 | 有線ロボット気象計 | 降水量、気温、風向、風速 |
+| 官 | 地上気象観測装置 | 降水量、気温、風向、風速、日照時間（一部の観測所を除く）、積雪の深さ（一部の観測所を除く） |
+| 雨 | 有線ロボット気象計 | 降水量 |
+| 雪 | 有線ロボット積雪計 | 積雪量 |
 
 #### 潮位観測地点
 
@@ -197,6 +211,7 @@ data("stations", package = "jmastats")
 stn変数の情報をもとにして、[`read_tide_level()`](https://uribo.github.io/jmastats/reference/read_tide_level.md)での潮位観測記録の取得が行えます。
 
 ``` r
+
 data("tide_station", package = "jmastats")
 ```
 
@@ -205,6 +220,7 @@ data("tide_station", package = "jmastats")
 地震・津波を観測するためのポイントを記録したデータです。震度観測点は気象庁のほかに各地方公共団体や国立研究開発法人防災科学技術研究所の観測地点が設置されていますが、このデータには気象庁が管理する地点だけが含まれます。
 
 ``` r
+
 data("earthquake_station", package = "jmastats")
 ```
 
