@@ -2,6 +2,13 @@
 
 ## jmastats (development version)
 
+### Fixes
+
+- `jma_collect(cache = TRUE)` no longer fails when the cache directory
+  does not exist, such as on a fresh install or after
+  [`reset_cache()`](https://uribo.github.io/jmastats/reference/reset_cache.md)
+  ([\#26](https://github.com/uribo/jmastats/issues/26)).
+
 ## jmastats 0.3.0
 
 CRAN release: 2025-01-28
