@@ -1,0 +1,71 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: R-CMD-check
+
+permissions: read-all
+
+# Supersede an in-flight run when the PR branch is pushed again: only the newest
+# commit's result carries information, and the two source-building rows cost
+# 18 and 27 minutes each. Restricted to pull_request so a run on main is never
+# cancelled -- that history is what the badge and the release audit read.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    # The default job timeout is 6 hours. r-lib/actions/setup-r@v2 stalled on
+    # 2026-08-19 and held runners until that cap across several projects, so
+    # bound the job: a hung run should fail fast and be re-runnable rather than
+    # read as "still running".
+    #
+    # 60 minutes is generous against observed times -- the rows with RSPM
+    # binaries finish in 5-7 minutes -- but the devel and R 4.1 rows have no
+    # binaries and compile sf, units and lwgeom from source, so they need the
+    # headroom. If one of those legitimately exceeds 60 minutes, raise this
+    # number rather than removing the bound.
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest, r: "release"}
+          - {os: windows-latest, r: "release"}
+          - {os: ubuntu-latest, r: "devel", http-user-agent: "release"}
+          - {os: ubuntu-latest, r: "release"}
+          - {os: ubuntu-latest, r: "oldrel-1"}
+          # Verifies the Depends: R (>= 4.1) floor declared in DESCRIPTION.
+          - {os: ubuntu-22.04, r: "4.1"}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual", "--compact-vignettes=gs+qpdf")'

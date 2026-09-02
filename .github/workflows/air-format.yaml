@@ -1,0 +1,37 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: air-format
+
+permissions: read-all
+
+# Supersede an in-flight run when the PR branch is pushed again: only the newest
+# commit's result carries information, and the two source-building rows cost
+# 18 and 27 minutes each. Restricted to pull_request so a run on main is never
+# cancelled -- that history is what the badge and the release audit read.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  air-format:
+    runs-on: ubuntu-latest
+    # Formatting check only; the observed run is 7 seconds. Bounded for the
+    # same reason as R-CMD-check: the 6-hour default turns a hung action into
+    # 360 wasted runner-minutes.
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Air
+        uses: posit-dev/setup-air@v1
+
+      # Only R/ and tests/ are gated here. data-raw/ is exploratory and
+      # .Rbuildignore'd, so it is not a CI gate -- but air.toml has no
+      # exclude, so the editor/agent format-on-save hook does reformat it.
+      - name: Check formatting
+        run: air format R tests --check
