@@ -1,0 +1,25 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+name: air-format
+
+permissions: read-all
+
+jobs:
+  air-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install Air
+        uses: posit-dev/setup-air@v1
+
+      # Only R/ and tests/ are gated here. data-raw/ is exploratory and
+      # .Rbuildignore'd, so it is not a CI gate -- but air.toml has no
+      # exclude, so the editor/agent format-on-save hook does reformat it.
+      - name: Check formatting
+        run: air format R tests --check
