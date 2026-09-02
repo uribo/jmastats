@@ -117,7 +117,9 @@ air format R tests                  # 整形（編集時 hook でも自動実行
 | `pkgdown.yaml` | push / PR（main）・release | pkgdown サイトを gh-pages へ配備 |
 | `rhub.yaml` | `workflow_dispatch` | CRAN 提出前の R-hub チェック（`rhub::rhub_setup()` 生成物。手で書き換えない） |
 
-`R-CMD-check.yaml` と `air-format.yaml` は 2026-09-02 に追加したもので、**まだ一度も実行されていない**。初回実行では `ubuntu-22.04` + R 4.1 のジョブの結果を必ず確認する。現行 CRAN の tidyverse は R 4.1 ではビルドできない可能性があり、その場合の正しい対処は `Depends` の下限を上げること（ユーザー確認が必要。「コーディング規約」を参照）で、ジョブを消すことではない。`fail-fast: false` なので他の行の結果は隠れない。
+`R-CMD-check.yaml` と `air-format.yaml` は 2026-09-02 に追加した。初回実行（PR #27）は 6 行すべて pass。所要は macOS 5 分 / Windows 6 分 / Ubuntu release・oldrel-1 各 6-7 分に対し、**`ubuntu-22.04` + R 4.1 が 18 分、`ubuntu-latest` + devel が 27 分**。この 2 行は RSPM のバイナリが無く `sf` / `units` / `lwgeom` をソースからビルドするため、他の行の 3-4 倍かかるのが正常。遅いことをハングと読み違えない。
+
+全 job に `timeout-minutes` を置いてある（R-CMD-check 60 分、air-format 10 分）。既定の 6 時間を放置すると、action がハングしたときに 1 リポジトリあたり 360 runner 分を無駄にする（2026-08-19 に `r-lib/actions/setup-r@v2` で実際に起きた）。ソースビルドの行が 60 分を超えるようになったら、**上限を上げるのであって外さない**。
 
 ## CRAN
 
