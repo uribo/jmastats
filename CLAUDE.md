@@ -117,9 +117,13 @@ air format R tests                  # 整形（編集時 hook でも自動実行
 | `pkgdown.yaml` | push / PR（main）・release | pkgdown サイトを gh-pages へ配備 |
 | `rhub.yaml` | `workflow_dispatch` | CRAN 提出前の R-hub チェック（`rhub::rhub_setup()` 生成物。手で書き換えない） |
 
-`R-CMD-check.yaml` と `air-format.yaml` は 2026-09-02 に追加した。初回実行（PR #27）は 6 行すべて pass。所要は macOS 5 分 / Windows 6 分 / Ubuntu release・oldrel-1 各 6-7 分に対し、**`ubuntu-22.04` + R 4.1 が 18 分、`ubuntu-latest` + devel が 27 分**。この 2 行は RSPM のバイナリが無く `sf` / `units` / `lwgeom` をソースからビルドするため、他の行の 3-4 倍かかるのが正常。遅いことをハングと読み違えない。
+`R-CMD-check.yaml` と `air-format.yaml` は 2026-09-02 に追加し、PR #27 で 6 行すべて pass した（R 4.1 も通ったので `Depends` の引き上げは不要）。
 
-全 job に `timeout-minutes` を置いてある（R-CMD-check 60 分、air-format 10 分）。既定の 6 時間を放置すると、action がハングしたときに 1 リポジトリあたり 360 runner 分を無駄にする（2026-08-19 に `r-lib/actions/setup-r@v2` で実際に起きた）。ソースビルドの行が 60 分を超えるようになったら、**上限を上げるのであって外さない**。
+**所要時間はキャッシュの有無で桁が変わる**。`ubuntu-22.04` + R 4.1 と `ubuntu-latest` + devel は RSPM のバイナリが無く `sf` / `units` / `lwgeom` をソースからビルドするため、`setup-r-dependencies` のキャッシュが無い初回は **18 分・27 分**かかった。キャッシュが乗った次の run では **5 分・6 分**で、他の行（4-7 分）と変わらない。依存を変えるとキャッシュキーが変わって再び cold になるので、そのときの 20-30 分をハングと読み違えない。
+
+全 job に `timeout-minutes` を置いてある（R-CMD-check 60 分、air-format 10 分、pkgdown 30 分）。既定の 6 時間を放置すると、action がハングしたときに 1 リポジトリあたり 360 runner 分を無駄にする（2026-08-19 に `r-lib/actions/setup-r@v2` で実際に起きた）。cold cache の最遅が 27 分なので 60 分は 2.2 倍の余裕がある。超えるようになったら、**上限を上げるのであって外さない**。
+
+`R-CMD-check` と `air-format` には `concurrency` グループがあり、PR ブランチを押し直すと追い越された run が破棄される。`cancel-in-progress` を `pull_request` に限定してあるのは、main 上の run はバッジとリリース監査が読む履歴なので完走させるため。`pkgdown.yaml` の `concurrency` は r-lib の定型で gh-pages への deploy を制御しており、別物なので触らない。
 
 ## CRAN
 
