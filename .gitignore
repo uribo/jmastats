@@ -10,3 +10,30 @@ data-raw/*.csv
 *.zip
 inst/besttrack/
 docs
+
+# --- editor: .vscode is tracked ON PURPOSE ---
+# The user-level global gitignore ignores .vscode; this re-include overrides it
+# (a repo .gitignore takes precedence over core.excludesFile) so workspace
+# settings stay versioned and new files under .vscode/ are not silently
+# invisible to git status. Keep the contents limited to workflow settings
+# (formatter policy, extension recommendations) -- no themes or fonts.
+#
+# There is NO workspace-level "machine-local" settings file: VS Code and
+# Positron read .vscode/settings.json and nothing else. A
+# .vscode/settings.local.json is silently ignored -- no error, no warning.
+# Machine-specific values (R interpreter paths, fonts) belong in User settings.
+!.vscode/
+
+# --- Claude Code local state (.claude/settings.json is tracked) ---
+.claude/settings.local.json
+.claude/agent-memory/
+.claude/scheduled_tasks.lock
+CLAUDE.local.md
+
+# --- delegation briefs for Codex: local process artifacts ---
+prompts/*.md
+!prompts/README.md
+
+# --- R CMD check artifacts ---
+/jmastats.Rcheck/
+/jmastats_*.tar.gz

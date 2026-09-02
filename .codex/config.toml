@@ -1,0 +1,38 @@
+# Project-local Codex defaults. Applied only when this repository is trusted.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+# Keep credentials out of model-initiated child processes. R_ENVIRON_USER also
+# prevents R from automatically loading a user or project .Renviron file.
+#
+# That suppression has a side effect worth naming: R treats a project-level
+# environment file as the *user* one, so pointing R_ENVIRON_USER at /dev/null
+# disables any locale pins such a file would carry. Both locale categories are
+# therefore set here as well, so agent sessions get the same collation order
+# and the same date-part names as a human terminal.
+#
+# LC_COLLATE drives sort()/order()/factor() level order. Even for pure ASCII,
+# C sorts by code point ("Zebra" < "apple") while most system locales sort
+# case-insensitively ("apple" < "Zebra").
+#
+# LC_TIME drives the month and weekday names returned by format()/strftime()
+# with %b/%B/%a/%A, and therefore the default date axis labels of ggplot2.
+# Unpinned under LANG=ja_JP.UTF-8 a date axis reads "1月 / 2月 / 3月" instead
+# of "Jan / Feb / Mar". This package parses no localized date strings (there is
+# no %b/%B inside a parsing call in R/ or tests/), so pinning to C is safe.
+#
+# Never merge the two into LC_ALL: that also overrides LC_CTYPE, so non-ASCII
+# comparisons stop matching and drop rows with no error and no warning.
+[shell_environment_policy]
+inherit = "core"
+ignore_default_excludes = false
+exclude = [
+  "*_API_KEY",
+  "*_TOKEN",
+  "*_SECRET",
+  "*_PASSWORD",
+  "AWS_*",
+  "AZURE_*",
+  "GOOGLE_APPLICATION_CREDENTIALS",
+]
+set = { R_ENVIRON_USER = "/dev/null", LC_COLLATE = "C", LC_TIME = "C" }

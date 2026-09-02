@@ -16,3 +16,11 @@
 ^pkgdown$
 ^[.]?air[.]toml$
 ^\.vscode$
+^CLAUDE\.md$
+^AGENTS\.md$
+^\.claude$
+^\.codex$
+^memory$
+^prompts$
+^jmastats_.*\.tar\.gz$
+^jmastats\.Rcheck$

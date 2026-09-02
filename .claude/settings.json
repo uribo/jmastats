@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "respectGitignore": true,
+  "env": {
+    "R_ENVIRON_USER": "/dev/null",
+    "LC_COLLATE": "C",
+    "LC_TIME": "C"
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.Renviron)",
+      "Read(./.env)",
+      "Edit(./.Renviron)",
+      "Edit(./.env)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // .tool_response.filePath'); echo \"$FILE\" | grep -iqE '\\.(R|r|qmd|Rmd)$' && command -v air >/dev/null 2>&1 && air format \"$FILE\" 2>&1 || true",
+            "timeout": 30,
+            "statusMessage": "Running air format..."
+          }
+        ]
+      }
+    ]
+  },
+  "model": "opus",
+  "language": "Use Japanese for chat conversations, English for writing files",
+  "alwaysThinkingEnabled": true
+}
