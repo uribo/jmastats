@@ -1,5 +1,9 @@
 # jmastats (development version)
 
+## Fixes
+
+* `jma_collect(cache = TRUE)` no longer fails when the cache directory does not exist, such as on a fresh install or after `reset_cache()` (#26).
+
 # jmastats 0.3.0
 
 ## New features

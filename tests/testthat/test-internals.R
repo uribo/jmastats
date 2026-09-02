@@ -76,3 +76,14 @@ test_that("Set coords", {
     )
   )
 })
+
+test_that("cache directory is created on demand", {
+  root <- tempfile()
+  on.exit(unlink(root, recursive = TRUE), add = TRUE)
+  path <- file.path(root, "jmastats", "nested")
+  expect_false(dir.exists(path))
+  expect_equal(ensure_cache_dir(path), path)
+  expect_true(dir.exists(path))
+  expect_silent(ensure_cache_dir(path))
+  expect_true(dir.exists(path))
+})

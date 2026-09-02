@@ -44,3 +44,10 @@ search_cache_file <- function(item, station_type, param) {
     )
   )
 }
+
+ensure_cache_dir <- function(path) {
+  if (!dir.exists(path)) {
+    dir.create(path, recursive = TRUE, showWarnings = FALSE)
+  }
+  invisible(path)
+}
