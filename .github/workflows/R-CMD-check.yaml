@@ -9,6 +9,14 @@ name: R-CMD-check
 
 permissions: read-all
 
+# Supersede an in-flight run when the PR branch is pushed again: only the newest
+# commit's result carries information, and the two source-building rows cost
+# 18 and 27 minutes each. Restricted to pull_request so a run on main is never
+# cancelled -- that history is what the badge and the release audit read.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
