@@ -83,6 +83,7 @@ jma_collect <- function(
     } else {
       out <-
         slow_jma_collect(item, block_no, year, month, day, quiet)
+      ensure_cache_dir(dirname(file_loc))
       saveRDS(out, file = file_loc)
     }
   } else {
