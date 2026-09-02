@@ -11,6 +11,10 @@ permissions: read-all
 jobs:
   air-format:
     runs-on: ubuntu-latest
+    # Formatting check only; the observed run is 7 seconds. Bounded for the
+    # same reason as R-CMD-check: the 6-hour default turns a hung action into
+    # 360 wasted runner-minutes.
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v6
