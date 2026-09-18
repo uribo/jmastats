@@ -1,7 +1,7 @@
 # Tidal observation stations of Japan Meteorological Agency
 
-Observation stations from 1997 to 2024. This data corresponds to the
-January 1, 2024 update.
+Observation stations from 1997 to 2026. This data corresponds to the
+September 19, 2026 update.
 
 ## Usage
 
@@ -11,7 +11,7 @@ tide_station
 
 ## Format
 
-A data frame with 1949 rows 7 variables
+A data frame with 2089 rows 7 variables
 
 ## Examples
 

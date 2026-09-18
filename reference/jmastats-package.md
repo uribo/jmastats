@@ -21,3 +21,8 @@ Useful links:
 
 **Maintainer**: Shinya Uryu <suika1127@gmail.com>
 ([ORCID](https://orcid.org/0000-0002-0493-6186)) \[copyright holder\]
+
+Authors:
+
+- Shinya Uryu <suika1127@gmail.com>
+  ([ORCID](https://orcid.org/0000-0002-0493-6186)) \[copyright holder\]

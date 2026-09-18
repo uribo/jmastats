@@ -1,6 +1,6 @@
 # Japan Meteorological Agency's Stations list
 
-This data corresponds to the April 1, 2024 update.
+This data corresponds to the March 24, 2026 update.
 
 ## Usage
 

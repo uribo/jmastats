@@ -12,6 +12,17 @@
   page, and the README citation is now generated from it instead of
   being hard-coded
   ([\#29](https://github.com/uribo/jmastats/issues/29)).
+- [`jma_collect()`](https://uribo.github.io/jmastats/reference/jma_collect.md)
+  now validates `block_no` against the `stations` dataset instead of a
+  fixed numeric range. Newly added stations are accepted, and retired
+  stations fail early with a clear error instead of producing an empty
+  URL ([\#32](https://github.com/uribo/jmastats/issues/32)).
+
+### Datasets
+
+- Various datasets handled by the package have been updated to the
+  latest version in September 2026
+  ([\#31](https://github.com/uribo/jmastats/issues/31)).
 
 ## jmastats 0.3.0
 

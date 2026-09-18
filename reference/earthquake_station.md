@@ -1,6 +1,6 @@
 # Japan Meteorological Agency's earthquake observe stations
 
-This data corresponds to the July 18, 2024 update.
+This data corresponds to the July 23, 2026 update.
 
 ## Usage
 
@@ -10,7 +10,7 @@ earthquake_station
 
 ## Format
 
-A simple feature data frame with 671 rows 7 variables
+A simple feature data frame with 670 rows 7 variables
 
 ## Examples
 

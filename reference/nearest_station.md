@@ -98,7 +98,7 @@ pick_neighbor_stations(140.10, 36.08, 300000)
 #>  2 茨城       40341 土浦         0324       11090.   (140.22 36.10333)
 #>  3 茨城       40281 下妻         0322       17038.  (139.945 36.16833)
 #>  4 茨城       40241 柿岡         1012       18804. (140.1883 36.23333)
-#>  5 茨城       40326 坂東         0323       19240.   (139.8933 36.035)
+#>  5 茨城       40326 坂東         0323       19165. (139.8917 36.04333)
 #>  6 茨城       40426 龍ケ崎       1014       23394.    (140.2117 35.89)
 #>  7 茨城       40391 江戸崎       0911       23865.      (140.32 35.96)
 #>  8 千葉       45061 我孫子       0376       24109.   (140.11 35.86333)
@@ -124,13 +124,13 @@ pick_neighbor_tide_stations(longitude = 133.4375, latitude = 34.45833,
 #> Simple feature collection with 3 features and 7 fields
 #> Geometry type: POINT
 #> Dimension:     XY
-#> Bounding box:  xmin: 132.7167 ymin: 33.86666 xmax: 134.05 ymax: 34.48333
+#> Bounding box:  xmin: 132.7167 ymin: 33.86667 xmax: 134.05 ymax: 34.48333
 #> Geodetic CRS:  WGS 84
 #> # A tibble: 3 × 8
 #>   year  id    stn   station_name address                  type   distance
 #>   <chr> <chr> <chr> <chr>        <chr>                    <chr>       [m]
 #> 1 2020  38    UN    宇野         岡山県 玉野市 宇野１丁目 電波式   47063.
 #> 2 2020  40    TA    高松         香川県 高松市 北浜町     電波式   57470.
-#> 3 2020  39    MT    松山         愛媛県 松山市 海岸通     電波式   93419.
+#> 3 2020  39    MT    松山         愛媛県 松山市 海岸通     電波式   93418.
 #> # ℹ 1 more variable: geometry <POINT [°]>
 ```

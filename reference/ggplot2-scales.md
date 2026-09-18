@@ -22,8 +22,10 @@ scale_fill_jma_relative(type = "amedas", ...)
 
 - ...:
 
-  Arguments to pass on to ggplot2::scale_color_gradientn or
-  ggplot2::scale_fill_gradientn
+  Arguments to pass on to
+  [ggplot2::scale_color_gradientn](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
+  or
+  [ggplot2::scale_fill_gradientn](https://ggplot2.tidyverse.org/reference/scale_gradient.html)
 
 ## Value
 
