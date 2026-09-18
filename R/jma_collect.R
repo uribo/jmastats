@@ -306,27 +306,29 @@ detect_target <- function(item, block_no, ...) {
 }
 
 check_block_no <- function(block_no) {
-  if (nchar(block_no) > 5) {
-    rlang::abort("block_no must be a string consisting of 4 or 5 digits.")
-  }
-  if (nchar(block_no) == 5L) {
-    if (stringr::str_detect(block_no, "^47")) {
-      if (!dplyr::between(as.numeric(block_no), 47401, 47991)) {
-        rlang::abort("The 5-digit block_no ranges from '47401' to '47991'.")
-      }
-    } else {
-      rlang::abort("The 5-digit block_no must start with '47'.")
-    }
-  } else if (!dplyr::between(as.numeric(block_no), 2, 1675)) {
-    rlang::abort("The 5-digit block_no ranges from '0002' to '1675'.")
-  } else if (!is.character(block_no)) {
-    rlang::warn(
-      "block_no is assumed to be given as a string.\nTreats the input block_no as a string."
-    ) # nolint
+  coerced <- !is.character(block_no)
+  if (coerced) {
+    block_no <- as.character(block_no)
     if (nchar(block_no) == 3L) {
       block_no <-
         stringr::str_pad(block_no, pad = "0", side = "left", width = 4)
     }
+  }
+  if (!stringr::str_detect(block_no, "^[0-9]{4,5}$")) {
+    rlang::abort("block_no must be a string consisting of 4 or 5 digits.")
+  }
+  # Validate against the bundled station list rather than a fixed range,
+  # so that stations added or retired by a dataset refresh are handled.
+  if (!block_no %in% stations$block_no) {
+    rlang::abort(c(
+      paste0("block_no '", block_no, "' is not in the station list."),
+      i = "The station may have been retired, or the number may be wrong. See `stations` for available stations."
+    ))
+  }
+  if (coerced) {
+    rlang::warn(
+      "block_no is assumed to be given as a string.\nTreats the input block_no as a string."
+    ) # nolint
   }
   block_no
 }
