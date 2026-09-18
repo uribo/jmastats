@@ -225,7 +225,7 @@ data("earthquake_station", package = "jmastats")
 このパッケージを利用した学術論文の出版、学会発表等を行う際は次のように引用を行ってください。
 
     Uryu S (2026). _jmastats: Download Weather Data from Japan
-    Meteorological Agency Website_. R package version 0.3.0.9000,
+    Meteorological Agency Website_. R package version 0.3.1,
     <https://CRAN.R-project.org/package=jmastats>.
 
 または
@@ -234,7 +234,7 @@ data("earthquake_station", package = "jmastats")
       title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
       author = {Shinya Uryu},
       year = {2026},
-      note = {R package version 0.3.0.9000},
+      note = {R package version 0.3.1},
       url = {https://CRAN.R-project.org/package=jmastats},
     }
 
