@@ -6,6 +6,7 @@ This is a patch release. It updates the bundled station datasets to the Septembe
 
 * local macOS 26.7, R 4.6.1
 * GitHub Actions: macOS, Windows and Ubuntu (R devel, release and oldrel-1), and Ubuntu 22.04 with R 4.1
+* win-builder: R-devel (2026-09-16 r90549 ucrt)
 
 ## R CMD check results
 
