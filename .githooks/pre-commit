@@ -1,0 +1,19 @@
+#!/bin/sh
+# pre-commit: AGENTS.md must stay under Codex's silent 32 KiB truncation limit.
+#
+# Codex cuts the project doc at project_doc_max_bytes (32,768 bytes) without a
+# warning, while Claude Code reads the same content in full, so an oversized
+# AGENTS.md breaks one tool silently. Hard failure, not a prompt: the fix is
+# always to move detail into docs/ and leave a pointer line.
+#
+# Companion of the Claude Code-side gate (.claude/settings.json PreToolUse):
+# that one covers commits made through Claude Code; this one covers commits
+# made from a terminal. Activate per clone with:
+#   git config core.hooksPath .githooks
+#
+# Escape hatch: git commit --no-verify
+
+if [ -f tools/check-instructions-size.sh ]; then
+  sh tools/check-instructions-size.sh --staged || exit 1
+fi
+exit 0

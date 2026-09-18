@@ -22,5 +22,7 @@
 ^\.codex$
 ^memory$
 ^prompts$
+^tools$
+^\.githooks$
 ^jmastats_.*\.tar\.gz$
 ^jmastats\.Rcheck$

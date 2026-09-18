@@ -15,6 +15,19 @@
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); CMD=$(printf %s \"$INPUT\" | jq -r '.tool_input.command // \"\"'); case \"$CMD\" in *\"git commit\"*) ;; *) exit 0 ;; esac; [ -f tools/check-instructions-size.sh ] || exit 0; OUT=$( { sh tools/check-instructions-size.sh --staged; sh tools/check-instructions-size.sh; } 2>&1 ) || jq -n --arg r \"$OUT\" '{hookSpecificOutput: {hookEventName: \"PreToolUse\", permissionDecision: \"deny\", permissionDecisionReason: $r}}'; exit 0",
+            "timeout": 15,
+            "statusMessage": "Checking AGENTS.md size against Codex limit..."
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
@@ -24,6 +37,17 @@
             "command": "FILE=$(jq -r '.tool_input.file_path // .tool_response.filePath'); echo \"$FILE\" | grep -iqE '\\.(R|r|qmd|Rmd)$' && command -v air >/dev/null 2>&1 && air format \"$FILE\" 2>&1 || true",
             "timeout": 30,
             "statusMessage": "Running air format..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // .tool_response.filePath'); case \"$FILE\" in *AGENTS.md) ;; *) exit 0 ;; esac; [ -f tools/check-instructions-size.sh ] || exit 0; sh tools/check-instructions-size.sh >&2; exit 0",
+            "timeout": 15,
+            "statusMessage": "Checking AGENTS.md size against Codex limit..."
           }
         ]
       }
