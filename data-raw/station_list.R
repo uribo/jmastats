@@ -15,14 +15,26 @@ library(rvest)
 library(ensurer)
 library(pointblank)
 
-if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
+# The cache is keyed on the master revision so that changing `ame_master`
+# forces the master file and the block_no scrape to be read again.
+ame_master <- "ame_master_20260324.csv"
+amedas_cache <-
+  here::here(
+    "data-raw",
+    stringr::str_replace(
+      ame_master,
+      "^ame_master_(\\d+)\\.csv$",
+      "amedas_raw_\\1.rds"
+    )
+  )
+
+if (!file.exists(amedas_cache)) {
   # 1. 地上気象観測地点 -------------------------------------------------------------
   # # 1.1. zip archives ---------------------------------------------------------
   # Ref) https://www.data.jma.go.jp/developer/index.html
   # 地上気象観測地点 https://www.data.jma.go.jp/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  ame_master <- "ame_master_20260324.csv"
   if (!file.exists(here::here(stringr::str_glue("data-raw/{ame_master}")))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
@@ -203,10 +215,10 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     pointblank::row_count_match(0L)
 
   stations |>
-    readr::write_rds("data-raw/amedas_raw.rds")
+    readr::write_rds(amedas_cache)
 } else {
   stations <-
-    readr::read_rds("data-raw/amedas_raw.rds")
+    readr::read_rds(amedas_cache)
 }
 
 # natural earthのポリゴン情報をもとに都道府県コードを付与
