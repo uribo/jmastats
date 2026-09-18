@@ -8,6 +8,10 @@
   does not exist, such as on a fresh install or after
   [`reset_cache()`](https://uribo.github.io/jmastats/reference/reset_cache.md)
   ([\#26](https://github.com/uribo/jmastats/issues/26)).
+- Added `inst/CITATION` so `citation("jmastats")` points to the CRAN
+  page, and the README citation is now generated from it instead of
+  being hard-coded
+  ([\#29](https://github.com/uribo/jmastats/issues/29)).
 
 ## jmastats 0.3.0
 
