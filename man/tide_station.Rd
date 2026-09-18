@@ -5,14 +5,14 @@
 \alias{tide_station}
 \title{Tidal observation stations of Japan Meteorological Agency}
 \format{
-A data frame with 1949 rows 7 variables
+A data frame with 2089 rows 7 variables
 }
 \usage{
 tide_station
 }
 \description{
-Observation stations from 1997 to 2024.
-This data corresponds to the January 1, 2024 update.
+Observation stations from 1997 to 2026.
+This data corresponds to the September 19, 2026 update.
 }
 \examples{
 head(tide_station)
