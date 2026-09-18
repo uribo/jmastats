@@ -1,6 +1,6 @@
 # Changelog
 
-## jmastats (development version)
+## jmastats 0.3.1
 
 ### Datasets
 
