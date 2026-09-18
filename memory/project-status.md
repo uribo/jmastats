@@ -2,7 +2,7 @@
 name: project-status
 description: 現在の進捗・直近の作業・次のステップ
 type: project
-updated: 2026-09-02
+updated: 2026-09-19
 ---
 
 # jmastats — Status
@@ -11,11 +11,11 @@ updated: 2026-09-02
 
 > 別のエージェント（Codex 等）や次のセッションが**この欄だけ読めば再開できる**状態を保つ。残すのは今使っている判断だけで、検討しただけの案は書かない。方針を決めた時・試行を捨てた時・検証を実行した時・セッションを終える時に更新する。
 
-- **現在採用している方針**: エージェント作業環境（`CLAUDE.md` / `AGENTS.md` / `.claude/settings.json` / `.codex/config.toml` / `.vscode/` / `memory/`）を `research-project-template` に倣って整備した。ただしテンプレートは renv + targets + Quarto 前提であり、jmastats はそのいずれも使わない R パッケージなので、**renv 関連の hook（PreToolUse の lockfile ゲート、Stop の drift チェック）と `.Rprofile` / `Renviron.example` / `_dependencies.R` / `notes/` / `paper/` / `TODO.md` は移植しなかった**。ロケール固定は環境変数の層（`.claude/settings.json` の `env` と `.codex/config.toml` の `set`）のみで行う。CI は jpops に倣って `R-CMD-check.yaml` と `air-format.yaml` を追加した。**2026-09-18 に規約の正典を `AGENTS.md` へ移した**（`28dfbdf`。旧 `AGENTS.md` は `CLAUDE.md` を読めと指すだけで、Codex に本体が届くかはモデル次第だった）。旧 `AGENTS.md` の認証情報と引き継ぎの規則は正典の節に統合済み、`CLAUDE.md` は `@AGENTS.md` と Claude Code のスキル・hook だけ。`AGENTS.md` は 32 KiB を超えないこと（`e56d04f` のガードが検査）。経緯は uribo/research-project-template#12。
-- **次に行う作業（1 つ）**: ユーザーが未コミット差分をレビューする（`R CMD build` の生成物 `jmastats_0.3.0.9000.tar.gz` が作業ツリーに残っている。gitignored だが削除はユーザーが行う — セッション中に削除許可が下りなかった）。
-- **試して失敗したこと**: 特になし。
-- **未確認の項目**: `.claude/skills/` へのスキル配備（`r-modern-tidyverse` 等）は未実施。CLAUDE.md「Skills」節はまだ絵に描いた餅で、conf-macos の `deploy/manifest.tsv` に jmastats を足して `deploy/deploy.sh --apply` を回すまで有効にならない（repo 外の作業なのでユーザーが行う）。配備後は `git status` に `.claude/skills/` の symlink が出ていないか確認する（kumagusu は `.claude/skills/.gitignore` で対処している）。CI は PR #27 で 2 回実行し、いずれも全 6 行 pass（`Depends` の引き上げは不要だった）。R 4.1 と devel は cold cache で 18 分・27 分、キャッシュ後は 5 分・6 分。
-- **最後に実行した検証と結果**: 2026-09-18 — `codex debug prompt-input` で `AGENTS.md`（17,466 B）が最後の行まで Codex に届き、Claude 専用のスキル一覧は届かないことを確認。`R CMD build --no-build-vignettes --no-manual` の tarball に指示ファイル・`tools/`・`.githooks/` が含まれないことを確認。以下は 2026-09-02 JST の結果: `devtools::test()` → 38 passed / 2 skipped（`{lwgeom}` 未導入）/ 0 failed。エージェントセッションと同じロケールを再現した `LC_COLLATE=C LC_TIME=C R_ENVIRON_USER=/dev/null Rscript -e 'devtools::test()'` でも同じ 38 / 2 / 0 で、ロケール固定に依存して壊れるテストは無い。`air format R tests --check` と `air format data-raw --check` → いずれも exit 0。`jq` / `tomllib` / `yaml::read_yaml()` による設定ファイルの parse → すべて正常。`R CMD build` した tarball に `CLAUDE.md` / `AGENTS.md` / `memory` / `.claude` / `.codex` / `.vscode` が含まれないことを確認。`git check-ignore` で `.vscode/settings.json` と `.claude/settings.json` が追跡対象、`.claude/settings.local.json` が無視対象になっていることを確認。`air format README.Rmd` はバイト無変更（hook の正規表現に `Rmd` が入っているが no-op）。PR #27 の CI は 6 行すべて success。
+- **次に行う作業（1 つ）**: PR #30 の CI を待ってマージする。ブランチ `fix/readme-citation`。
+- **最後に実行した検証と結果**: `devtools::test()` → 43 passed / 2 skipped / 0 failed（前回 38→43）。`devtools::build_readme()` → OK（README に動的生成された citation 反映済み）。R CMD check は未実行。
+- **現在採用している方針**: Issue #29（README の citation 版年が不一致）は inst/CITATION を追加して解決。版は `meta$Version`、年は `Date/Publication`（無ければビルドした年）、URL は CRAN に固定。README.Rmd は `citation("jmastats")` を評価して出力する（PR #30）。
+- **試して失敗したこと**: plain eval of citation() without inst/CITATION — dev DESCRIPTION に Date が無く、年が `????` になり警告も出る。inst/CITATION で明示的に固定化した。
+- **未確認の項目**: R CMD check を CI で実行待ち。PR #30 の全 CI が通ることが merge 条件。
 
 - **現在フェーズ**: 0.3.0 リリース後の開発（`0.3.0.9000`）
 - **直近の作業**: air フォーマッタの全面適用（`6a94e5f`）→ エージェント作業環境の整備

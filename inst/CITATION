@@ -1,0 +1,11 @@
+pub_date <- meta$`Date/Publication`
+year <- if (is.null(pub_date)) format(Sys.Date(), "%Y") else substr(pub_date, 1, 4)
+
+bibentry(
+  bibtype = "Manual",
+  title = "jmastats: Download Weather Data from Japan Meteorological Agency Website",
+  author = person("Shinya", "Uryu"),
+  year = year,
+  note = paste("R package version", meta$Version),
+  url = "https://CRAN.R-project.org/package=jmastats"
+)
