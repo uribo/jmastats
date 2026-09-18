@@ -22,5 +22,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Shinya Uryu \email{suika1127@gmail.com} (\href{https://orcid.org/0000-0002-0493-6186}{ORCID}) [copyright holder]
 
+Authors:
+\itemize{
+  \item Shinya Uryu \email{suika1127@gmail.com} (\href{https://orcid.org/0000-0002-0493-6186}{ORCID}) [copyright holder]
+}
+
 }
 \keyword{internal}

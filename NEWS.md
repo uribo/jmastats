@@ -4,6 +4,11 @@
 
 * `jma_collect(cache = TRUE)` no longer fails when the cache directory does not exist, such as on a fresh install or after `reset_cache()` (#26).
 * Added `inst/CITATION` so `citation("jmastats")` points to the CRAN page, and the README citation is now generated from it instead of being hard-coded (#29).
+* `jma_collect()` now validates `block_no` against the `stations` dataset instead of a fixed numeric range. Newly added stations are accepted, and retired stations fail early with a clear error instead of producing an empty URL (#32).
+
+## Datasets
+
+* Various datasets handled by the package have been updated to the latest version in September 2026 (#31).
 
 # jmastats 0.3.0
 

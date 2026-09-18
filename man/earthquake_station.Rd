@@ -5,13 +5,13 @@
 \alias{earthquake_station}
 \title{Japan Meteorological Agency's earthquake observe stations}
 \format{
-A simple feature data frame with 671 rows  7 variables
+A simple feature data frame with 670 rows  7 variables
 }
 \usage{
 earthquake_station
 }
 \description{
-This data corresponds to the July 18, 2024 update.
+This data corresponds to the July 23, 2026 update.
 }
 \examples{
 head(earthquake_station)

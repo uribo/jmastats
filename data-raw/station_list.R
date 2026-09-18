@@ -1,9 +1,9 @@
 #####################################
 # Stations list
-# Last Update: 2025-01-28
-# 1. 地上気象観測地点,地域気象観測所 (適用日：2024年12月18日)
-# 2. 潮位観測地点（2025-01-01）
-# 3. 震度観測点 (2024-11-21)
+# Last Update: 2026-09-19
+# 1. 地上気象観測地点,地域気象観測所 (適用日：2026年3月24日)
+# 2. 潮位観測地点（2026-09-19）
+# 3. 震度観測点 (2026-07-23)
 #####################################
 # pak::pkg_install("uribo/kuniezu")
 library(dplyr, warn.conflicts = FALSE)
@@ -15,14 +15,26 @@ library(rvest)
 library(ensurer)
 library(pointblank)
 
-if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
+# The cache is keyed on the master revision so that changing `ame_master`
+# forces the master file and the block_no scrape to be read again.
+ame_master <- "ame_master_20260324.csv"
+amedas_cache <-
+  here::here(
+    "data-raw",
+    stringr::str_replace(
+      ame_master,
+      "^ame_master_(\\d+)\\.csv$",
+      "amedas_raw_\\1.rds"
+    )
+  )
+
+if (!file.exists(amedas_cache)) {
   # 1. 地上気象観測地点 -------------------------------------------------------------
   # # 1.1. zip archives ---------------------------------------------------------
   # Ref) https://www.data.jma.go.jp/developer/index.html
   # 地上気象観測地点 https://www.data.jma.go.jp/stats/data/mdrr/chiten/sindex2.html
   # https://www.jma.go.jp/jma/kishou/know/amedas/ame_master.pdf
   # ame_master.zip はここから https://www.jma.go.jp/jma/kishou/know/amedas/kaisetsu.html
-  ame_master <- "ame_master_20241218.csv"
   if (!file.exists(here::here(stringr::str_glue("data-raw/{ame_master}")))) {
     # "https://www.data.jma.go.jp/developer/index.html" |>
     #   read_html() |>
@@ -137,13 +149,13 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
       read_block_no
     ) |>
     purrr::list_rbind() |>
-    pointblank::row_count_match(1677L) |>
+    pointblank::row_count_match(1679L) |>
     pointblank::col_count_match(3L)
   df_stations <-
     df_stations_raw |>
     dplyr::left_join(df_prec_no, by = dplyr::join_by(prec_no)) |>
     dplyr::mutate(area = stringr::str_remove(area, "地方")) |>
-    pointblank::row_count_match(1677L) |>
+    pointblank::row_count_match(1679L) |>
     pointblank::col_count_match(4L) |>
     dplyr::mutate(
       area = stringr::str_remove(area, "(都|府|県)$"),
@@ -203,10 +215,10 @@ if (!file.exists(here::here("data-raw/amedas_raw.rds"))) {
     pointblank::row_count_match(0L)
 
   stations |>
-    readr::write_rds("data-raw/amedas_raw.rds")
+    readr::write_rds(amedas_cache)
 } else {
   stations <-
-    readr::read_rds("data-raw/amedas_raw.rds")
+    readr::read_rds(amedas_cache)
 }
 
 # natural earthのポリゴン情報をもとに都道府県コードを付与
@@ -565,17 +577,17 @@ tide_station <-
     latitude = parzer::parse_lat(latitude)
   ) |>
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4326) |>
-  pointblank::row_count_match(2019L) |>
+  pointblank::row_count_match(2089L) |>
   pointblank::col_count_match(7L)
 
 tide_station |>
-  dplyr::filter(year == 2025) |>
+  dplyr::filter(year == 2026) |>
   pointblank::row_count_match(70L)
 
 tide_station |>
   st_drop_geometry() |>
   count(year) |>
-  pointblank::row_count_match(29L)
+  pointblank::row_count_match(30L)
 
 usethis::use_data(tide_station, overwrite = TRUE)
 
@@ -586,7 +598,7 @@ x <-
   )
 x |>
   rvest::html_element(css = "#main > h1") |>
-  rvest::html_text() # 令和6年11月21日現在
+  rvest::html_text() # 令和8年7月23日現在
 
 earthquake_station <-
   x |>
@@ -601,7 +613,7 @@ earthquake_station <-
     ~ mutate(.x, across(.cols = everything(), .fns = as.character))
   ) |>
   purrr::list_rbind(names_to = "prefecture") |>
-  pointblank::row_count_match(1127L) |>
+  pointblank::row_count_match(1139L) |>
   pointblank::col_count_match(10L) |>
   readr::type_convert(col_types = "ccccididcc") |>
   purrr::set_names(c(
@@ -644,10 +656,10 @@ earthquake_station <-
   sf::st_as_sf(coords = c("longitude", "latitude"), crs = 4612) |>
   sf::st_transform(crs = 4326) |>
   select(!c(ends_with("_do"), ends_with("_fun"))) |>
-  pointblank::row_count_match(1127L) |>
+  pointblank::row_count_match(1139L) |>
   pointblank::col_count_match(7L) |>
   filter(is.na(observation_end)) |>
-  pointblank::row_count_match(671L)
+  pointblank::row_count_match(670L)
 
 usethis::use_data(earthquake_station, overwrite = TRUE)
 
