@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/uribo/jmastats/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/uribo/jmastats/blob/v0.3.1/inst/CITATION)
 
 Uryu S (2026). *jmastats: Download Weather Data from Japan
 Meteorological Agency Website*. R package version 0.3.1,

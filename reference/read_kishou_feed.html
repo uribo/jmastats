@@ -28,7 +28,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Read Kishou Disaster Prevention Information Feed</h1>
-      <small class="dont-index">Source: <a href="https://github.com/uribo/jmastats/blob/main/R/kishou_feed.R" class="external-link"><code>R/kishou_feed.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/uribo/jmastats/blob/v0.3.1/R/kishou_feed.R" class="external-link"><code>R/kishou_feed.R</code></a></small>
       <div class="d-none name"><code>read_kishou_feed.Rd</code></div>
     </div>
 
@@ -78,35 +78,35 @@ See details for the items.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`update_list()` was deprecated in purrr 1.0.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">jmastats</span> package.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at <span style="color: #0000BB; font-style: italic;">&lt;https://github.com/uribo/jmastats/issues&gt;</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 228 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    title                      id        updated             author content link </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 府県天気予報（Ｒ１）       https://… 2026-09-18 <span style="color: #949494;">19:35:17</span> 新潟地方気… 【新潟県府県… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 警報級の可能性（明日まで） https://… 2026-09-18 <span style="color: #949494;">19:35:17</span> 新潟地方気… 【新潟県警報… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 警報級の可能性（明日まで） https://… 2026-09-18 <span style="color: #949494;">19:35:16</span> 釧路地方気… 【釧路・根室… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 府県天気予報（Ｒ１）       https://… 2026-09-18 <span style="color: #949494;">19:35:16</span> 釧路地方気… 【釧路・根室… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 府県天気予報（Ｒ１）       https://… 2026-09-18 <span style="color: #949494;">19:35:02</span> 函館地方気… 【渡島・檜山… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 早期注意情報（明後日まで） https://… 2026-09-18 <span style="color: #949494;">19:35:02</span> 函館地方気… 【渡島・檜山… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 警報級の可能性（明日まで） https://… 2026-09-18 <span style="color: #949494;">19:35:02</span> 函館地方気… 【渡島・檜山… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 府県天気概況               https://… 2026-09-18 <span style="color: #949494;">19:34:52</span> 松山地方気… 【天気概況】… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 早期注意情報（明後日まで） https://… 2026-09-18 <span style="color: #949494;">19:34:51</span> 鳥取地方気… 【鳥取県早期… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 警報級の可能性（明日まで） https://… 2026-09-18 <span style="color: #949494;">19:34:51</span> 鳥取地方気… 【鳥取県警報… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 218 more rows</span></span>
-<span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"other"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 475 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 524 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    title                          id    updated             author content link </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">17:35:00</span> 名古屋地方… 【名古屋海上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 全般海上警報（臨時）（Ｈ２９） http… 2026-09-18 <span style="color: #949494;">17:16:50</span> 気象庁 【全般海上警… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:05</span> 福岡管区気… 【長崎海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:05</span> 鹿児島地方… 【鹿児島海上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:04</span> 名古屋地方… 【名古屋海上… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:04</span> 福岡管区気… 【福岡海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:04</span> 高松地方気… 【神戸海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:03</span> 新潟地方気… 【新潟海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:03</span> 気象庁 【東京海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上警報（Ｈ２８）         http… 2026-09-18 <span style="color: #949494;">14:35:02</span> 札幌管区気… 【函館海上気… http…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 465 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 気象警報・注意報（Ｒ０６）（集約通報）…… http… 2026-09-23 <span style="color: #949494;">14:30:51</span> 気象庁 【警戒・注意… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 気象警報・注意報（Ｒ０６）（集約通報）…… http… 2026-09-23 <span style="color: #949494;">14:20:56</span> 気象庁 【警戒・注意… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地上実況図                     http… 2026-09-23 <span style="color: #949494;">14:15:59</span> 気象庁 【地上実況図… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 気象警報・注意報（Ｒ０６）（集約通報）…… http… 2026-09-23 <span style="color: #949494;">14:10:51</span> 気象庁 【警戒・注意… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 気象警報・注意報（Ｒ０６）（集約通報）…… http… 2026-09-23 <span style="color: #949494;">14:01:26</span> 気象庁 【警戒・注意… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 気象警報・注意報時系列情報（Ｒ０６）…… http… 2026-09-23 <span style="color: #949494;">13:55:00</span> 高松地方気… 【香川県警戒… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 気象警報・注意報時系列情報（Ｒ０６）…… http… 2026-09-23 <span style="color: #949494;">13:55:00</span> 高知地方気… 【高知県警戒… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 気象警報・注意報時系列情報（Ｒ０６）…… http… 2026-09-23 <span style="color: #949494;">13:55:00</span> 徳島地方気… 【徳島県警戒… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 気象警報・注意報時系列情報（Ｒ０６）…… http… 2026-09-23 <span style="color: #949494;">13:55:00</span> 名瀬測候所… 【奄美地方（… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 気象警報・注意報時系列情報（Ｒ０６）…… http… 2026-09-23 <span style="color: #949494;">13:55:00</span> 石垣島地方… 【八重山地方… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 514 more rows</span></span>
+<span class="r-in"><span><span class="fu">read_kishou_feed</span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"other"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 600 × 6</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    title                          id    updated             author content link </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> 地方海上警報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">14:35:02</span> 大阪管区気… 【舞鶴海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> 地方海上警報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">14:35:01</span> 札幌管区気… 【函館海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> 地方海上警報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">14:35:01</span> 新潟地方気… 【新潟海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> 地方海上警報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">14:35:00</span> 札幌管区気… 【札幌海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> 全般海上警報（定時）（Ｒ０８） http… 2026-09-23 <span style="color: #949494;">14:32:14</span> 気象庁 【全般海上警… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> 全般海上警報（定時）（Ｈ２９） http… 2026-09-23 <span style="color: #949494;">14:32:14</span> 気象庁 【全般海上警… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> 地方海上予報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">09:10:06</span> 沖縄気象台… 【沖縄海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> 地方海上予報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">09:10:05</span> 福岡管区気… 【長崎海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> 地方海上予報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">09:10:05</span> 福岡管区気… 【福岡海上気… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 地方海上予報（Ｈ２８）         http… 2026-09-23 <span style="color: #949494;">09:10:05</span> 鹿児島地方… 【鹿児島海上… http…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 590 more rows</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -2,6 +2,8 @@
 
 ## jmastats 0.3.1
 
+CRAN release: 2026-09-18
+
 ### Datasets
 
 - Various datasets handled by the package have been updated to the
