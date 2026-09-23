@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/uribo/jmastats/blob/v0.3.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/uribo/jmastats/blob/main/inst/CITATION)
 
 Uryu S (2026). *jmastats: Download Weather Data from Japan
-Meteorological Agency Website*. R package version 0.3.1,
+Meteorological Agency Website*. R package version 0.3.1.9000,
 <https://CRAN.R-project.org/package=jmastats>.
 
     @Manual{,
       title = {jmastats: Download Weather Data from Japan Meteorological Agency Website},
       author = {Shinya Uryu},
       year = {2026},
-      note = {R package version 0.3.1},
+      note = {R package version 0.3.1.9000},
       url = {https://CRAN.R-project.org/package=jmastats},
     }

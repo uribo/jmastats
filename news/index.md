@@ -1,5 +1,7 @@
 # Changelog
 
+## jmastats (development version)
+
 ## jmastats 0.3.1
 
 CRAN release: 2026-09-18
