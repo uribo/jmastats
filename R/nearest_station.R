@@ -118,6 +118,7 @@ pick_neighbor_stations <- function(
   geometry = NULL
 ) {
   unit <- rlang::quo_name(.unit)
+  stations <- jmastats::stations
   coords <-
     check_input_coords(longitude, latitude, geometry)
   coords <-
@@ -168,7 +169,7 @@ pick_neighbor_tide_stations <- function(
   yr <-
     rlang::enquo(year)
   stations <-
-    tide_station |> filter(year == !!yr)
+    jmastats::tide_station |> filter(year == !!yr)
   coords <-
     check_input_coords(longitude, latitude, geometry)
   coords <-

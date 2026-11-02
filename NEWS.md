@@ -1,5 +1,9 @@
 # jmastats (development version)
 
+## Fixes
+
+* `jma_collect()`, `nearest_station()`, `pick_neighbor_stations()`, `pick_neighbor_tide_stations()`, and `read_tide_level()` no longer fail with "object 'stations' not found" (or `'tide_station'`) when called as `jmastats::` without attaching the package (#35).
+
 # jmastats 0.3.1
 
 ## Datasets

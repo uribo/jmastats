@@ -67,7 +67,7 @@ request_tide_level_url <- function(.year, .month, .stn) {
     rlang::abort("Old format")
   }
   stn_candidate <-
-    tide_station |>
+    jmastats::tide_station |>
     dplyr::filter(year == !!rlang::enquo(year)) |>
     dplyr::pull(stn)
   stn <-

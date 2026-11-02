@@ -1,5 +1,3 @@
-globalVariables(c("stations", "tide_station", "earthquake_station"))
-
 #' Japan Meteorological Agency's Stations list
 #'
 #' @description This data corresponds to the March 24, 2026 update.
