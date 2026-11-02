@@ -319,7 +319,7 @@ check_block_no <- function(block_no) {
   }
   # Validate against the bundled station list rather than a fixed range,
   # so that stations added or retired by a dataset refresh are handled.
-  if (!block_no %in% stations$block_no) {
+  if (!block_no %in% jmastats::stations$block_no) {
     rlang::abort(c(
       paste0("block_no '", block_no, "' is not in the station list."),
       i = "The station may have been retired, or the number may be wrong. See `stations` for available stations."
@@ -518,7 +518,7 @@ jma_url <- function(item = NULL, block_no, year, month, day, ...) {
 
 detect_station_info <- function(.blockid) {
   df_target_station <-
-    subset(stations, block_no == rlang::eval_tidy(.blockid)) |>
+    subset(jmastats::stations, block_no == rlang::eval_tidy(.blockid)) |>
     sf::st_drop_geometry() |>
     dplyr::distinct(block_no, .keep_all = TRUE)
   pref <-
