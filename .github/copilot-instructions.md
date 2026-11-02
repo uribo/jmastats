@@ -28,7 +28,7 @@ jmastats は気象庁（JMA）の公開データ（過去の気象データ検�
 - 既存の `intToUtf8()` 呼び出しを Unicode エスケープへ一括置換すること（指示があるまで行わない。触る行の周辺だけ合わせればよい）。
 - testthat edition 3 への移行の提案（edition 2 のまま。移行は独立した作業）。
 - 生成物: `man/*.Rd`、`NAMESPACE`（roxygen2 が生成）、`README.md`（`README.Rmd` から生成）、`.github/workflows/rhub.yaml`（`rhub::rhub_setup()` の生成物）。ただし `README.md` だけを直接編集して `README.Rmd` を直していない変更は指摘する。
-- `memory/` 配下のノート（エージェント間の引き継ぎ記録）。
+- `memory/` 配下のノート（エージェント間の引き継ぎ記録）の文体・書式。ただし、記述どうしの矛盾や、コード・テスト結果との事実の食い違いは指摘する。
 
 ## 記法の規約
 
