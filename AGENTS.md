@@ -30,7 +30,7 @@ README.md は README.Rmd
 ``` sh
 Rscript -e 'devtools::load_all()'
 Rscript -e 'devtools::document()'   # roxygen2 で man/ と NAMESPACE を再生成
-Rscript -e 'devtools::test()'       # 現状 38 passed / 2 skipped / 0 failed
+Rscript -e 'devtools::test()'       # 現状 51 passed / 2 skipped / 0 failed
 Rscript -e 'devtools::check()'
 Rscript -e 'devtools::build_readme()'
 air format R tests                  # 整形（編集時 hook でも自動実行）
@@ -328,6 +328,7 @@ R CMD build . && tar tzf jmastats_*.tar.gz | grep -E 'CLAUDE|AGENTS|memory|tools
 | `data` | `data-raw/` の生成スクリプト |
 | `ci` | `.github/workflows/` |
 | `config` | エージェント・エディタ設定 |
+| `memory` | `memory/` のノート（HANDOFF を含む。type は `docs`） |
 
     feat(collect): support 10min interval for AMeDAS stations
     fix(tide): keep missing markers out of type_convert()

@@ -48,7 +48,7 @@
 <h2 id="開発コマンド">開発コマンド<a class="anchor" aria-label="anchor" href="#%E9%96%8B%E7%99%BA%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"></a></h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::load_all()'</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::document()'</span>   <span class="co"># roxygen2 で man/ と NAMESPACE を再生成</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::test()'</span>       <span class="co"># 現状 38 passed / 2 skipped / 0 failed</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::test()'</span>       <span class="co"># 現状 51 passed / 2 skipped / 0 failed</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::check()'</span></span>
 <span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::build_readme()'</span></span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="ex">air</span> format R tests                  <span class="co"># 整形（編集時 hook でも自動実行）</span></span></code></pre></div>
@@ -286,6 +286,9 @@
 <td><code>.github/workflows/</code></td>
 </tr><tr><td><code>config</code></td>
 <td>エージェント・エディタ設定</td>
+</tr><tr><td><code>memory</code></td>
+<td>
+<code>memory/</code> のノート（HANDOFF を含む。type は <code>docs</code>）</td>
 </tr></tbody></table><pre><code>feat(collect): support 10min interval for AMeDAS stations
 fix(tide): keep missing markers out of type_convert()
 chore(data): refresh station list to 2026-01 revision

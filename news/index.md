@@ -2,6 +2,18 @@
 
 ## jmastats (development version)
 
+### Fixes
+
+- [`jma_collect()`](https://uribo.github.io/jmastats/reference/jma_collect.md),
+  [`nearest_station()`](https://uribo.github.io/jmastats/reference/nearest_station.md),
+  [`pick_neighbor_stations()`](https://uribo.github.io/jmastats/reference/nearest_station.md),
+  [`pick_neighbor_tide_stations()`](https://uribo.github.io/jmastats/reference/nearest_station.md),
+  and
+  [`read_tide_level()`](https://uribo.github.io/jmastats/reference/read_tide_level.md)
+  no longer fail with “object ‘stations’ not found” (or
+  `'tide_station'`) when called as `jmastats::` without attaching the
+  package ([\#35](https://github.com/uribo/jmastats/issues/35)).
+
 ## jmastats 0.3.1
 
 CRAN release: 2026-09-18
